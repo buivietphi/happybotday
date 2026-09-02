@@ -258,46 +258,46 @@ export default function Matchstick({
       <g filter="url(#ms-shadow)">
         {/* Main Wood Stem */}
         <rect
-          x="16.5"
+          x="15"
           y="15"
-          width="7"
+          width="10"
           height="145"
-          rx="2"
+          rx="3"
           fill="url(#ms-wood-body)"
         />
 
         {/* Left edge bevel highlight (gives 3D cylindrical/square depth) */}
         <rect
-          x="16.5"
+          x="15"
           y="15"
-          width="1.8"
+          width="2.4"
           height="144"
-          rx="1"
+          rx="1.2"
           fill="#fffbeb"
           opacity="0.7"
         />
 
         {/* Right edge shadow bevel */}
         <rect
-          x="21.7"
+          x="22.6"
           y="15"
-          width="1.8"
+          width="2.4"
           height="144"
-          rx="1"
+          rx="1.2"
           fill="#78350f"
           opacity="0.45"
         />
 
         {/* Delicate natural wood grain fibers */}
-        <line x1="19" y1="35" x2="19" y2="148" stroke="#d97706" strokeWidth="0.6" opacity="0.35" />
-        <line x1="20.5" y1="45" x2="20.5" y2="135" stroke="#b45309" strokeWidth="0.5" opacity="0.25" />
+        <line x1="18" y1="35" x2="18" y2="148" stroke="#d97706" strokeWidth="0.7" opacity="0.35" />
+        <line x1="22" y1="45" x2="22" y2="135" stroke="#b45309" strokeWidth="0.6" opacity="0.25" />
 
         {/* === Charred Burnt Wood Zone (shows when lit) === */}
         {lit && (
           <rect
-            x="16.5"
+            x="15"
             y="15"
-            width="7"
+            width="10"
             height="28"
             rx="1"
             fill="url(#ms-charred)"
@@ -311,37 +311,37 @@ export default function Matchstick({
               ref={emberPulseRef}
               cx="20"
               cy="22"
-              rx="2.8"
-              ry="4.5"
+              rx="3.6"
+              ry="5"
               fill="oklch(75% 0.22 45)"
               opacity="0.75"
             />
-            <circle cx="19.5" cy="20" r="1.2" fill="#ffedd5" opacity="0.9" />
+            <circle cx="19.5" cy="20" r="1.4" fill="#ffedd5" opacity="0.9" />
           </g>
         )}
 
         {/* === 3D SULFUR MATCH HEAD BULB === */}
         {/* Sulfur Bulb Shape */}
         <path
-          d="M 20 7
-             C 14.5 7, 13.5 12, 14 16
-             C 14.5 20, 17 23, 20 23
-             C 23 23, 25.5 20, 26 16
-             C 26.5 12, 25.5 7, 20 7 Z"
+          d="M 20 6
+             C 13 6, 12 12, 12.5 17
+             C 13 21.5, 16 24, 20 24
+             C 24 24, 27 21.5, 27.5 17
+             C 28 12, 27 6, 20 6 Z"
           fill="url(#ms-head-3d)"
         />
 
         {/* Glossy specular highlight on top-left of head */}
         <ellipse
-          cx="18"
-          cy="11"
-          rx="2.2"
-          ry="3.2"
+          cx="17"
+          cy="10.5"
+          rx="2.6"
+          ry="3.6"
           fill="#ffffff"
           opacity="0.75"
-          transform="rotate(-20 18 11)"
+          transform="rotate(-20 17 10.5)"
         />
-        <circle cx="17.2" cy="9.5" r="0.8" fill="#ffffff" opacity="0.9" />
+        <circle cx="16" cy="9" r="0.9" fill="#ffffff" opacity="0.9" />
       </g>
 
       {/* === ANIMATED MATCHSTICK FLAME (Anchored at match head center 20, 15) === */}

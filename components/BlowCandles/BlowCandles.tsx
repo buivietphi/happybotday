@@ -342,24 +342,8 @@ export default function BlowCandles({ onComplete }: Props) {
         delay: T_DARK / 1000,
         ease: 'power2.out',
       });
-      // Idle breathing wobble
-      const tEnter = (T_DARK + T_ENTERING) / 1000;
-      gsap.to(el, {
-        y: MATCH_CORNER.y - 5,
-        duration: 1.6,
-        delay: tEnter,
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1,
-      });
-      gsap.to(el, {
-        rotate: MATCH_CORNER.rotate - 2,
-        duration: 2.0,
-        delay: tEnter + 0.3,
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1,
-      });
+      // (Idle breathing wobble removed — matchstick now sits still in the corner
+      // so the cursor lands on it cleanly without chasing a moving target.)
     });
     return () => ctx.revert();
   }, [reduced]);
@@ -1217,8 +1201,8 @@ export default function BlowCandles({ onComplete }: Props) {
             }}
           >
             {/* Matchstick head aligned precisely with parent origin (0, 0) */}
-            <g transform="translate(-40.9, -59.1)">
-              <Matchstick size={200} lit={isMatchLit} />
+            <g transform="translate(-50, -70)">
+              <Matchstick size={230} lit={isMatchLit} />
             </g>
           </g>
         </svg>
