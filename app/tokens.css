@@ -1,0 +1,163 @@
+/* Hallmark · macrostructure: BirthdayCelebration (custom, not catalog)
+ * tone: birthday-celebratory · audience: KIỀU LEE (girlfriend) from her boyfriend
+ * theme: Confetti Pop (high-saturation poly-chromatic, anti-romance)
+ * anchor hue: hot magenta ~350°  ·  display: Cormorant Garamond  ·  body: Be Vietnam Pro
+ * diversification: rebuilt from prior romantic palette — must NOT read as wedding
+ * motive: every animation must justify itself in one sentence
+ */
+
+:root {
+  /* === Color tokens (OKLCH throughout) === */
+  /* Paper / backgrounds — cream champagne base */
+  --color-paper:        oklch(98% 0.008 80);
+  --color-paper-soft:   oklch(99% 0.005 80);
+  --color-paper-deep:   oklch(94% 0.022 75);
+  --color-paper-night:  oklch(15% 0.025 295);   /* midnight plum */
+
+  /* Text — midnight plum ink */
+  --color-text:         oklch(22% 0.06 295);
+  --color-text-soft:    oklch(45% 0.04 295);
+  --color-text-fade:    oklch(60% 0.02 295);
+  --color-text-invert:  oklch(98% 0.008 80);
+
+  /* Primary accent — hot magenta (party pink, anti-rose) */
+  --color-accent:       oklch(65% 0.30 350);
+  --color-accent-deep:  oklch(48% 0.28 350);
+  --color-accent-soft:  oklch(86% 0.10 350);
+  --color-accent-tint:  oklch(94% 0.05 350);
+
+  /* Champagne gold (cake tier, candle flame core, shimmer) */
+  --color-gold:         oklch(82% 0.13 85);
+  --color-gold-soft:    oklch(92% 0.05 85);
+
+  /* Confetti palette — 5 party hues */
+  --color-confetti-magenta: oklch(70% 0.30 350);
+  --color-confetti-yellow:  oklch(85% 0.20 95);
+  --color-confetti-cyan:    oklch(78% 0.16 220);
+  --color-confetti-lime:    oklch(82% 0.18 130);
+  --color-confetti-violet:  oklch(65% 0.22 295);
+
+  /* Cake + candle specifics */
+  --color-frosting:      oklch(92% 0.02 80);
+  --color-frosting-pink: oklch(86% 0.08 10);
+  --color-cake-tier:     oklch(75% 0.10 50);    /* sponge tan */
+  --color-cake-shadow:   oklch(58% 0.08 45);
+  --color-flame:         oklch(78% 0.20 60);
+  --color-flame-core:    oklch(95% 0.10 90);
+  --color-flame-glow:    oklch(80% 0.18 55 / 0.55);
+  --color-wick:          oklch(20% 0.02 30);
+  --color-smoke:         oklch(85% 0.005 80 / 0.55);
+
+  /* Balloon palette (used by FloatingBalloons) */
+  --color-balloon-1: oklch(70% 0.30 350);  /* magenta */
+  --color-balloon-2: oklch(78% 0.16 220);  /* cyan */
+  --color-balloon-3: oklch(85% 0.20 95);   /* yellow */
+  --color-balloon-4: oklch(82% 0.18 130);  /* lime */
+  --color-balloon-5: oklch(65% 0.22 295);  /* violet */
+
+  /* Lucky wheel — 8 segments (curated Confetti Pop rotation) */
+  --color-wheel-1: oklch(70% 0.30 350);  /* magenta */
+  --color-wheel-2: oklch(85% 0.20 95);   /* yellow */
+  --color-wheel-3: oklch(78% 0.16 220);  /* cyan */
+  --color-wheel-4: oklch(82% 0.18 130);  /* lime */
+  --color-wheel-5: oklch(65% 0.22 295);  /* violet */
+  --color-wheel-6: oklch(82% 0.13 85);   /* gold */
+  --color-wheel-7: oklch(86% 0.10 350);  /* soft pink */
+  --color-wheel-8: oklch(92% 0.05 85);   /* cream */
+
+  /* Cat fur palette */
+  --color-cat-fur-1: oklch(78% 0.08 50);    /* orange tabby */
+  --color-cat-fur-2: oklch(20% 0.02 30);    /* tuxedo black */
+  --color-cat-fur-3: oklch(86% 0.05 80);    /* white */
+  --color-cat-fur-4: oklch(58% 0.05 50);    /* gray */
+  --color-cat-fur-5: oklch(70% 0.10 25);    /* ginger */
+
+  /* Avatar frame ring gradient */
+  --color-avatar-ring-1: oklch(65% 0.30 350);
+  --color-avatar-ring-2: oklch(82% 0.13 85);
+
+  /* Surface (cards / glass) */
+  --color-surface:      oklch(99% 0.005 80);
+  --color-surface-edge: oklch(88% 0.015 75);
+
+  /* Semantic */
+  --color-focus:        var(--color-accent);
+  --color-overlay:      oklch(15% 0.025 295 / 0.55);
+  --color-shadow-soft:  oklch(22% 0.06 295 / 0.08);
+  --color-shadow-deep:  oklch(22% 0.06 295 / 0.18);
+
+  /* === Typography ===
+   * Both fonts are loaded via next/font/google in app/layout.tsx and
+   * exposed as CSS variables on <html>. The variables below reference
+   * those loaded fonts first, with safe fallbacks.
+   */
+  --font-display: var(--font-display-loaded), 'Cormorant Garamond', 'DM Serif Display', 'Playfair Display', Georgia, serif;
+  --font-body:    var(--font-vietnamese), 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono:    ui-monospace, 'SF Mono', 'JetBrains Mono', monospace;
+  /* Flowing copperplate script for handwritten-feeling copy (e.g. the
+   * "Happy Birthday" banner). Falls back to a script serif before
+   * dropping to the display family. */
+  --font-script:  var(--font-script), 'Great Vibes', 'Allura', 'Sacramento', 'Pacifico', cursive;
+
+  /* === Type scale === */
+  --text-xs:      0.75rem;
+  --text-sm:      0.875rem;
+  --text-base:    1rem;
+  --text-lg:      1.125rem;
+  --text-xl:      1.375rem;
+  --text-2xl:     1.75rem;
+  --text-3xl:     2.25rem;
+  --text-4xl:     3rem;
+  --text-5xl:     4rem;
+  --text-display: 5.5rem;
+  --text-display-l: 7.5rem;
+
+  /* === Spacing (4pt) === */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.5rem;
+  --space-6:  2rem;
+  --space-7:  3rem;
+  --space-8:  4rem;
+  --space-9:  6rem;
+  --space-10: 8rem;
+  --space-11: 12rem;
+
+  /* === Easings ===
+   * Pure ease curves only. No bounce / elastic / overshoot easings —
+   * they read as dated. For one-time entrance "lift" use GSAP `back.out(1.4–1.6)`
+   * at the tween level, not in the global token.
+   */
+  --ease-out:      cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:       cubic-bezier(0.4, 0, 0.7, 0.1);
+  --ease-in-out:   cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* === Durations === */
+  --dur-instant:  120ms;
+  --dur-fast:     300ms;
+  --dur-base:     600ms;
+  --dur-slow:     1200ms;
+  --dur-slower:   2200ms;
+  --dur-cinematic: 3500ms;
+
+  /* === Radii === */
+  --radius-xs:  4px;
+  --radius-sm:  8px;
+  --radius-md:  14px;
+  --radius-lg:  22px;
+  --radius-xl:  32px;
+  --radius-pill: 999px;
+
+  /* === Z-index scale === */
+  --z-base:    0;
+  --z-raised:  5;
+  --z-overlay: 10;
+  --z-sticky:  20;
+  --z-modal:   50;
+  --z-toast:   100;
+
+  /* === Hairlines === */
+  --rule-hair: 1px solid var(--color-surface-edge);
+}
