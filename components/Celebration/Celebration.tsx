@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { useReducedMotionSafe } from '@/lib/useReducedMotion';
@@ -44,8 +44,32 @@ export default function Celebration({ name, outroWish, prizes, onReplay }: Props
     setSub('wheel');
   };
 
+  // Firework >3 clicks teaser cat (8s, only once)
+  const [fireworkClicks, setFireworkClicks] = useState(0);
+  const [showFireworkCat, setShowFireworkCat] = useState(false);
+  const [hasShownFireworkCat, setHasShownFireworkCat] = useState(false);
+
   const triggerFireworkBurst = () => {
     setFireworkKey(Date.now());
+    if (!hasShownFireworkCat) {
+      setFireworkClicks((prev) => {
+        const next = prev + 1;
+        if (next > 3) {
+          setShowFireworkCat(true);
+          setHasShownFireworkCat(true);
+          try {
+            const audio = new Audio('/sounds/meow_chirp.wav');
+            audio.volume = 0.7;
+            audio.play().catch(() => {});
+          } catch {}
+
+          window.setTimeout(() => {
+            setShowFireworkCat(false);
+          }, 8000); // 8s visible, then hides!
+        }
+        return next;
+      });
+    }
   };
 
   return (
@@ -80,6 +104,18 @@ export default function Celebration({ name, outroWish, prizes, onReplay }: Props
           background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
           animation: goldShineSweep 3s infinite ease-in-out;
           pointer-events: none;
+        }
+
+        @keyframes promptCatPop {
+          0% { transform: translateX(-50%) scale(0) translateY(24px); opacity: 0; }
+          60% { transform: translateX(-50%) scale(1.12) translateY(-4px); opacity: 1; }
+          80% { transform: translateX(-50%) scale(0.96) translateY(2px); opacity: 1; }
+          100% { transform: translateX(-50%) scale(1) translateY(0); opacity: 1; }
+        }
+
+        @keyframes pawWave {
+          0% { transform: rotate(-10deg); }
+          100% { transform: rotate(18deg); }
         }
 
         .hallmark-glow-card {
@@ -170,6 +206,7 @@ export default function Celebration({ name, outroWish, prizes, onReplay }: Props
           reduced={reduced}
           onOpen={openWheel}
           onFirework={triggerFireworkBurst}
+          showFireworkCat={showFireworkCat}
         />
       )}
 
@@ -192,9 +229,119 @@ export default function Celebration({ name, outroWish, prizes, onReplay }: Props
           onReplayWheel={replayWheel}
           onReplay={onReplay}
           onFirework={triggerFireworkBurst}
+          showFireworkCat={showFireworkCat}
         />
       )}
     </section>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * Sub-component: Firework Sunglasses Shocked Cat
+ * ------------------------------------------------------------------ */
+function FireworkSunglassesCat() {
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        bottom: 'calc(100% + 12px)',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 40,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        pointerEvents: 'none',
+        filter: 'drop-shadow(0 12px 28px rgba(0,0,0,0.65))',
+        animation: 'promptCatPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+      }}
+    >
+      {/* Comic Speech Bubble */}
+      <div
+        style={{
+          background: 'linear-gradient(135deg, #fef08a 0%, #fde047 100%)',
+          color: '#1c1917',
+          padding: '8px 18px',
+          borderRadius: 18,
+          border: '2px solid #ca8a04',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+          fontFamily: 'var(--font-display, "Cormorant Garamond", serif)',
+          fontWeight: 800,
+          textAlign: 'center',
+          whiteSpace: 'nowrap',
+          position: 'relative',
+        }}
+      >
+        <div style={{ fontSize: '14px', color: '#854d0e', fontWeight: 800 }}>
+          Bắn gì mà dữ dằn dạ má?! 🙀💥🎆
+        </div>
+        <div style={{ fontSize: '12px', color: '#713f12', fontStyle: 'italic', marginTop: 2 }}>
+          Mù con mắt tui gòy! Đẹp thì đẹp mà chói quáaa! 😎💖
+        </div>
+        {/* Bubble pointer triangle */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: -7,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 0,
+            height: 0,
+            borderLeft: '7px solid transparent',
+            borderRight: '7px solid transparent',
+            borderTop: '7px solid #ca8a04',
+          }}
+        />
+      </div>
+
+      {/* Handcrafted Sunglasses Firework Cat SVG */}
+      <svg viewBox="0 0 130 100" width="126" height="96" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginTop: 2 }}>
+        {/* Ambient Sparkles */}
+        <path d="M 20 20 L 22 25 L 27 27 L 22 29 L 20 34 L 18 29 L 13 27 L 18 25 Z" fill="#facc15" />
+        <path d="M 112 24 L 113 28 L 117 29 L 113 30 L 112 34 L 111 30 L 107 29 L 111 28 Z" fill="#f43f5e" />
+
+        {/* Cat Body */}
+        <ellipse cx="65" cy="74" rx="34" ry="22" fill="#f97316" stroke="#c2410c" strokeWidth="2" />
+        <ellipse cx="65" cy="76" rx="20" ry="14" fill="#ffedd5" />
+
+        {/* Ears */}
+        <path d="M 40 46 L 30 18 L 54 32 Z" fill="#f97316" stroke="#c2410c" strokeWidth="2" />
+        <path d="M 40 42 L 34 24 L 50 34 Z" fill="#fda4af" />
+        <path d="M 90 46 L 100 18 L 76 32 Z" fill="#f97316" stroke="#c2410c" strokeWidth="2" />
+        <path d="M 90 42 L 96 24 L 80 34 Z" fill="#fda4af" />
+
+        {/* Head */}
+        <circle cx="65" cy="48" r="26" fill="#f97316" stroke="#c2410c" strokeWidth="2" />
+        <ellipse cx="58" cy="56" rx="8" ry="6" fill="#ffedd5" />
+        <ellipse cx="72" cy="56" rx="8" ry="6" fill="#ffedd5" />
+
+        {/* Cool Black Sunglasses */}
+        <ellipse cx="52" cy="46" rx="12" ry="9" fill="#0f172a" stroke="#ffffff" strokeWidth="1.5" />
+        <ellipse cx="78" cy="46" rx="12" ry="9" fill="#0f172a" stroke="#ffffff" strokeWidth="1.5" />
+        <path d="M 64 45 L 66 45" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
+        <line x1="46" y1="42" x2="52" y2="50" stroke="rgba(255,255,255,0.7)" strokeWidth="1.6" strokeLinecap="round" />
+        <line x1="72" y1="42" x2="78" y2="50" stroke="rgba(255,255,255,0.7)" strokeWidth="1.6" strokeLinecap="round" />
+
+        {/* Nose & Grinning Mouth */}
+        <polygon points="63,52 67,52 65,55" fill="#f43f5e" />
+        <path d="M 58 56 Q 65 62 72 56" stroke="#1c1917" strokeWidth="2" fill="#881337" strokeLinecap="round" />
+        <ellipse cx="65" cy="58" rx="3.5" ry="2" fill="#fda4af" />
+
+        {/* Whiskers */}
+        <path d="M 44 56 L 24 53 M 44 59 L 22 61" stroke="#7c2d12" strokeWidth="1.2" strokeLinecap="round" />
+        <path d="M 86 56 L 106 53 M 86 59 L 108 61" stroke="#7c2d12" strokeWidth="1.2" strokeLinecap="round" />
+
+        {/* Clapping Paws */}
+        <g transform="translate(38, 54)">
+          <ellipse cx="8" cy="10" rx="8" ry="7" fill="#ffedd5" stroke="#c2410c" strokeWidth="1.6" />
+          <circle cx="8" cy="10" r="2.5" fill="#f43f5e" />
+        </g>
+        <g transform="translate(76, 54)">
+          <ellipse cx="8" cy="10" rx="8" ry="7" fill="#ffedd5" stroke="#c2410c" strokeWidth="1.6" />
+          <circle cx="8" cy="10" r="2.5" fill="#f43f5e" />
+        </g>
+      </svg>
+    </div>
   );
 }
 
@@ -206,13 +353,64 @@ function Intro({
   reduced,
   onOpen,
   onFirework,
+  showFireworkCat,
 }: {
   name: string;
   reduced: boolean;
   onOpen: () => void;
   onFirework: () => void;
+  showFireworkCat: boolean;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
+
+  // 15s idle teaser cat prompting to open the wheel
+  const [showIntroPromptCat, setShowIntroPromptCat] = useState(false);
+  const [hasOpened, setHasOpened] = useState(false);
+
+  useEffect(() => {
+    if (hasOpened) {
+      setShowIntroPromptCat(false);
+      return;
+    }
+
+    let hideTimeout: number | undefined;
+    let nextShowTimeout: number | undefined;
+
+    const scheduleShow = () => {
+      setShowIntroPromptCat(true);
+      try {
+        const audio = new Audio('/sounds/meow1.wav');
+        audio.volume = 0.65;
+        audio.play().catch(() => {});
+      } catch {}
+
+      // Keep visible for 5s then hide
+      hideTimeout = window.setTimeout(() => {
+        setShowIntroPromptCat(false);
+        // Wait 15s before showing again if still not opened
+        nextShowTimeout = window.setTimeout(() => {
+          scheduleShow();
+        }, 15000);
+      }, 5000);
+    };
+
+    // First trigger after 15s if not opened
+    const initialTimer = window.setTimeout(() => {
+      scheduleShow();
+    }, 15000);
+
+    return () => {
+      window.clearTimeout(initialTimer);
+      if (nextShowTimeout) window.clearTimeout(nextShowTimeout);
+      if (hideTimeout) window.clearTimeout(hideTimeout);
+    };
+  }, [hasOpened]);
+
+  const handleOpenClick = () => {
+    setHasOpened(true);
+    setShowIntroPromptCat(false);
+    onOpen();
+  };
 
   useGSAP(
     () => {
@@ -317,14 +515,134 @@ function Intro({
 
       {/* Buttons: Open Lucky Wheel + Firework Fun */}
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center', marginTop: 4 }}>
-        <button onClick={onOpen} className="hallmark-primary-btn" aria-label="Mở vòng quay may mắn">
-          <div className="celebration-shimmer" />
-          <span>🎁 Mở Vòng Quay May Mắn ✨</span>
-        </button>
+        <div style={{ position: 'relative', display: 'inline-flex', flexDirection: 'column', alignItems: 'center' }}>
+          {showIntroPromptCat && (
+            <div
+              style={{
+                position: 'absolute',
+                bottom: 'calc(100% + 12px)',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                zIndex: 35,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                pointerEvents: 'none',
+                filter: 'drop-shadow(0 12px 28px rgba(0,0,0,0.55))',
+                animation: 'promptCatPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+              }}
+            >
+              {/* Comic Speech Bubble */}
+              <div
+                style={{
+                  background: 'linear-gradient(135deg, #fef9c3 0%, #fed7aa 100%)',
+                  color: '#1c1917',
+                  padding: '8px 18px',
+                  borderRadius: 18,
+                  border: '2px solid #f97316',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+                  fontFamily: 'var(--font-display, "Cormorant Garamond", serif)',
+                  fontWeight: 800,
+                  textAlign: 'center',
+                  whiteSpace: 'nowrap',
+                  position: 'relative',
+                }}
+              >
+                <div style={{ fontSize: '14px', color: '#9a3412', fontWeight: 800 }}>
+                  Ủa tính đứng ngắm hoài dạ cô nương? 😸👑
+                </div>
+                <div style={{ fontSize: '12px', color: '#7c2d12', fontStyle: 'italic', marginTop: 2 }}>
+                  Bấm mở vòng quay lẹ đii, quà xịn đang chờ kìa! 🎁✨
+                </div>
+                {/* Bubble pointer triangle */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: -7,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: 0,
+                    height: 0,
+                    borderLeft: '7px solid transparent',
+                    borderRight: '7px solid transparent',
+                    borderTop: '7px solid #f97316',
+                  }}
+                />
+              </div>
 
-        <button onClick={onFirework} className="hallmark-secondary-btn" aria-label="Bắn pháo hoa chúc mừng">
-          <span>🎆 Pháo Hoa & Trái Tim 💖</span>
-        </button>
+              {/* Handcrafted Fluffy Calico Party Hat Kitty with Waving Beckoning Paw */}
+              <svg viewBox="0 0 130 100" width="124" height="96" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginTop: 2 }}>
+                {/* Cat Body */}
+                <ellipse cx="65" cy="74" rx="34" ry="22" fill="#ffffff" stroke="#e0e7ff" strokeWidth="2" />
+                <ellipse cx="65" cy="76" rx="20" ry="14" fill="#fff1f2" />
+
+                {/* Left & Right Fluffy Ears */}
+                <path d="M 40 46 L 30 18 L 54 32 Z" fill="#ffffff" stroke="#e0e7ff" strokeWidth="2" />
+                <path d="M 40 42 L 34 24 L 50 34 Z" fill="#fda4af" />
+                <path d="M 90 46 L 100 18 L 76 32 Z" fill="#ffffff" stroke="#e0e7ff" strokeWidth="2" />
+                <path d="M 90 42 L 96 24 L 80 34 Z" fill="#fda4af" />
+
+                {/* Festive Birthday Party Cone Hat */}
+                <path d="M 54 30 L 65 4 L 76 30 Z" fill="#f59e0b" stroke="#b45309" strokeWidth="1.5" />
+                <circle cx="65" cy="4" r="5" fill="#fde047" stroke="#ca8a04" strokeWidth="1.2" />
+                <path d="M 57 22 L 73 22" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
+                <path d="M 60 14 L 70 14" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" />
+                <circle cx="65" cy="18" r="1.5" fill="#ffffff" />
+
+                {/* Head */}
+                <circle cx="65" cy="48" r="26" fill="#ffffff" stroke="#e0e7ff" strokeWidth="2" />
+                <path d="M 72 32 C 84 34, 88 44, 85 52 C 80 58, 70 54, 70 42 Z" fill="#fde047" opacity="0.8" />
+
+                {/* Eyes */}
+                <ellipse cx="53" cy="46" rx="5.5" ry="6.5" fill="#0f172a" />
+                <circle cx="51.5" cy="44" r="2.2" fill="#ffffff" />
+                <circle cx="55" cy="48" r="1.1" fill="#38bdf8" />
+
+                <ellipse cx="77" cy="46" rx="5.5" ry="6.5" fill="#0f172a" />
+                <circle cx="75.5" cy="44" r="2.2" fill="#ffffff" />
+                <circle cx="79" cy="48" r="1.1" fill="#38bdf8" />
+
+                {/* Nose & Mouth */}
+                <polygon points="63,50 67,50 65,53" fill="#f43f5e" />
+                <path d="M 59 54 Q 65 58 71 54" stroke="#0f172a" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+
+                {/* Cheeks */}
+                <ellipse cx="44" cy="52" rx="4.5" ry="3" fill="#f43f5e" opacity="0.45" />
+                <ellipse cx="86" cy="52" rx="4.5" ry="3" fill="#f43f5e" opacity="0.45" />
+
+                {/* Whiskers */}
+                <path d="M 44 54 L 26 51 M 44 57 L 24 58" stroke="#94a3b8" strokeWidth="1.2" strokeLinecap="round" />
+                <path d="M 86 54 L 104 51 M 86 57 L 106 58" stroke="#94a3b8" strokeWidth="1.2" strokeLinecap="round" />
+
+                {/* Left Paw Resting */}
+                <g transform="translate(36, 60)">
+                  <ellipse cx="10" cy="10" rx="9" ry="7" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.6" />
+                  <circle cx="10" cy="10" r="2.5" fill="#fda4af" />
+                </g>
+                {/* Right Paw BECKONING / WAVING */}
+                <g transform="translate(78, 50)" style={{ animation: 'pawWave 0.8s infinite alternate ease-in-out', transformOrigin: '5px 15px' }}>
+                  <ellipse cx="10" cy="8" rx="9" ry="8" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.6" />
+                  <circle cx="10" cy="8" r="3" fill="#fda4af" />
+                  <circle cx="7" cy="4" r="1.5" fill="#fda4af" />
+                  <circle cx="10" cy="3" r="1.5" fill="#fda4af" />
+                  <circle cx="13" cy="4" r="1.5" fill="#fda4af" />
+                </g>
+              </svg>
+            </div>
+          )}
+
+          <button onClick={handleOpenClick} className="hallmark-primary-btn" aria-label="Mở vòng quay may mắn">
+            <div className="celebration-shimmer" />
+            <span>🎁 Mở Vòng Quay May Mắn ✨</span>
+          </button>
+        </div>
+
+        <div style={{ position: 'relative', display: 'inline-flex', flexDirection: 'column', alignItems: 'center' }}>
+          {showFireworkCat && <FireworkSunglassesCat />}
+          <button onClick={onFirework} className="hallmark-secondary-btn" aria-label="Bắn pháo hoa chúc mừng">
+            <span>🎆 Pháo Hoa & Trái Tim 💖</span>
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -346,6 +664,50 @@ function WheelStage({
   const headRef = useRef<HTMLDivElement>(null);
   const wheelRef = useRef<LuckyWheelHandle | null>(null);
   const [spinning, setSpinning] = useState(false);
+
+  // 15s idle teaser cat prompting user to spin
+  const [showPromptCat, setShowPromptCat] = useState(false);
+  const [hasSpun, setHasSpun] = useState(false);
+  const promptCatRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (hasSpun) {
+      setShowPromptCat(false);
+      return;
+    }
+
+    let hideTimeout: number | undefined;
+    let nextShowTimeout: number | undefined;
+
+    const scheduleShow = () => {
+      setShowPromptCat(true);
+      try {
+        const audio = new Audio('/sounds/meow_chirp.wav');
+        audio.volume = 0.65;
+        audio.play().catch(() => {});
+      } catch {}
+
+      // Keep visible for 5s then hide
+      hideTimeout = window.setTimeout(() => {
+        setShowPromptCat(false);
+        // Wait 15s before showing again if not clicked
+        nextShowTimeout = window.setTimeout(() => {
+          scheduleShow();
+        }, 15000);
+      }, 5000);
+    };
+
+    // First trigger after 15s if not spun
+    const initialTimer = window.setTimeout(() => {
+      scheduleShow();
+    }, 15000);
+
+    return () => {
+      window.clearTimeout(initialTimer);
+      if (nextShowTimeout) window.clearTimeout(nextShowTimeout);
+      if (hideTimeout) window.clearTimeout(hideTimeout);
+    };
+  }, [hasSpun]);
 
   useGSAP(
     () => {
@@ -372,7 +734,9 @@ function WheelStage({
   );
 
   const handleSpin = () => {
-    if (spinning) return;
+    if (spinning || hasSpun) return;
+    setHasSpun(true);
+    setShowPromptCat(false);
     setSpinning(true);
     wheelRef.current?.spin();
   };
@@ -433,7 +797,106 @@ function WheelStage({
         />
       </div>
 
-      <div>
+      <div style={{ position: 'relative', display: 'inline-flex', flexDirection: 'column', alignItems: 'center' }}>
+        {showPromptCat && (
+          <div
+            ref={promptCatRef}
+            style={{
+              position: 'absolute',
+              bottom: 'calc(100% + 12px)',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              zIndex: 35,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              pointerEvents: 'none',
+              filter: 'drop-shadow(0 12px 28px rgba(0,0,0,0.55))',
+              animation: 'promptCatPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+            }}
+          >
+            {/* Comic Speech Bubble */}
+            <div
+              style={{
+                background: 'linear-gradient(135deg, #fef08a 0%, #fde047 100%)',
+                color: '#1c1917',
+                padding: '8px 18px',
+                borderRadius: 18,
+                border: '2px solid #ca8a04',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+                fontFamily: 'var(--font-display, "Cormorant Garamond", serif)',
+                fontWeight: 800,
+                textAlign: 'center',
+                whiteSpace: 'nowrap',
+                position: 'relative',
+              }}
+            >
+              <div style={{ fontSize: '14px', color: '#854d0e', fontWeight: 800 }}>
+                Ủa không muốn mở quà hả? 😼🎁
+              </div>
+              <div style={{ fontSize: '12px', color: '#713f12', fontStyle: 'italic', marginTop: 2 }}>
+                Chê đúng hơm, bấm quay lẹ đii nèee! 😜👇
+              </div>
+              {/* Bubble pointer triangle */}
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: -7,
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: 0,
+                  height: 0,
+                  borderLeft: '7px solid transparent',
+                  borderRight: '7px solid transparent',
+                  borderTop: '7px solid #ca8a04',
+                }}
+              />
+            </div>
+
+            {/* Handcrafted Vector Cat Pointing Down */}
+            <svg viewBox="0 0 130 95" width="124" height="90" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginTop: 2 }}>
+              <ellipse cx="65" cy="68" rx="34" ry="22" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
+              <ellipse cx="65" cy="70" rx="20" ry="14" fill="#fef3c7" />
+
+              <path d="M 42 44 L 32 16 L 56 30 Z" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
+              <path d="M 42 40 L 36 22 L 52 32 Z" fill="#fda4af" />
+              <path d="M 88 44 L 98 16 L 74 30 Z" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
+              <path d="M 88 40 L 94 22 L 78 32 Z" fill="#fda4af" />
+
+              <circle cx="65" cy="42" r="25" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
+              <ellipse cx="59" cy="48" rx="9" ry="6" fill="#ffffff" />
+              <ellipse cx="71" cy="48" rx="9" ry="6" fill="#ffffff" />
+
+              <path d="M 48 39 Q 54 34 60 39" stroke="#1c1917" strokeWidth="2.8" strokeLinecap="round" />
+              <ellipse cx="76" cy="38" rx="4.5" ry="5.5" fill="#1c1917" />
+              <circle cx="74.5" cy="36.5" r="1.8" fill="#ffffff" />
+              <circle cx="77.5" cy="40" r="0.9" fill="#ffffff" />
+
+              <polygon points="63,44 67,44 65,47" fill="#f43f5e" />
+              <path d="M 60 48 Q 65 52 70 48" stroke="#1c1917" strokeWidth="2" fill="none" strokeLinecap="round" />
+              <polygon points="64,48 66,48 65,51" fill="#ffffff" />
+
+              <ellipse cx="46" cy="45" rx="4" ry="2.5" fill="#f43f5e" opacity="0.45" />
+              <ellipse cx="84" cy="45" rx="4" ry="2.5" fill="#f43f5e" opacity="0.45" />
+
+              <path d="M 46 47 L 28 44 M 46 50 L 26 51" stroke="#78350f" strokeWidth="1.2" strokeLinecap="round" />
+              <path d="M 84 47 L 102 44 M 84 50 L 104 51" stroke="#78350f" strokeWidth="1.2" strokeLinecap="round" />
+
+              {/* Pointing down paws */}
+              <g transform="translate(34, 52)">
+                <ellipse cx="10" cy="10" rx="10" ry="8" fill="#fef3c7" stroke="#b45309" strokeWidth="1.8" />
+                <path d="M 10 16 L 10 26 L 6 20 M 10 26 L 14 20" stroke="#b45309" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                <circle cx="10" cy="10" r="3" fill="#f43f5e" />
+              </g>
+              <g transform="translate(76, 52)">
+                <ellipse cx="10" cy="10" rx="10" ry="8" fill="#fef3c7" stroke="#b45309" strokeWidth="1.8" />
+                <path d="M 10 16 L 10 26 L 6 20 M 10 26 L 14 20" stroke="#b45309" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                <circle cx="10" cy="10" r="3" fill="#f43f5e" />
+              </g>
+            </svg>
+          </div>
+        )}
+
         <button
           onClick={handleSpin}
           disabled={spinning}
@@ -459,6 +922,7 @@ function Reveal({
   onReplayWheel,
   onReplay,
   onFirework,
+  showFireworkCat,
 }: {
   name: string;
   prize: WheelPrize;
@@ -467,6 +931,7 @@ function Reveal({
   onReplayWheel: () => void;
   onReplay: () => void;
   onFirework: () => void;
+  showFireworkCat: boolean;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const wishRef = useRef<HTMLParagraphElement>(null);
@@ -762,13 +1227,16 @@ function Reveal({
             <span>{isReplayLocked ? '🔒 1 Lần Thôi Người Ơi! 🐾' : '🎲 Quay Lại'}</span>
           </button>
         </div>
-        <button
-          onClick={onFirework}
-          className="hallmark-secondary-btn"
-          aria-label="Bắn pháo hoa"
-        >
-          <span>🎆 Pháo Hoa & Trái Tim 💖</span>
-        </button>
+        <div style={{ position: 'relative', display: 'inline-flex', flexDirection: 'column', alignItems: 'center' }}>
+          {showFireworkCat && <FireworkSunglassesCat />}
+          <button
+            onClick={onFirework}
+            className="hallmark-secondary-btn"
+            aria-label="Bắn pháo hoa"
+          >
+            <span>🎆 Pháo Hoa & Trái Tim 💖</span>
+          </button>
+        </div>
         <button
           onClick={onReplay}
           className="hallmark-primary-btn"
