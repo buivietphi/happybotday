@@ -33,6 +33,30 @@ export default function WishesStack({ wishes, onComplete }: Props) {
   const total = wishes.length;
   const isLast = topIndex >= total - 1;
 
+  // 15-second slow reading teaser cats
+  const [showSlowCats, setShowSlowCats] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setShowSlowCats(true);
+      try {
+        const audio = new Audio('/sounds/meow_chirp.wav');
+        audio.volume = 0.65;
+        audio.play().catch(() => {});
+      } catch {}
+    }, 15000); // 15 seconds
+
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  const handleCatTeaseTap = (sound: string) => {
+    try {
+      const audio = new Audio(sound);
+      audio.volume = 0.7;
+      audio.play().catch(() => {});
+    } catch {}
+  };
+
   // Advance to next wish card
   const handleNext = useCallback(() => {
     if (isLast) {
@@ -135,6 +159,17 @@ export default function WishesStack({ wishes, onComplete }: Props) {
           background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
           animation: shimmerGlow 3s infinite ease-in-out;
           pointer-events: none;
+        }
+
+        @keyframes catPopUpBounce {
+          0% { transform: translateY(60px) scale(0.6); opacity: 0; }
+          60% { transform: translateY(-8px) scale(1.1); opacity: 1; }
+          80% { transform: translateY(3px) scale(0.96); opacity: 1; }
+          100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        @keyframes catIdleBob {
+          0% { transform: translateY(0) rotate(0deg); }
+          100% { transform: translateY(-4px) rotate(2deg); }
         }
       `}</style>
 
@@ -387,6 +422,154 @@ export default function WishesStack({ wishes, onComplete }: Props) {
           </button>
         </div>
       </div>
+
+      {/* === 15s SLOW READING TEASER CATS (2 CORNERS) === */}
+      {showSlowCats && (
+        <>
+          {/* Left Corner Cat: "Ú òa hết hồn chưaaa! Đọc gì lâu dọ?" */}
+          <div
+            onClick={() => handleCatTeaseTap('/sounds/meow1.wav')}
+            style={{
+              position: 'fixed',
+              left: 'clamp(8px, 2.5vw, 24px)',
+              bottom: 'clamp(10px, 2vh, 20px)',
+              zIndex: 45,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              cursor: 'pointer',
+              filter: 'drop-shadow(0 10px 24px rgba(0,0,0,0.35))',
+              animation: 'catPopUpBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+            }}
+            title="Bé mèo tinh nghịch"
+          >
+            {/* Comic Speech Bubble */}
+            <div
+              style={{
+                background: 'linear-gradient(135deg, #fef08a 0%, #fde047 100%)',
+                padding: '7px 14px',
+                borderRadius: '16px 16px 16px 4px',
+                border: '2px solid #ca8a04',
+                boxShadow: '0 6px 16px rgba(0,0,0,0.15)',
+                fontFamily: 'var(--font-display, "Cormorant Garamond", serif)',
+                maxWidth: 'min(210px, 44vw)',
+                marginBottom: 4,
+                marginLeft: 10,
+              }}
+            >
+              <div style={{ fontWeight: 800, color: '#854d0e', fontSize: '13px', lineHeight: 1.2 }}>
+                Ú òa hết hồn chưaaa! 🐱👻
+              </div>
+              <div style={{ fontWeight: 600, color: '#713f12', fontSize: '11.5px', fontStyle: 'italic', marginTop: 2 }}>
+                Đọc gì mà lâu dọ? 😜🐾
+              </div>
+            </div>
+
+            {/* Handcrafted Playful Winking Cat SVG */}
+            <svg
+              viewBox="0 0 110 90"
+              width="96"
+              height="78"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{ animation: 'catIdleBob 2.2s ease-in-out infinite alternate' }}
+            >
+              <path d="M 28 42 L 18 16 L 44 28 Z" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
+              <path d="M 28 38 L 22 22 L 40 30 Z" fill="#fda4af" />
+              <path d="M 72 42 L 82 16 L 56 28 Z" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
+              <path d="M 72 38 L 78 22 L 60 30 Z" fill="#fda4af" />
+              <circle cx="50" cy="46" r="26" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
+              <ellipse cx="44" cy="52" rx="9" ry="6" fill="#ffffff" />
+              <ellipse cx="56" cy="52" rx="9" ry="6" fill="#ffffff" />
+              <path d="M 36 43 Q 41 38 46 43" stroke="#1c1917" strokeWidth="2.5" strokeLinecap="round" />
+              <ellipse cx="60" cy="42" rx="4.5" ry="5.5" fill="#1c1917" />
+              <circle cx="59" cy="40.5" r="1.6" fill="#ffffff" />
+              <polygon points="48,48 52,48 50,51" fill="#f43f5e" />
+              <path d="M 46 52 Q 50 54 54 52" stroke="#1c1917" strokeWidth="1.8" fill="none" />
+              <ellipse cx="50" cy="56" rx="3.5" ry="4.5" fill="#f43f5e" />
+              <ellipse cx="32" cy="48" rx="4" ry="2.5" fill="#f43f5e" opacity="0.45" />
+              <ellipse cx="68" cy="48" rx="4" ry="2.5" fill="#f43f5e" opacity="0.45" />
+              <path d="M 34 50 L 16 48 M 34 53 L 14 54" stroke="#78350f" strokeWidth="1.2" strokeLinecap="round" />
+              <path d="M 66 50 L 84 48 M 66 53 L 86 54" stroke="#78350f" strokeWidth="1.2" strokeLinecap="round" />
+              <ellipse cx="26" cy="74" rx="10" ry="7" fill="#ffffff" stroke="#b45309" strokeWidth="1.8" />
+              <ellipse cx="74" cy="74" rx="10" ry="7" fill="#ffffff" stroke="#b45309" strokeWidth="1.8" />
+            </svg>
+          </div>
+
+          {/* Right Corner Cat: "Xúc động quá đúng hem? Biết mòoo~" */}
+          <div
+            onClick={() => handleCatTeaseTap('/sounds/meow_chirp.wav')}
+            style={{
+              position: 'fixed',
+              right: 'clamp(8px, 2.5vw, 24px)',
+              bottom: 'clamp(76px, 10vh, 90px)',
+              zIndex: 45,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-end',
+              cursor: 'pointer',
+              filter: 'drop-shadow(0 10px 24px rgba(0,0,0,0.35))',
+              animation: 'catPopUpBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s forwards',
+            }}
+            title="Bé mèo xúc động"
+          >
+            {/* Comic Speech Bubble */}
+            <div
+              style={{
+                background: 'linear-gradient(135deg, #ffffff 0%, #fff1f2 100%)',
+                padding: '7px 14px',
+                borderRadius: '16px 16px 4px 16px',
+                border: '2px solid #f43f5e',
+                boxShadow: '0 6px 16px rgba(244,63,94,0.2)',
+                fontFamily: 'var(--font-display, "Cormorant Garamond", serif)',
+                maxWidth: 'min(210px, 44vw)',
+                marginBottom: 4,
+                marginRight: 10,
+              }}
+            >
+              <div style={{ fontWeight: 800, color: '#e11d48', fontSize: '13px', lineHeight: 1.2 }}>
+                Xúc động quá đúng hem? 🥺💖
+              </div>
+              <div style={{ fontWeight: 600, color: '#881337', fontSize: '11.5px', fontStyle: 'italic', marginTop: 2 }}>
+                Biết mòoo~ Cứ đọc nha! 😽✨
+              </div>
+            </div>
+
+            {/* Handcrafted Watery-Eyed Loving Cat SVG */}
+            <svg
+              viewBox="0 0 110 90"
+              width="96"
+              height="78"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{ animation: 'catIdleBob 2.5s ease-in-out infinite alternate 0.3s' }}
+            >
+              <path d="M 50 14 C 50 8, 44 4, 40 8 C 36 4, 30 8, 30 14 C 30 20, 40 26, 40 26 C 40 26, 50 20, 50 14 Z" fill="#f43f5e" />
+              <path d="M 28 44 L 18 18 L 44 30 Z" fill="#fed7aa" stroke="#ea580c" strokeWidth="2" />
+              <path d="M 28 40 L 22 24 L 40 32 Z" fill="#fda4af" />
+              <path d="M 72 44 L 82 18 L 56 30 Z" fill="#fed7aa" stroke="#ea580c" strokeWidth="2" />
+              <path d="M 72 40 L 78 24 L 60 32 Z" fill="#fda4af" />
+              <circle cx="50" cy="48" r="26" fill="#fed7aa" stroke="#ea580c" strokeWidth="2" />
+              <ellipse cx="44" cy="54" rx="9" ry="6" fill="#ffffff" />
+              <ellipse cx="56" cy="54" rx="9" ry="6" fill="#ffffff" />
+              <ellipse cx="40" cy="44" rx="5" ry="6" fill="#1c1917" />
+              <circle cx="39" cy="42" r="2" fill="#ffffff" />
+              <circle cx="42" cy="46" r="1" fill="#ffffff" />
+              <ellipse cx="60" cy="44" rx="5" ry="6" fill="#1c1917" />
+              <circle cx="59" cy="42" r="2" fill="#ffffff" />
+              <circle cx="62" cy="46" r="1" fill="#ffffff" />
+              <polygon points="48,50 52,50 50,53" fill="#f43f5e" />
+              <path d="M 44 54 Q 50 58 56 54" stroke="#1c1917" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+              <ellipse cx="30" cy="50" rx="5" ry="3" fill="#f43f5e" opacity="0.5" />
+              <ellipse cx="70" cy="50" rx="5" ry="3" fill="#f43f5e" opacity="0.5" />
+              <path d="M 32 52 L 14 50 M 32 55 L 12 56" stroke="#c2410c" strokeWidth="1.2" strokeLinecap="round" />
+              <path d="M 68 52 L 86 50 M 68 55 L 88 56" stroke="#c2410c" strokeWidth="1.2" strokeLinecap="round" />
+              <ellipse cx="38" cy="74" rx="9" ry="6" fill="#ffffff" stroke="#ea580c" strokeWidth="1.8" />
+              <ellipse cx="62" cy="74" rx="9" ry="6" fill="#ffffff" stroke="#ea580c" strokeWidth="1.8" />
+            </svg>
+          </div>
+        </>
+      )}
     </section>
   );
 }

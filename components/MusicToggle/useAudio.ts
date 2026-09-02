@@ -23,6 +23,8 @@ export function useAudio(track: MusicTrack | undefined) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const ctxRef = useRef<AudioContext | null>(null);
   const synthRef = useRef<SynthHandle | null>(null);
+  // Tracks if user has explicitly pressed pause/mute
+  const manuallyPausedRef = useRef<boolean>(false);
   // Mirrors the latest startSynth so the auto-gesture listener (defined
   // inside useEffect) can call into the latest closure without re-binding.
   const startSynthRef = useRef<() => void>(() => {});
@@ -37,8 +39,8 @@ export function useAudio(track: MusicTrack | undefined) {
     if (track.kind !== 'synth') {
       const audio = new Audio(track.src);
       audio.loop = track.loop ?? true;
-      audio.volume = track.volume ?? 0.3;
-      audio.preload = 'none';
+      audio.volume = track.volume ?? 0.5;
+      audio.preload = 'auto';
       audioRef.current = audio;
 
       const onError = () =>
@@ -50,7 +52,36 @@ export function useAudio(track: MusicTrack | undefined) {
       audio.addEventListener('play', onPlay);
       audio.addEventListener('pause', onPause);
 
+      // Attempt immediate auto-play (Music defaults to ON)
+      const tryAutoPlay = () => {
+        if (manuallyPausedRef.current) return;
+        const p = audio.play();
+        if (p && typeof p.then === 'function') {
+          p.catch(() => {
+            // Autoplay restricted by browser policy until first gesture
+          });
+        }
+      };
+
+      tryAutoPlay();
+
+      // Trigger playback on first user gesture anywhere if autoplay was restricted
+      const onFirstInteraction = () => {
+        if (!manuallyPausedRef.current && audio.paused) {
+          tryAutoPlay();
+        }
+      };
+
+      window.addEventListener('pointerdown', onFirstInteraction, { passive: true });
+      window.addEventListener('touchstart', onFirstInteraction, { passive: true });
+      window.addEventListener('keydown', onFirstInteraction, { passive: true });
+      window.addEventListener('click', onFirstInteraction, { passive: true });
+
       return () => {
+        window.removeEventListener('pointerdown', onFirstInteraction);
+        window.removeEventListener('touchstart', onFirstInteraction);
+        window.removeEventListener('keydown', onFirstInteraction);
+        window.removeEventListener('click', onFirstInteraction);
         audio.pause();
         audio.removeEventListener('error', onError);
         audio.removeEventListener('play', onPlay);
@@ -59,23 +90,27 @@ export function useAudio(track: MusicTrack | undefined) {
       };
     }
 
-    // Synth mode: auto-start on the FIRST user gesture anywhere on the page.
-    // iOS Safari only allows AudioContext.resume() inside a user-initiated
-    // event handler, so we attach a one-shot listener.
+    // Synth mode: auto-start on mount or on first user gesture anywhere
     const onFirstGesture = () => {
-      startSynthRef.current?.();
-      document.removeEventListener('pointerdown', onFirstGesture);
-      document.removeEventListener('keydown', onFirstGesture);
-      document.removeEventListener('touchstart', onFirstGesture);
+      if (!manuallyPausedRef.current) {
+        startSynthRef.current?.();
+      }
     };
-    document.addEventListener('pointerdown', onFirstGesture, { passive: true });
-    document.addEventListener('keydown', onFirstGesture, { passive: true });
-    document.addEventListener('touchstart', onFirstGesture, { passive: true });
+
+    window.addEventListener('pointerdown', onFirstGesture, { passive: true, once: true });
+    window.addEventListener('keydown', onFirstGesture, { passive: true, once: true });
+    window.addEventListener('touchstart', onFirstGesture, { passive: true, once: true });
+    window.addEventListener('click', onFirstGesture, { passive: true, once: true });
+
+    try {
+      startSynthRef.current?.();
+    } catch {}
 
     return () => {
-      document.removeEventListener('pointerdown', onFirstGesture);
-      document.removeEventListener('keydown', onFirstGesture);
-      document.removeEventListener('touchstart', onFirstGesture);
+      window.removeEventListener('pointerdown', onFirstGesture);
+      window.removeEventListener('keydown', onFirstGesture);
+      window.removeEventListener('touchstart', onFirstGesture);
+      window.removeEventListener('click', onFirstGesture);
     };
   }, [track]);
 
@@ -114,6 +149,7 @@ export function useAudio(track: MusicTrack | undefined) {
   }, []);
 
   const play = useCallback(() => {
+    manuallyPausedRef.current = false;
     if (!track) return;
     if (track.kind === 'synth') {
       startSynth();
@@ -126,6 +162,7 @@ export function useAudio(track: MusicTrack | undefined) {
   }, [track, startSynth]);
 
   const pause = useCallback(() => {
+    manuallyPausedRef.current = true;
     if (!track) return;
     if (track.kind === 'synth') {
       stopSynth();
@@ -137,15 +174,15 @@ export function useAudio(track: MusicTrack | undefined) {
   const toggle = useCallback(() => {
     if (!track) return;
     if (track.kind === 'synth') {
-      if (synthRef.current) stopSynth();
-      else startSynth();
+      if (synthRef.current) pause();
+      else play();
       return;
     }
     const a = audioRef.current;
     if (!a) return;
     if (a.paused) play();
     else pause();
-  }, [track, play, pause, startSynth, stopSynth]);
+  }, [track, play, pause]);
 
   return { ...state, play, pause, toggle };
 }

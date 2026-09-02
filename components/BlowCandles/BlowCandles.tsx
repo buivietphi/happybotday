@@ -82,6 +82,10 @@ export default function BlowCandles({ onComplete }: Props) {
   // Dynamic nitro angle trailing directly behind drag motion
   const [dragAngle, setDragAngle] = useState(180);
 
+  // Crying cat state if user stays in celebrate phase for 30s without clicking proceed button
+  const [showCryingCat, setShowCryingCat] = useState(false);
+  const cryingCatRef = useRef<HTMLDivElement>(null);
+
   const litCount = extinguished.filter((v) => !v).length;
   const blownCount = extinguished.filter((v) => v).length;
 
@@ -269,6 +273,25 @@ export default function BlowCandles({ onComplete }: Props) {
 
     return () => ctx.revert();
   }, [phase, reduced]);
+
+  // If user stays in celebrate phase for ~30s without clicking the proceed button, show crying cat
+  useEffect(() => {
+    if (phase !== 'celebrate') {
+      setShowCryingCat(false);
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setShowCryingCat(true);
+      try {
+        const audio = new Audio('/sounds/meow_chirp.wav');
+        audio.volume = 0.65;
+        audio.play().catch(() => {});
+      } catch {}
+    }, 30000); // 30s timeout
+
+    return () => window.clearTimeout(timer);
+  }, [phase]);
 
   // User click on Hallmark Proceed Button
   const handleProceedClick = useCallback(() => {
@@ -772,6 +795,17 @@ export default function BlowCandles({ onComplete }: Props) {
           100% { stroke-dashoffset: -80; opacity: 0.85; }
         }
 
+        @keyframes cryingCatEnter {
+          0% { transform: translateX(-50%) scale(0) translateY(24px); opacity: 0; }
+          60% { transform: translateX(-50%) scale(1.12) translateY(-4px); opacity: 1; }
+          80% { transform: translateX(-50%) scale(0.96) translateY(2px); opacity: 1; }
+          100% { transform: translateX(-50%) scale(1) translateY(0); opacity: 1; }
+        }
+        @keyframes cryingSobSob {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-3px); }
+        }
+
         .hallmark-btn {
           position: relative;
           display: inline-flex;
@@ -1227,12 +1261,8 @@ export default function BlowCandles({ onComplete }: Props) {
           letterSpacing: '0.04em',
         }}
       >
-        {(isDark || isReady) && (
-          <span>
-            {!isMatchLit
-              ? 'Chạm vào que diêm để quẹt lửa'
-              : `Đang thắp · ${litCount}/${CANDLE_COUNT}`}
-          </span>
+        {(isDark || isReady) && isMatchLit && (
+          <span>Đang thắp · {litCount}/{CANDLE_COUNT}</span>
         )}
         {(isLit || isBlowing) && (
           <span style={{ color: 'var(--color-accent-deep)', fontWeight: 600 }}>
@@ -1240,17 +1270,147 @@ export default function BlowCandles({ onComplete }: Props) {
           </span>
         )}
         {isCelebrate && (
-          <button
-            ref={proceedBtnRef}
-            onClick={handleProceedClick}
-            className="hallmark-btn"
-            aria-label="Mở thư sinh nhật và xem lời chúc"
+          <div
+            style={{
+              position: 'relative',
+              display: 'inline-flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
           >
-            <div className="gold-shimmer-sweep" />
-            <span style={{ fontSize: '1.2em' }}>💌</span>
-            <span>Mở Thư Sinh Nhật Của Em</span>
-            <span style={{ fontSize: '1.1em' }}>✨</span>
-          </button>
+            {showCryingCat && (
+              <div
+                ref={cryingCatRef}
+                style={{
+                  position: 'absolute',
+                  bottom: 'calc(100% + 12px)',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  zIndex: 35,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  pointerEvents: 'none',
+                  filter: 'drop-shadow(0 12px 28px rgba(0,0,0,0.55))',
+                  animation: 'cryingCatEnter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+                }}
+              >
+                {/* Comic Speech Bubble */}
+                <div
+                  style={{
+                    background: 'linear-gradient(135deg, #ffffff 0%, #fff1f2 100%)',
+                    color: '#881337',
+                    padding: '8px 18px',
+                    borderRadius: 18,
+                    border: '2px solid #f43f5e',
+                    boxShadow: '0 8px 24px rgba(244, 63, 94, 0.35)',
+                    fontFamily: 'var(--font-display, "Cormorant Garamond", serif)',
+                    fontWeight: 700,
+                    textAlign: 'center',
+                    whiteSpace: 'nowrap',
+                    position: 'relative',
+                  }}
+                >
+                  <div style={{ fontSize: '15px', color: '#e11d48', fontWeight: 800 }}>
+                    Tại sao không bấm nhanh điii... 😿💦
+                  </div>
+                  <div style={{ fontSize: '13px', color: '#9f1239', fontStyle: 'italic', marginTop: 2 }}>
+                    Đang háo hức chờ xem thư nèee! 🥺💌✨
+                  </div>
+                  {/* Bubble pointer */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: -7,
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      width: 0,
+                      height: 0,
+                      borderLeft: '7px solid transparent',
+                      borderRight: '7px solid transparent',
+                      borderTop: '7px solid #f43f5e',
+                    }}
+                  />
+                </div>
+
+                {/* Handcrafted Vector Crying Kitten SVG */}
+                <svg
+                  viewBox="0 0 130 95"
+                  width="124"
+                  height="90"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ marginTop: 2, animation: 'cryingSobSob 1.2s ease-in-out infinite' }}
+                >
+                  {/* Tear splash puddles */}
+                  <ellipse cx="22" cy="85" rx="14" ry="4" fill="#38bdf8" opacity="0.6" />
+                  <ellipse cx="108" cy="85" rx="14" ry="4" fill="#38bdf8" opacity="0.6" />
+
+                  {/* Cat Body */}
+                  <ellipse cx="65" cy="68" rx="34" ry="22" fill="#fed7aa" stroke="#ea580c" strokeWidth="2" />
+                  <ellipse cx="65" cy="70" rx="20" ry="14" fill="#ffffff" />
+
+                  {/* Drooping Sad Cat Ears */}
+                  <path d="M 42 44 L 22 28 L 48 35 Z" fill="#fed7aa" stroke="#ea580c" strokeWidth="2" />
+                  <path d="M 40 40 L 26 30 L 46 35 Z" fill="#fda4af" />
+                  <path d="M 88 44 L 108 28 L 82 35 Z" fill="#fed7aa" stroke="#ea580c" strokeWidth="2" />
+                  <path d="M 90 40 L 104 30 L 84 35 Z" fill="#fda4af" />
+
+                  {/* Head */}
+                  <circle cx="65" cy="44" r="24" fill="#fed7aa" stroke="#ea580c" strokeWidth="2" />
+                  <ellipse cx="60" cy="50" rx="8" ry="6" fill="#ffffff" />
+                  <ellipse cx="70" cy="50" rx="8" ry="6" fill="#ffffff" />
+
+                  {/* Big Watery Crying Eyes */}
+                  <ellipse cx="52" cy="40" rx="6" ry="7" fill="#1c1917" />
+                  <circle cx="50" cy="38" r="2.4" fill="#ffffff" />
+                  <circle cx="54" cy="42" r="1.4" fill="#ffffff" />
+                  <ellipse cx="52" cy="44" rx="4" ry="2" fill="#38bdf8" opacity="0.75" />
+
+                  <ellipse cx="78" cy="40" rx="6" ry="7" fill="#1c1917" />
+                  <circle cx="76" cy="38" r="2.4" fill="#ffffff" />
+                  <circle cx="80" cy="42" r="1.4" fill="#ffffff" />
+                  <ellipse cx="78" cy="44" rx="4" ry="2" fill="#38bdf8" opacity="0.75" />
+
+                  {/* Gushing Waterfall Tears */}
+                  <path d="M 48 44 C 36 50, 24 62, 22 84" stroke="#38bdf8" strokeWidth="4" strokeLinecap="round" />
+                  <path d="M 48 44 C 36 50, 24 62, 22 84" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" />
+                  <circle cx="28" cy="62" r="2.5" fill="#bae6fd" />
+                  <circle cx="16" cy="74" r="2" fill="#38bdf8" />
+
+                  <path d="M 82 44 C 94 50, 106 62, 108 84" stroke="#38bdf8" strokeWidth="4" strokeLinecap="round" />
+                  <path d="M 82 44 C 94 50, 106 62, 108 84" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" />
+                  <circle cx="102" cy="62" r="2.5" fill="#bae6fd" />
+                  <circle cx="114" cy="74" r="2" fill="#38bdf8" />
+
+                  {/* Trembling Open Crying Mouth */}
+                  <polygon points="63,47 67,47 65,50" fill="#f43f5e" />
+                  <path d="M 58 52 C 60 58, 70 58, 72 52 Z" fill="#e11d48" stroke="#1c1917" strokeWidth="1.5" />
+                  <ellipse cx="65" cy="55" rx="3.5" ry="2" fill="#fda4af" />
+
+                  {/* Whiskers */}
+                  <path d="M 46 48 L 30 46 M 46 51 L 28 52" stroke="#c2410c" strokeWidth="1.2" strokeLinecap="round" />
+                  <path d="M 84 48 L 100 46 M 84 51 L 102 52" stroke="#c2410c" strokeWidth="1.2" strokeLinecap="round" />
+
+                  {/* Front Paws Wiping Cheeks */}
+                  <ellipse cx="44" cy="56" rx="7" ry="5.5" fill="#ffffff" stroke="#ea580c" strokeWidth="1.5" />
+                  <ellipse cx="86" cy="56" rx="7" ry="5.5" fill="#ffffff" stroke="#ea580c" strokeWidth="1.5" />
+                </svg>
+              </div>
+            )}
+
+            <button
+              ref={proceedBtnRef}
+              onClick={handleProceedClick}
+              className="hallmark-btn"
+              aria-label="Mở thư sinh nhật và xem lời chúc"
+            >
+              <div className="gold-shimmer-sweep" />
+              <span style={{ fontSize: '1.2em' }}>💌</span>
+              <span>Mở Thư Sinh Nhật Của Em</span>
+              <span style={{ fontSize: '1.1em' }}>✨</span>
+            </button>
+          </div>
         )}
       </div>
     </section>

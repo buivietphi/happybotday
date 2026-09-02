@@ -32,6 +32,10 @@ const SECTOR_THEMES = [
   { bg: 'linear-gradient(135deg, #e11d48 0%, #9f1239 100%)', text: '#ffe4e6', border: '#fecdd3' }, // Velvet Crimson
   { bg: 'linear-gradient(135deg, #06b6d4 0%, #0e7490 100%)', text: '#cffafe', border: '#67e8f9' }, // Cyan Diamond
   { bg: 'linear-gradient(135deg, #f97316 0%, #c2410c 100%)', text: '#ffedd5', border: '#fdba74' }, // Sunset Coral
+  { bg: 'linear-gradient(135deg, #14b8a6 0%, #0f766e 100%)', text: '#ccfbf1', border: '#5eead4' }, // Persian Teal
+  { bg: 'linear-gradient(135deg, #d946ef 0%, #a21caf 100%)', text: '#fae8ff', border: '#f0abfc' }, // Electric Orchid
+  { bg: 'linear-gradient(135deg, #eab308 0%, #a16207 100%)', text: '#fef9c3', border: '#fef08a' }, // Imperial Gold
+  { bg: 'linear-gradient(135deg, #6366f1 0%, #4338ca 100%)', text: '#e0e7ff', border: '#a5b4fc' }, // Royal Indigo
 ];
 
 const SIZE = 400;

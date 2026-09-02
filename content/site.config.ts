@@ -63,6 +63,10 @@ const config: SiteConfig = {
     { label: 'Quà 200k Tiền Mặt', emoji: '💵' },
     { label: 'Ăn Tối Cùng Nhau', emoji: '🍽️' },
     { label: 'Được Đi Du Lịch Sài Gòn', emoji: '✈️' },
+    { label: 'Vé Xem Phim Couple & Bắp Nước', emoji: '🎬' },
+    { label: '1 Buổi Gội Đầu Dưỡng Sinh Thư Giãn', emoji: '💆‍♀️' },
+    { label: '1 Bó Hoa Tươi Thơm Ngát', emoji: '💐' },
+    { label: 'Làm Bộ Móng Mới Dưới 300k', emoji: '💅' },
   ],
   theme: {
     primary: '#e34d8c',    // hot magenta

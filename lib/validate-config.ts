@@ -22,7 +22,7 @@ export const SiteConfigSchema = z.object({
         color: z.string().optional(),
       }),
     )
-    .max(12)
+    .max(24)
     .optional(),
   music: z
     .union([
