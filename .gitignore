@@ -39,3 +39,6 @@ next-env.d.ts
 
 # logs
 *.log
+
+# Impeccable plugin internal cache (auto-generated)
+/.impeccable/hook.cache.json

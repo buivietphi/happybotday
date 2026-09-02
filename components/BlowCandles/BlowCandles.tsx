@@ -50,7 +50,7 @@ const WIND_CORNER = { x: 15, y: 238 };
 // Timings (ms)
 const T_DARK = 600;
 const T_ENTERING = 1200;
-const T_LIT = 3200; // "make a wish" pause before prompting to blow
+const T_LIT = 5000; // "Em ước đi nhé ✨" shows for 5s before prompting to blow
 const T_BLOW_TO_CELEBRATE = 800;
 
 export default function BlowCandles({ onComplete }: Props) {
@@ -888,7 +888,7 @@ export default function BlowCandles({ onComplete }: Props) {
               : 'Kéo diêm đến từng ngọn nến mèo để thắp nhé 🕯️'}
           </div>
         )}
-        {(isLit || isBlowing) && (
+        {isLit && (
           <div
             className="phase-caption"
             key="lit"
@@ -901,6 +901,11 @@ export default function BlowCandles({ onComplete }: Props) {
             }}
           >
             Em ước đi nhé ✨
+          </div>
+        )}
+        {isBlowing && (
+          <div className="phase-caption" key="blow" style={captionStyle}>
+            Kéo đám mây gió qua bánh kem để thổi tắt nến 💨
           </div>
         )}
         {isCelebrate && (
