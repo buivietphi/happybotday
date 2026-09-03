@@ -10,7 +10,7 @@ import ConfettiBurst from '@/components/bits/ConfettiBurst';
 import Matchstick from '@/components/bits/Matchstick';
 import IgniteBurst from '@/components/bits/IgniteBurst';
 import FloatingHearts from '@/components/bits/FloatingHearts';
-import Avatar from '@/components/bits/Avatar';
+import QueenAnt from '@/components/bits/QueenAnt';
 import config from '@/content/site.config';
 
 type Props = {
@@ -123,6 +123,77 @@ function FlyingWindPuff({
   );
 }
 
+function GiantMegaWindPuff({
+  startX,
+  startY,
+  targetX,
+  targetY,
+  onHit,
+  onComplete,
+}: {
+  startX: number;
+  startY: number;
+  targetX: number;
+  targetY: number;
+  onHit: () => void;
+  onComplete: () => void;
+}) {
+  const puffRef = useRef<SVGGElement>(null);
+
+  useEffect(() => {
+    if (!puffRef.current) return;
+    const el = puffRef.current;
+    let hitFired = false;
+
+    gsap.set(el, {
+      x: startX,
+      y: startY,
+      scale: 0.9,
+      opacity: 1,
+    });
+
+    gsap.to(el, {
+      x: targetX,
+      y: targetY - 10,
+      scale: 2.4,
+      duration: 0.55,
+      ease: 'power2.out',
+      onUpdate: function () {
+        if (!hitFired && this.progress() >= 0.65) {
+          hitFired = true;
+          onHit();
+        }
+      },
+      onComplete: () => {
+        gsap.to(el, {
+          opacity: 0,
+          scale: 3.2,
+          duration: 0.18,
+          ease: 'power2.out',
+          onComplete,
+        });
+      },
+    });
+  }, [startX, startY, targetX, targetY, onHit, onComplete]);
+
+  return (
+    <g ref={puffRef} style={{ pointerEvents: 'none' }} filter="url(#windGlow)">
+      {/* 1 Cục Gió To Khổng Lồ ("nhấn giữ nặng ra 1 cục gió to") */}
+      <circle cx="0" cy="0" r="28" fill="url(#windBreezeGrad)" stroke="#0284c7" strokeWidth="2.5" opacity="0.95" />
+      <ellipse cx="-14" cy="4" rx="20" ry="16" fill="url(#windBreezeGrad)" stroke="#38bdf8" strokeWidth="1.8" opacity="0.9" />
+      <ellipse cx="16" cy="-4" rx="18" ry="15" fill="url(#windBreezeGrad)" stroke="#38bdf8" strokeWidth="1.8" opacity="0.9" />
+      <circle cx="2" cy="-12" r="14" fill="url(#windBreezeGrad)" />
+      {/* Swirling Cyclone Rings */}
+      <ellipse cx="0" cy="0" rx="36" ry="16" fill="none" stroke="#ffffff" strokeWidth="3" strokeDasharray="16 8" opacity="0.85" />
+      <ellipse cx="0" cy="0" rx="26" ry="24" fill="none" stroke="#bae6fd" strokeWidth="2" strokeDasharray="12 6" opacity="0.75" />
+      {/* Mega Speed Trails behind */}
+      <path d="M -30 6 Q -48 2 -68 10" stroke="#38bdf8" strokeWidth="4.5" strokeLinecap="round" fill="none" opacity="0.8" />
+      <path d="M -26 -8 Q -46 -14 -62 -6" stroke="#7dd3fc" strokeWidth="3.5" strokeLinecap="round" fill="none" opacity="0.7" />
+      <path d="M -20 18 Q -40 24 -56 16" stroke="#bae6fd" strokeWidth="3" strokeLinecap="round" fill="none" opacity="0.6" />
+    </g>
+  );
+}
+
 export default function BlowCandles({ onComplete }: Props) {
   const root = useRef<HTMLElement>(null);
   const matchstickRef = useRef<SVGGElement>(null);
@@ -152,19 +223,24 @@ export default function BlowCandles({ onComplete }: Props) {
   // Dynamic nitro angle trailing directly behind drag motion
   const [dragAngle, setDragAngle] = useState(180);
 
-  // Flying Wind Puffs state ("thổi bao nhiêu ra bấy nhiêu, click 1 lần thì 1 đám gió bay ra")
+  // Flying Wind Puffs state ("5 gió cùng lúc hoặc nhấn giữ nặng ra 1 cục gió to")
   type WindPuff = {
     id: number;
     startX: number;
     startY: number;
     targetX: number;
     targetY: number;
+    isMega?: boolean;
   };
   const [windPuffs, setWindPuffs] = useState<WindPuff[]>([]);
   const [antIsPuffing, setAntIsPuffing] = useState(false);
+  const [isChargingMega, setIsChargingMega] = useState(false);
+  const [chargeProgress, setChargeProgress] = useState(0);
   const puffCounterRef = useRef(0);
-  const candleHitCount = useRef(0);
-  const hitDecayTimer = useRef<number | null>(null);
+  const recentHitsRef = useRef<number[]>([]);
+  const holdStartTimeRef = useRef<number>(0);
+  const holdTimerRef = useRef<number | null>(null);
+  const isHoldActiveRef = useRef(false);
 
   // Crying cat state if user stays in celebrate phase for 30s without clicking proceed button
   const [showCryingCat, setShowCryingCat] = useState(false);
@@ -660,72 +736,147 @@ export default function BlowCandles({ onComplete }: Props) {
     setWindPuffs((prev) => prev.filter((p) => p.id !== id));
   }, []);
 
-  const handlePuffHit = useCallback(() => {
-    if (extinguished[0]) return;
+  const spawnPuff = useCallback((isMega = false) => {
+    puffCounterRef.current += 1;
+    const newId = puffCounterRef.current;
+    const antMouthX = WIND_CORNER.x + 40;
+    const antMouthY = WIND_CORNER.y + 10;
+    const targetCandleX = CANDLE_CONFIGS[0]?.x ?? 300;
+    const targetCandleY = (CANDLE_CONFIGS[0]?.y ?? 286) - 54;
 
-    if (hitDecayTimer.current) {
-      window.clearTimeout(hitDecayTimer.current);
-      hitDecayTimer.current = null;
-    }
+    setWindPuffs((prev) => [
+      ...prev,
+      {
+        id: newId,
+        startX: antMouthX,
+        startY: antMouthY,
+        targetX: targetCandleX,
+        targetY: targetCandleY,
+        isMega,
+      },
+    ]);
+  }, []);
 
-    candleHitCount.current += 1;
-    const count = candleHitCount.current;
+  /** Puff reaches candle ("5 gió đi cùng lúc kìa mới tắt, hoặc 1 cục gió to") */
+  const handlePuffHit = useCallback(
+    (isMega?: boolean) => {
+      if (extinguished[0]) return;
 
-    if (count >= 3) {
-      // 3rd puff blows out the candle!
-      try {
-        const audio = new Audio('/sounds/wind_breeze.wav');
-        audio.volume = 0.85;
-        audio.play().catch(() => {});
-      } catch {}
-      candleHitCount.current = 0;
-      extinguishCandle(0, -1);
-    } else {
-      // Gentle flicker & sway
-      flickerAndSwayCandles(count);
-      hitDecayTimer.current = window.setTimeout(() => {
-        candleHitCount.current = 0;
-      }, 1500);
-    }
-  }, [extinguished, extinguishCandle, flickerAndSwayCandles]);
+      // Mega Wind Ball -> Blows out instantly!
+      if (isMega) {
+        try {
+          const audio = new Audio('/sounds/wind_breeze.wav');
+          audio.volume = 0.95;
+          audio.play().catch(() => {});
+        } catch {}
+        recentHitsRef.current = [];
+        extinguishCandle(0, -1);
+        return;
+      }
 
-  /** Click ant = 1 đám gió bay ra ("thổi bao nhiêu ra bấy nhiêu") */
-  const handleAntClick = useCallback(
+      // Normal small puff
+      const now = Date.now();
+      // Keep only hits in the last 1100ms
+      recentHitsRef.current = recentHitsRef.current.filter((t) => now - t <= 1100);
+      recentHitsRef.current.push(now);
+      const count = recentHitsRef.current.length;
+
+      if (count >= 5) {
+        // 5 puffs hitting rapidly in succession -> Blows out candle!
+        try {
+          const audio = new Audio('/sounds/wind_breeze.wav');
+          audio.volume = 0.9;
+          audio.play().catch(() => {});
+        } catch {}
+        recentHitsRef.current = [];
+        extinguishCandle(0, -1);
+      } else {
+        // Clicks ngắt quãng or < 5 -> candle flickers & sways with wind, DOES NOT blow out!
+        flickerAndSwayCandles(count);
+      }
+    },
+    [extinguished, extinguishCandle, flickerAndSwayCandles],
+  );
+
+  /** Pointer Down on Ant: Press & hold to charge giant wind ball ("nhấn giữ nặng ra 1 cục gió to") */
+  const handleAntPointerDown = useCallback(
     (e: React.PointerEvent) => {
       e.preventDefault();
       e.stopPropagation();
 
-      // Ant cheeks puff
+      isHoldActiveRef.current = true;
+      holdStartTimeRef.current = Date.now();
       setAntIsPuffing(true);
-      setTimeout(() => setAntIsPuffing(false), 220);
+      setIsChargingMega(true);
+      setChargeProgress(0.1);
 
-      // Ant chirp
-      try {
-        const audio = new Audio('/sounds/ant_chirp.wav');
-        audio.volume = 0.65;
-        audio.play().catch(() => {});
-      } catch {}
+      if (holdTimerRef.current) window.clearInterval(holdTimerRef.current);
 
-      // Spawn flying wind puff ("1 đám gió")
-      puffCounterRef.current += 1;
-      const newId = puffCounterRef.current;
-      const antMouthX = WIND_CORNER.x + 40;
-      const antMouthY = WIND_CORNER.y + 10;
-      const targetCandleX = CANDLE_CONFIGS[0]?.x ?? 300;
-      const targetCandleY = (CANDLE_CONFIGS[0]?.y ?? 286) - 54;
+      holdTimerRef.current = window.setInterval(() => {
+        if (!isHoldActiveRef.current) return;
+        const elapsed = Date.now() - holdStartTimeRef.current;
+        const prog = Math.min(elapsed / 700, 1);
+        setChargeProgress(prog);
 
-      setWindPuffs((prev) => [
-        ...prev,
-        {
-          id: newId,
-          startX: antMouthX,
-          startY: antMouthY,
-          targetX: targetCandleX,
-          targetY: targetCandleY,
-        },
-      ]);
+        if (elapsed >= 800) {
+          // Auto blast if held for 800ms
+          isHoldActiveRef.current = false;
+          setIsChargingMega(false);
+          setChargeProgress(0);
+          setAntIsPuffing(false);
+          if (holdTimerRef.current) {
+            window.clearInterval(holdTimerRef.current);
+            holdTimerRef.current = null;
+          }
+          try {
+            const audio = new Audio('/sounds/wind_breeze.wav');
+            audio.volume = 0.85;
+            audio.play().catch(() => {});
+          } catch {}
+          spawnPuff(true); // 1 CỤC GIÓ TO!
+        }
+      }, 50);
     },
-    [],
+    [spawnPuff],
+  );
+
+  /** Pointer Up on Ant: If held long -> launch mega puff; if quick tap -> launch normal puff */
+  const handleAntPointerUp = useCallback(
+    (e: React.PointerEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (!isHoldActiveRef.current) return;
+      isHoldActiveRef.current = false;
+      setIsChargingMega(false);
+      setChargeProgress(0);
+      setTimeout(() => setAntIsPuffing(false), 200);
+
+      if (holdTimerRef.current) {
+        window.clearInterval(holdTimerRef.current);
+        holdTimerRef.current = null;
+      }
+
+      const elapsed = Date.now() - holdStartTimeRef.current;
+      if (elapsed >= 550) {
+        // Charged enough -> Giant Mega Wind Puff!
+        try {
+          const audio = new Audio('/sounds/wind_breeze.wav');
+          audio.volume = 0.85;
+          audio.play().catch(() => {});
+        } catch {}
+        spawnPuff(true); // 1 CỤC GIÓ TO!
+      } else {
+        // Quick click -> normal puff ("thổi bao nhiêu ra bấy nhiêu")
+        try {
+          const audio = new Audio('/sounds/ant_chirp.wav');
+          audio.volume = 0.65;
+          audio.play().catch(() => {});
+        } catch {}
+        spawnPuff(false);
+      }
+    },
+    [spawnPuff],
   );
 
   // === Pointer Drag Handlers ===
@@ -1014,7 +1165,7 @@ export default function BlowCandles({ onComplete }: Props) {
           justifyContent: 'center',
         }}
       >
-        <Avatar name={config.recipient.name} size="sm" caption="" hideName imageUrl="/photos/avta.jpg" />
+        <QueenAnt size="sm" />
         <div style={{ textAlign: 'left' }}>
           <div
             style={{
@@ -1238,7 +1389,10 @@ export default function BlowCandles({ onComplete }: Props) {
           <g
             ref={windGroupRef}
             data-ant-blow=""
-            onPointerDown={handleAntClick}
+            onPointerDown={handleAntPointerDown}
+            onPointerUp={handleAntPointerUp}
+            onPointerLeave={handleAntPointerUp}
+            onPointerCancel={handleAntPointerUp}
             transform={`translate(${WIND_CORNER.x}, ${WIND_CORNER.y})`}
             filter="url(#windGlow)"
             style={{
@@ -1250,7 +1404,7 @@ export default function BlowCandles({ onComplete }: Props) {
             }}
             role="button"
             tabIndex={0}
-            aria-label="Bấm vào bé kiến để thổi gió"
+            aria-label="Bấm liên tục 5 lần hoặc nhấn giữ để thổi ra cục gió to"
           >
             {/* Hypersensitive Large Touch Hit Area */}
             <rect
@@ -1273,7 +1427,7 @@ export default function BlowCandles({ onComplete }: Props) {
               fontFamily="var(--font-body)"
               style={{ pointerEvents: 'none', userSelect: 'none' }}
             >
-              Bấm vào bé kiến để thổi gió 🐜💨
+              Bấm 5 lần liên tục hoặc nhấn giữ ra cục gió to 🐜💨
             </text>
 
             {/* Ambient Cyan Aura Halo behind Bé Kiến */}
@@ -1294,12 +1448,12 @@ export default function BlowCandles({ onComplete }: Props) {
               <path d="M 32 -4 Q 44 -18 40 -24" stroke="#c2410c" strokeWidth="2.4" strokeLinecap="round" fill="none" />
               <circle cx="40" cy="-24" r="3" fill="#facc15" stroke="#c2410c" strokeWidth="1" />
 
-              {/* Ant Head (Phồng má khi thổi) */}
+              {/* Ant Head (Phồng má khi thổi hoặc sạc) */}
               <ellipse
                 cx="28"
                 cy="8"
-                rx={antIsPuffing ? 20 : 17}
-                ry={antIsPuffing ? 17 : 14}
+                rx={antIsPuffing || isChargingMega ? 21 : 17}
+                ry={antIsPuffing || isChargingMega ? 18 : 14}
                 fill="#ea580c"
                 stroke="#c2410c"
                 strokeWidth="2"
@@ -1317,24 +1471,63 @@ export default function BlowCandles({ onComplete }: Props) {
               <ellipse cx="40" cy="10" rx="3.5" ry="4.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1.2" />
               <circle cx="40" cy="10" r="1.5" fill="#e0f2fe" />
 
+              {/* Charging Mega Wind Sphere right at mouth ("nhấn giữ nặng ra 1 cục gió to") */}
+              {isChargingMega && (
+                <g transform="translate(48, 10)" style={{ pointerEvents: 'none' }}>
+                  <circle
+                    cx="0"
+                    cy="0"
+                    r={8 + chargeProgress * 18}
+                    fill="url(#windBreezeGrad)"
+                    stroke="#38bdf8"
+                    strokeWidth="2.2"
+                    opacity={0.8 + chargeProgress * 0.2}
+                    filter="url(#windGlow)"
+                  />
+                  <ellipse
+                    cx="0"
+                    cy="0"
+                    rx={12 + chargeProgress * 20}
+                    ry={5 + chargeProgress * 8}
+                    fill="none"
+                    stroke="#ffffff"
+                    strokeWidth="2"
+                    strokeDasharray="8 4"
+                    opacity="0.9"
+                  />
+                </g>
+              )}
+
               {/* Ant Legs supporting body */}
               <ellipse cx="12" cy="22" rx="5" ry="4" fill="#ffffff" stroke="#ea580c" strokeWidth="1.2" />
               <ellipse cx="26" cy="22" rx="5" ry="4" fill="#ffffff" stroke="#ea580c" strokeWidth="1.2" />
             </g>
           </g>
 
-          {/* Flying Wind Puffs ("thổi bao nhiêu ra bấy nhiêu, click 1 lần thì 1 đám gió bay ra") */}
-          {windPuffs.map((puff) => (
-            <FlyingWindPuff
-              key={puff.id}
-              startX={puff.startX}
-              startY={puff.startY}
-              targetX={puff.targetX}
-              targetY={puff.targetY}
-              onHit={handlePuffHit}
-              onComplete={() => removePuff(puff.id)}
-            />
-          ))}
+          {/* Flying Wind Puffs ("5 gió đi cùng lúc hoặc 1 cục gió to") */}
+          {windPuffs.map((puff) =>
+            puff.isMega ? (
+              <GiantMegaWindPuff
+                key={puff.id}
+                startX={puff.startX}
+                startY={puff.startY}
+                targetX={puff.targetX}
+                targetY={puff.targetY}
+                onHit={() => handlePuffHit(true)}
+                onComplete={() => removePuff(puff.id)}
+              />
+            ) : (
+              <FlyingWindPuff
+                key={puff.id}
+                startX={puff.startX}
+                startY={puff.startY}
+                targetX={puff.targetX}
+                targetY={puff.targetY}
+                onHit={() => handlePuffHit(false)}
+                onComplete={() => removePuff(puff.id)}
+              />
+            ),
+          )}
 
           {/* Matchstick — freely draggable AT ALL TIMES */}
           <g
@@ -1410,7 +1603,7 @@ export default function BlowCandles({ onComplete }: Props) {
             }}
           >
             <span style={{ fontSize: '14px', color: 'var(--color-accent-deep)', fontWeight: 600 }}>
-              👈 Bấm vào bé kiến để thổi tắt nến nhé (thổi bao nhiêu ra bấy nhiêu 🐜💨)
+              👈 Bấm liên tục 5 lần hoặc nhấn giữ bé kiến để thổi tắt nến nhé 🐜💨
             </span>
           </div>
         )}
