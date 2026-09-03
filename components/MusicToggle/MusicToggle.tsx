@@ -49,7 +49,7 @@ export default function MusicToggle({ track }: Props) {
       aria-label={label}
       title={label}
     >
-      <span aria-hidden>{isPlaying ? '🎵' : '🔇'}</span>
+      <span aria-hidden>{isPlaying ? '🐜🎶' : '🔇'}</span>
     </button>
   );
 }

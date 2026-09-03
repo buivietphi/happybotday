@@ -1416,19 +1416,6 @@ export default function BlowCandles({ onComplete }: Props) {
               style={{ cursor: 'pointer', touchAction: 'none' }}
             />
 
-            {/* Simple clean floating hint */}
-            <text
-              x="22"
-              y="-28"
-              textAnchor="middle"
-              fill="#0284c7"
-              fontSize="12.5"
-              fontWeight="700"
-              fontFamily="var(--font-body)"
-              style={{ pointerEvents: 'none', userSelect: 'none' }}
-            >
-              Bấm 5 lần liên tục hoặc nhấn giữ ra cục gió to 🐜💨
-            </text>
 
             {/* Ambient Cyan Aura Halo behind Bé Kiến */}
             <ellipse cx="20" cy="8" rx="48" ry="32" fill="#e0f2fe" opacity="0.65" filter="blur(8px)" />
