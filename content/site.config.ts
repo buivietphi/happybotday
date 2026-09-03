@@ -22,7 +22,7 @@ const config: SiteConfig = {
     name: 'Dẹo Dẹo',
     headline: 'Chúc mừng sinh nhật, Dẹo Dẹo!',
     outroWish:
-      'Chúc chị tuổi mới công việc thăng tiến, sức khỏe dồi dào, cuộc sống viên mãn và luôn tươi cười rạng rỡ mỗi ngày! Từ em Phi 🐜🎂',
+      'Chúc chị tuổi mới công việc thăng tiến, sức khỏe dồi dào, cuộc sống viên mãn và luôn tươi cười rạng rỡ mỗi ngày! Từ Phi 🐜🎂',
   },
   wishes: [
     {

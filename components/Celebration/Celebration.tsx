@@ -295,7 +295,7 @@ export default function Celebration({ name, outroWish, onReplay }: Props) {
               fontWeight: 700,
             }}
           >
-            — Chị Phi 🌟 —
+            — Phi 🌟 —
           </div>
         </div>
 
