@@ -22,28 +22,28 @@ const config: SiteConfig = {
     name: 'Dẹo Dẹo',
     headline: 'Chúc mừng sinh nhật, Dẹo Dẹo!',
     outroWish:
-      'Thổi nến, ước thật to, rồi bóc quà sinh nhật từ đứa bạn này nhé! 🎁',
+      'Chúc chị tuổi mới công việc thăng tiến, sức khỏe dồi dào, cuộc sống viên mãn và luôn tươi cười rạng rỡ mỗi ngày! Từ em Phi 🐜🎂',
   },
   wishes: [
     {
       text:
-        'Chúc mừng sinh nhật Dẹo Dẹo! Chúc bạn tui thêm một tuổi mới luôn vui vẻ, rạng rỡ, tràn đầy năng lượng tích cực và ngày càng thành công nhé! 🎂🎉',
+        'Chúc mừng sinh nhật chị Dẹo Dẹo! Chúc chị thêm một tuổi mới tràn đầy sức khỏe, mọi dự án đều hanh thông, sự nghiệp ngày càng thăng tiến rực rỡ nhé! 🎂🎉',
     },
     {
       text:
-        'Chúc bạn tuổi mới tiền đầy túi, công việc hanh thông, mọi dự định đều thuận buồm xuôi gió. Lúc nào cần đồng bọn đi ăn đi quẩy cứ ới là có mặt ngay! 🛵💨',
+        'Chúc chị tuổi mới tiền đầy túi, KPI đạt vượt chỉ tiêu, sếp thưởng tấp nập! Làm việc cùng chị là một điều may mắn của em đó nha! 🚀💪',
     },
     {
       text:
-        'Mong tuổi mới mang đến cho Dẹo Dẹo thật nhiều chuyến đi thú vị, những trải nghiệm tuyệt vời và ăn bao nhiêu món ngon cũng không sợ béo! 🍕🧋',
+        'Mong tuổi mới mang đến cho chị thật nhiều niềm vui, những chuyến đi thú vị và những bữa ăn trưa team ngon lành không kém. Chị xứng đáng được hưởng điều tốt nhất! 🍕☕',
     },
     {
       text:
-        'Cảm ơn vì đã luôn là một người bạn chí cốt cực kỳ tuyệt vời, luôn mang tiếng cười và sự ấm áp đến cho bạn bè xung quanh. Tình bạn của tụi mình mãi bền chặt nha! 🤝🌟',
+        'Cảm ơn chị đã luôn hỗ trợ và chia sẻ nhiều kinh nghiệm quý giá. Làm việc có chị em cảm thấy yên tâm và học hỏi được nhiều lắm. Sinh nhật chị vui vẻ nhé! 🌟🤝',
     },
     {
       text:
-        'Thêm tuổi mới bớt "dẹo" lại một xíu nha bạn hiền, cơ mà nếu không dẹo thì đâu còn là Dẹo Dẹo nữa! Cứ tự tin tỏa sáng theo cách riêng của mình nha! 😜💖',
+        'Chị Dẹo Dẹo ơi — tuổi mới chúc chị vẫn giữ nguyên cái sự "dẹo" đáng yêu đó nha! Cứ tự tin là chính mình, tỏa sáng theo cách riêng của chị là đủ rồi! 😄✨',
     },
   ],
   music: {

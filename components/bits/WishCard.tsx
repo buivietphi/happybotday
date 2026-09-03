@@ -452,7 +452,7 @@ export default function WishCard({
                 color: theme.accent,
               }}
             >
-              — Bạn Thân Tri Kỷ 🌟 —
+              — Chị Phi 🌟 —
             </span>
           </div>
 

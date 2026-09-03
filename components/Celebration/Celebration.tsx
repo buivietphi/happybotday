@@ -7,7 +7,6 @@ import { useReducedMotionSafe } from '@/lib/useReducedMotion';
 import ShimmerText from '@/components/bits/ShimmerText';
 import QueenAnt from '@/components/bits/QueenAnt';
 import GrandFireworksShow from '@/components/bits/GrandFireworksShow';
-import FloatingHearts from '@/components/bits/FloatingHearts';
 import type { WheelPrize } from '@/lib/types';
 
 type Props = {
@@ -20,16 +19,14 @@ type Props = {
 /**
  * Celebration Finale — Grand Showcase with Adorable Queen Ant:
  *   - Con Kiến Chúa Đáng Yêu (Queen Ant with 24K Royal Crown & Ermine Cape) in the spotlight.
- *   - Grand Fireworks & Cascading Glowing Hearts Show.
- *   - Royal Friendship Decree & Outro Wish for Dẹo Dẹo.
- *   - Interactive Fireworks & Hearts triggers with Sunglasses Ant tease.
+ *   - Grand Fireworks Show & Outro Wish.
+ *   - Tông đồng nghiệp chị/em vui vẻ cho Dẹo Dẹo.
  */
 export default function Celebration({ name, outroWish, onReplay }: Props) {
   const root = useRef<HTMLElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotionSafe();
   const [fireworkKey, setFireworkKey] = useState<number>(0);
-  const [showHearts, setShowHearts] = useState(true);
 
   // Firework >3 clicks teaser ant (8s, only once)
   const [fireworkClicks, setFireworkClicks] = useState(0);
@@ -59,15 +56,7 @@ export default function Celebration({ name, outroWish, onReplay }: Props) {
     }
   };
 
-  const triggerHeartsBurst = () => {
-    setShowHearts(false);
-    setTimeout(() => setShowHearts(true), 50);
-    try {
-      const audio = new Audio('/sounds/ant_chirp.wav');
-      audio.volume = 0.6;
-      audio.play().catch(() => {});
-    } catch {}
-  };
+
 
   useGSAP(
     () => {
@@ -181,9 +170,8 @@ export default function Celebration({ name, outroWish, onReplay }: Props) {
         }
       `}</style>
 
-      {/* === GRAND FIREWORKS & CASCADING HEARTS SHOW === */}
+      {/* === GRAND FIREWORKS SHOW === */}
       <GrandFireworksShow triggerKey={fireworkKey} autoLoop={true} />
-      {showHearts && <FloatingHearts count={16} playing duration={4} />}
 
       {/* Ambient Starlight Glow Halo */}
       <div
@@ -307,7 +295,7 @@ export default function Celebration({ name, outroWish, onReplay }: Props) {
               fontWeight: 700,
             }}
           >
-            — Bạn Thân Tri Kỷ Mãi Mãi 🌟 —
+            — Chị Phi 🌟 —
           </div>
         </div>
 
@@ -342,13 +330,6 @@ export default function Celebration({ name, outroWish, onReplay }: Props) {
           </div>
 
           <div style={{ display: 'flex', gap: 10 }}>
-            <button
-              type="button"
-              className="hallmark-secondary-btn"
-              onClick={triggerHeartsBurst}
-            >
-              Thả Trái Tim 💖
-            </button>
             <button
               type="button"
               className="hallmark-secondary-btn"
