@@ -82,6 +82,13 @@ export default function BlowCandles({ onComplete }: Props) {
   // Dynamic nitro angle trailing directly behind drag motion
   const [dragAngle, setDragAngle] = useState(180);
 
+  // Blowing Ant interactive wind combo states
+  const [windCombo, setWindCombo] = useState(0);
+  const [antIsPuffing, setAntIsPuffing] = useState(false);
+  const [windHint, setWindHint] = useState('Bấm vào bé kiến để thổi gió nha! 🐜💨');
+  const comboCountRef = useRef(0);
+  const comboTimerRef = useRef<number | null>(null);
+
   // Crying cat state if user stays in celebrate phase for 30s without clicking proceed button
   const [showCryingCat, setShowCryingCat] = useState(false);
   const cryingCatRef = useRef<HTMLDivElement>(null);
@@ -523,22 +530,131 @@ export default function BlowCandles({ onComplete }: Props) {
     }
   }, []);
 
-  /** Interactive Big Blow Button: sweeps wind and blows out all lit candles */
-  const handleBlowAll = useCallback(() => {
-    try {
-      const audio = new Audio('/sounds/wind_breeze.wav');
-      audio.volume = 0.75;
-      audio.play().catch(() => {});
-    } catch {}
+  /** Sway and flicker candle flames without extinguishing (for wind levels 1 & 2) */
+  const flickerAndSwayCandles = useCallback(
+    (level: number) => {
+      const tiltDeg = level === 1 ? 16 : 32;
+      const duration = level === 1 ? 0.38 : 0.48;
+      const scaleY = level === 1 ? 0.88 : 0.65;
 
-    for (let i = 0; i < CANDLE_COUNT; i++) {
-      if (!extinguished[i]) {
-        setTimeout(() => {
-          extinguishCandle(i, -1);
-        }, i * 150);
+      for (let idx = 0; idx < CANDLE_COUNT; idx++) {
+        if (extinguished[idx]) continue;
+        const flameEl = root.current?.querySelector<SVGGElement>(
+          `[data-flame-wrap="${idx}"] [data-flame]`,
+        );
+        const glowEl = root.current?.querySelector<SVGCircleElement>(
+          `[data-flame-wrap="${idx}"] [data-glow]`,
+        );
+        if (!flameEl) continue;
+
+        gsap.killTweensOf(flameEl);
+        if (glowEl) gsap.killTweensOf(glowEl);
+
+        const tl = gsap.timeline();
+        tl.to(flameEl, {
+          rotate: tiltDeg,
+          skewX: tiltDeg * 0.7,
+          scaleX: 1.25,
+          scaleY: scaleY,
+          duration: duration * 0.35,
+          ease: 'power2.out',
+          transformOrigin: '0px 0px',
+        })
+          .to(flameEl, {
+            rotate: tiltDeg * 0.6,
+            scaleY: scaleY * 1.1,
+            duration: duration * 0.25,
+            ease: 'sine.inOut',
+          })
+          .to(flameEl, {
+            rotate: 0,
+            skewX: 0,
+            scaleX: 1,
+            scaleY: 1,
+            duration: duration * 0.45,
+            ease: 'elastic.out(1.1, 0.4)',
+          });
+
+        if (glowEl) {
+          gsap.to(glowEl, {
+            opacity: level === 1 ? 0.55 : 0.3,
+            duration: duration * 0.35,
+            yoyo: true,
+            repeat: 1,
+            ease: 'sine.inOut',
+          });
+        }
+      }
+    },
+    [extinguished],
+  );
+
+  /** Interactive Blowing Ant Click Handler: click 1 = gentle breeze, click multiple = mega gust */
+  const handleAntBlowClick = useCallback(() => {
+    if (phase !== 'blowing') return;
+
+    if (comboTimerRef.current) {
+      window.clearTimeout(comboTimerRef.current);
+      comboTimerRef.current = null;
+    }
+
+    comboCountRef.current += 1;
+    const currentCombo = comboCountRef.current;
+    setWindCombo(currentCombo);
+    setAntIsPuffing(true);
+
+    setTimeout(() => setAntIsPuffing(false), 350);
+
+    if (currentCombo === 1) {
+      // Level 1: Gentle breeze, candle flames sway and flicker without extinguishing
+      try {
+        const audio = new Audio('/sounds/ant_chirp.wav');
+        audio.volume = 0.6;
+        audio.play().catch(() => {});
+      } catch {}
+
+      setWindHint('Gió nhẹ quá nến chỉ đung đưa thui, bấm nhanh dồn dập lên nào! 🐜💨');
+      flickerAndSwayCandles(1);
+
+      comboTimerRef.current = window.setTimeout(() => {
+        comboCountRef.current = 0;
+        setWindCombo(0);
+        setWindHint('Bấm vào bé kiến để thổi gió nha! 🐜💨');
+      }, 1500);
+    } else if (currentCombo === 2) {
+      // Level 2: Moderate gust, flames tilt heavily, still standing
+      try {
+        const audio = new Audio('/sounds/ant_chirp.wav');
+        audio.volume = 0.8;
+        audio.play().catch(() => {});
+      } catch {}
+
+      setWindHint('Sắp tắt rồi, bấm dồn dập nữa đi nào! 🔥💨');
+      flickerAndSwayCandles(2);
+
+      comboTimerRef.current = window.setTimeout(() => {
+        comboCountRef.current = 0;
+        setWindCombo(0);
+        setWindHint('Bấm vào bé kiến để thổi gió nha! 🐜💨');
+      }, 1300);
+    } else {
+      // Level 3+: Super whirlwind blast! All candles extinguished!
+      try {
+        const audio = new Audio('/sounds/wind_breeze.wav');
+        audio.volume = 0.85;
+        audio.play().catch(() => {});
+      } catch {}
+
+      setWindHint('Phùuuu~! Tắt hết rồiii! 🎉🎂');
+      for (let i = 0; i < CANDLE_COUNT; i++) {
+        if (!extinguished[i]) {
+          setTimeout(() => {
+            extinguishCandle(i, -1);
+          }, i * 140);
+        }
       }
     }
-  }, [extinguished, extinguishCandle]);
+  }, [phase, extinguished, extinguishCandle, flickerAndSwayCandles]);
 
   // === Pointer Drag Handlers ===
   const handlePointerDown = useCallback(
@@ -1291,25 +1407,209 @@ export default function BlowCandles({ onComplete }: Props) {
               alignItems: 'center',
               gap: 8,
               marginTop: 4,
+              animation: 'promptCatPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
             }}
           >
-            <button
-              onClick={handleBlowAll}
-              className="hallmark-primary-btn"
+            {/* Interactive Comic Speech Bubble */}
+            <div
               style={{
-                padding: '11px 26px',
-                fontSize: '16px',
-                borderRadius: '999px',
-                background: 'linear-gradient(135deg, #0284c7 0%, #38bdf8 100%)',
-                boxShadow: '0 8px 24px rgba(2, 132, 199, 0.45)',
-                cursor: 'pointer',
+                background: 'linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%)',
+                color: '#15803d',
+                padding: '7px 18px',
+                borderRadius: 18,
+                border: '2px solid #22c55e',
+                boxShadow: '0 8px 24px rgba(34, 197, 94, 0.28)',
+                fontFamily: 'var(--font-display, "Cormorant Garamond", serif)',
+                fontWeight: 700,
+                fontSize: '14px',
+                textAlign: 'center',
+                whiteSpace: 'nowrap',
+                position: 'relative',
+                pointerEvents: 'none',
               }}
             >
-              <div className="celebration-shimmer" />
-              <span>🌬️ Thổi Phùuu Tắt Nến! 💨</span>
-            </button>
-            <span style={{ fontSize: '12px', fontStyle: 'italic', color: '#854d0e' }}>
-              (Chạm vào từng cây nến hoặc bấm nút để thổi nhé ✨)
+              <span>{windHint}</span>
+              {/* Pointer triangle */}
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: -6,
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: 0,
+                  height: 0,
+                  borderLeft: '6px solid transparent',
+                  borderRight: '6px solid transparent',
+                  borderTop: '6px solid #22c55e',
+                }}
+              />
+            </div>
+
+            {/* Clickable Bé Kiến Thổi Gió Button Avatar */}
+            <div
+              onClick={handleAntBlowClick}
+              role="button"
+              tabIndex={0}
+              aria-label="Bấm vào bé kiến để thổi gió"
+              style={{
+                position: 'relative',
+                cursor: 'pointer',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                transform: antIsPuffing ? 'scale(1.18)' : 'scale(1)',
+                transition: 'transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                userSelect: 'none',
+              }}
+            >
+              {/* Pulsing Aura */}
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: -6,
+                  borderRadius: 999,
+                  background: 'radial-gradient(circle, rgba(56, 189, 248, 0.35) 0%, transparent 70%)',
+                  animation: 'pulse 1.4s infinite alternate',
+                  pointerEvents: 'none',
+                }}
+              />
+
+              {/* Handcrafted Vector Bé Kiến Thổi Gió SVG */}
+              <svg
+                viewBox="0 0 120 90"
+                width="110"
+                height="82"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                style={{ filter: 'drop-shadow(0 6px 14px rgba(0,0,0,0.18))' }}
+              >
+                {/* Wind Gust Streams issuing from mouth */}
+                <g stroke="#38bdf8" strokeLinecap="round" fill="none">
+                  {windCombo >= 1 && (
+                    <path
+                      d="M 68 46 Q 85 40 102 32 M 72 50 Q 90 46 108 40"
+                      strokeWidth="2.5"
+                      opacity="0.9"
+                      strokeDasharray="12 6"
+                      style={{ animation: 'pawWave 0.5s infinite alternate ease-in-out' }}
+                    />
+                  )}
+                  {windCombo >= 2 && (
+                    <path
+                      d="M 66 42 Q 88 32 112 22 M 70 54 Q 94 50 114 46"
+                      strokeWidth="3.2"
+                      stroke="#0284c7"
+                      opacity="0.95"
+                      strokeDasharray="16 8"
+                    />
+                  )}
+                </g>
+
+                {/* Ant Round Abdomen */}
+                <ellipse cx="32" cy="58" rx="20" ry="14" fill="#ea580c" stroke="#c2410c" strokeWidth="1.8" />
+                <ellipse cx="32" cy="60" rx="13" ry="9" fill="#fed7aa" />
+
+                {/* Ant Thorax with cute little vest */}
+                <ellipse cx="50" cy="52" rx="12" ry="10" fill="#f97316" stroke="#c2410c" strokeWidth="1.6" />
+
+                {/* Ant Antennae (wobbling with wind) */}
+                <path
+                  d="M 52 32 Q 40 14 46 6"
+                  stroke="#c2410c"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  fill="none"
+                />
+                <circle cx="46" cy="6" r="3" fill="#facc15" stroke="#c2410c" strokeWidth="1" />
+                <path
+                  d="M 66 32 Q 80 14 74 6"
+                  stroke="#c2410c"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  fill="none"
+                />
+                <circle cx="74" cy="6" r="3" fill="#facc15" stroke="#c2410c" strokeWidth="1" />
+
+                {/* Ant Head (puffed cheeks when blowing) */}
+                <ellipse
+                  cx="58"
+                  cy="44"
+                  rx={antIsPuffing ? 20 : 17}
+                  ry={antIsPuffing ? 18 : 15}
+                  fill="#ea580c"
+                  stroke="#c2410c"
+                  strokeWidth="1.8"
+                />
+
+                {/* Cheeks Blush */}
+                <ellipse cx="52" cy="48" rx="4" ry="2.5" fill="#f43f5e" opacity="0.65" />
+                <ellipse cx="68" cy="48" rx="4" ry="2.5" fill="#f43f5e" opacity="0.65" />
+
+                {/* Closed eyes blowing hard */}
+                <path d="M 48 40 Q 52 36 56 40" stroke="#1e293b" strokeWidth="2.2" strokeLinecap="round" />
+                <path d="M 62 40 Q 66 36 70 40" stroke="#1e293b" strokeWidth="2.2" strokeLinecap="round" />
+
+                {/* Puckered Whistle Mouth blowing wind to the right */}
+                <ellipse cx="68" cy="47" rx="3.5" ry="4.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1.2" />
+                <circle cx="68" cy="47" r="1.5" fill="#e0f2fe" />
+
+                {/* Paws holding belly or gesturing */}
+                <ellipse cx="44" cy="56" rx="5" ry="4" fill="#ffffff" stroke="#ea580c" strokeWidth="1.2" />
+                <ellipse cx="60" cy="56" rx="5" ry="4" fill="#ffffff" stroke="#ea580c" strokeWidth="1.2" />
+              </svg>
+
+              {/* Combo Power Gauge Pills */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  marginTop: 2,
+                }}
+              >
+                <span
+                  style={{
+                    padding: '3px 8px',
+                    borderRadius: 999,
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    background: windCombo >= 1 ? '#38bdf8' : '#e2e8f0',
+                    color: windCombo >= 1 ? '#ffffff' : '#64748b',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  💨 Nhẹ
+                </span>
+                <span
+                  style={{
+                    padding: '3px 8px',
+                    borderRadius: 999,
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    background: windCombo >= 2 ? '#0284c7' : '#e2e8f0',
+                    color: windCombo >= 2 ? '#ffffff' : '#64748b',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  💨💨 Vừa
+                </span>
+                <span
+                  style={{
+                    padding: '3px 8px',
+                    borderRadius: 999,
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    background: windCombo >= 3 ? '#e11d48' : '#e2e8f0',
+                    color: windCombo >= 3 ? '#ffffff' : '#64748b',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  🌪️ Bão Lốc
+                </span>
+              </div>
+            </div>
+            <span style={{ fontSize: '12px', fontStyle: 'italic', color: '#854d0e', marginTop: 2 }}>
+              (Hoặc chạm vào từng cây nến để thổi từng cây nhé ✨)
             </span>
           </div>
         )}
