@@ -517,53 +517,40 @@ const CatRunner = forwardRef<CatRunnerHandle, Props>(function CatRunner(
 
         {/* Head */}
         <g ref={head} style={{ transformOrigin: '60px 60px' }}>
-          {/* Ears (slightly larger and properly triangular) */}
+          {/* Floppy Puppy Ears */}
           <g ref={ears}>
-            <path d="M 36 56 L 44 24 L 60 52 Z" fill={colors.ear} stroke={colors.bodyShadow} strokeWidth="0.6" strokeLinejoin="round" />
-            <path d="M 42 50 L 47 32 L 55 50 Z" fill={colors.innerEar} />
-            <path d="M 84 56 L 76 24 L 60 52 Z" fill={colors.ear} stroke={colors.bodyShadow} strokeWidth="0.6" strokeLinejoin="round" />
-            <path d="M 78 50 L 73 32 L 65 50 Z" fill={colors.innerEar} />
+            <path d="M 44 48 C 30 42, 24 64, 34 72 C 42 78, 48 62, 50 50 Z" fill={colors.ear} stroke={colors.bodyShadow} strokeWidth="0.8" />
+            <path d="M 42 52 C 32 48, 28 66, 36 72 C 40 76, 46 64, 48 54 Z" fill={colors.innerEar} />
+            <path d="M 76 48 C 90 42, 96 64, 86 72 C 78 78, 72 62, 70 50 Z" fill={colors.ear} stroke={colors.bodyShadow} strokeWidth="0.8" />
+            <path d="M 78 52 C 88 48, 92 66, 84 72 C 80 76, 74 64, 72 54 Z" fill={colors.innerEar} />
           </g>
 
-          {/* Head circle (slightly squished to look more cat-like) */}
+          {/* Head circle */}
           <ellipse cx="60" cy="60" rx="22" ry="20" fill={colors.body} />
           {/* Cheek/jaw shading */}
           <ellipse cx="60" cy="68" rx="14" ry="6" fill={colors.bodyShadow} opacity="0.25" />
           {/* Chin highlight */}
           <ellipse cx="60" cy="72" rx="8" ry="3" fill={colors.belly} opacity="0.45" />
 
-          {/* Eyes (slit pupils) */}
+          {/* Puppy Eyes (round and sparkling) */}
           <g className={`cat-eye-${fur}`}>
-            <ellipse cx="50" cy="58" rx="4" ry="5" fill={colors.accent} opacity="0.95" />
-            <ellipse cx="51" cy="58" rx="0.8" ry="4.5" fill="oklch(15% 0.02 30)" />
-            <ellipse cx="70" cy="58" rx="4" ry="5" fill={colors.accent} opacity="0.95" />
-            <ellipse cx="71" cy="58" rx="0.8" ry="4.5" fill="oklch(15% 0.02 30)" />
+            <circle cx="50" cy="58" r="3.8" fill="#0f172a" />
+            <circle cx="49" cy="57" r="1.2" fill="#ffffff" />
+            <circle cx="70" cy="58" r="3.8" fill="#0f172a" />
+            <circle cx="69" cy="57" r="1.2" fill="#ffffff" />
           </g>
 
-          {/* Nose (small pink heart, slightly bigger and more visible) */}
-          <path
-            d="M 60 67 C 58 65, 55 66, 60 71 L 60 73 L 60 71 C 65 66, 62 65, 60 67 Z"
-            fill="oklch(78% 0.16 350)"
-          />
+          {/* Puppy Black Button Nose */}
+          <ellipse cx="60" cy="69" rx="3.2" ry="2.2" fill="#0f172a" />
 
-          {/* Mouth (W-shape under nose) */}
+          {/* Puppy Smile */}
           <path
-            d="M 60 72 Q 56 76 53 74 M 60 72 Q 64 76 67 74"
+            d="M 60 71 Q 56 75 53 73 M 60 71 Q 64 75 67 73"
             stroke={colors.bodyShadow}
-            strokeWidth="1"
+            strokeWidth="1.2"
             fill="none"
             strokeLinecap="round"
           />
-
-          {/* Whiskers — slightly curved like real whiskers */}
-          <g stroke={colors.bodyShadow} strokeWidth="0.5" fill="none" strokeLinecap="round" opacity="0.65">
-            <path d="M 38 64 Q 48 64 56 66" />
-            <path d="M 38 68 Q 48 68 56 68" />
-            <path d="M 38 72 Q 48 72 56 70" />
-            <path d="M 82 64 Q 72 64 64 66" />
-            <path d="M 82 68 Q 72 68 64 68" />
-            <path d="M 82 72 Q 72 72 64 70" />
-          </g>
         </g>
       </g>
     </svg>

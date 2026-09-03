@@ -222,7 +222,7 @@ export default function WishesStack({ wishes, onComplete }: Props) {
             textShadow: '0 2px 10px rgba(255,255,255,0.8)',
           }}
         >
-          Gửi Riêng Cho Em, KIỀU LEE
+          Gửi Riêng Cho Em, Dẹo Dẹo
         </h2>
       </div>
 
@@ -423,12 +423,12 @@ export default function WishesStack({ wishes, onComplete }: Props) {
         </div>
       </div>
 
-      {/* === 15s SLOW READING TEASER CATS (2 CORNERS) === */}
+      {/* === 15s SLOW READING TEASER PUPPIES (2 CORNERS) === */}
       {showSlowCats && (
         <>
-          {/* Left Corner Cat: "Ú òa hết hồn chưaaa! Đọc gì lâu dọ?" */}
+          {/* Left Corner Puppy: "Ú òa hết hồn chưaaa! Đọc gì lâu dọ?" */}
           <div
-            onClick={() => handleCatTeaseTap('/sounds/meow1.wav')}
+            onClick={() => handleCatTeaseTap('/sounds/dog_bark.wav')}
             style={{
               position: 'fixed',
               left: 'clamp(8px, 2.5vw, 24px)',
@@ -441,7 +441,7 @@ export default function WishesStack({ wishes, onComplete }: Props) {
               filter: 'drop-shadow(0 10px 24px rgba(0,0,0,0.35))',
               animation: 'catPopUpBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
             }}
-            title="Bé mèo tinh nghịch"
+            title="Bé cún tinh nghịch"
           >
             {/* Comic Speech Bubble */}
             <div
@@ -458,14 +458,14 @@ export default function WishesStack({ wishes, onComplete }: Props) {
               }}
             >
               <div style={{ fontWeight: 800, color: '#854d0e', fontSize: '13px', lineHeight: 1.2 }}>
-                Ú òa hết hồn chưaaa! 🐱👻
+                Ú òa hết hồn chưaaa! 🐶👻
               </div>
               <div style={{ fontWeight: 600, color: '#713f12', fontSize: '11.5px', fontStyle: 'italic', marginTop: 2 }}>
                 Đọc gì mà lâu dọ? 😜🐾
               </div>
             </div>
 
-            {/* Handcrafted Playful Winking Cat SVG */}
+            {/* Handcrafted Playful Winking Puppy SVG */}
             <svg
               viewBox="0 0 110 90"
               width="96"
@@ -474,31 +474,42 @@ export default function WishesStack({ wishes, onComplete }: Props) {
               xmlns="http://www.w3.org/2000/svg"
               style={{ animation: 'catIdleBob 2.2s ease-in-out infinite alternate' }}
             >
-              <path d="M 28 42 L 18 16 L 44 28 Z" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
-              <path d="M 28 38 L 22 22 L 40 30 Z" fill="#fda4af" />
-              <path d="M 72 42 L 82 16 L 56 28 Z" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
-              <path d="M 72 38 L 78 22 L 60 30 Z" fill="#fda4af" />
+              {/* Drooping Puppy Ears */}
+              <path d="M 28 36 C 14 38, 8 58, 16 64 C 24 70, 32 54, 36 44 Z" fill="#b45309" stroke="#78350f" strokeWidth="1.5" />
+              <path d="M 72 36 C 86 38, 92 58, 84 64 C 76 70, 68 54, 64 44 Z" fill="#b45309" stroke="#78350f" strokeWidth="1.5" />
+
+              {/* Puppy Head */}
               <circle cx="50" cy="46" r="26" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
-              <ellipse cx="44" cy="52" rx="9" ry="6" fill="#ffffff" />
-              <ellipse cx="56" cy="52" rx="9" ry="6" fill="#ffffff" />
+              <ellipse cx="50" cy="53" rx="14" ry="10" fill="#ffffff" />
+
+              {/* Eyes */}
               <path d="M 36 43 Q 41 38 46 43" stroke="#1c1917" strokeWidth="2.5" strokeLinecap="round" />
               <ellipse cx="60" cy="42" rx="4.5" ry="5.5" fill="#1c1917" />
               <circle cx="59" cy="40.5" r="1.6" fill="#ffffff" />
-              <polygon points="48,48 52,48 50,51" fill="#f43f5e" />
-              <path d="M 46 52 Q 50 54 54 52" stroke="#1c1917" strokeWidth="1.8" fill="none" />
-              <ellipse cx="50" cy="56" rx="3.5" ry="4.5" fill="#f43f5e" />
+
+              {/* Shiny Black Button Nose */}
+              <ellipse cx="50" cy="48" rx="4.5" ry="3.2" fill="#0f172a" />
+              <ellipse cx="48.5" cy="47" rx="1.5" ry="1" fill="#ffffff" />
+
+              {/* Happy Puppy Mouth & Tongue */}
+              <path d="M 44 51 Q 50 55 56 51" stroke="#1c1917" strokeWidth="1.8" fill="none" />
+              <path d="M 47 53 C 46 61, 54 61, 53 53 Z" fill="#f43f5e" stroke="#be123c" strokeWidth="1" />
+
+              {/* Rosy Cheeks */}
               <ellipse cx="32" cy="48" rx="4" ry="2.5" fill="#f43f5e" opacity="0.45" />
               <ellipse cx="68" cy="48" rx="4" ry="2.5" fill="#f43f5e" opacity="0.45" />
-              <path d="M 34 50 L 16 48 M 34 53 L 14 54" stroke="#78350f" strokeWidth="1.2" strokeLinecap="round" />
-              <path d="M 66 50 L 84 48 M 66 53 L 86 54" stroke="#78350f" strokeWidth="1.2" strokeLinecap="round" />
-              <ellipse cx="26" cy="74" rx="10" ry="7" fill="#ffffff" stroke="#b45309" strokeWidth="1.8" />
-              <ellipse cx="74" cy="74" rx="10" ry="7" fill="#ffffff" stroke="#b45309" strokeWidth="1.8" />
+
+              {/* Paws on bottom */}
+              <ellipse cx="28" cy="74" rx="10" ry="7" fill="#ffffff" stroke="#b45309" strokeWidth="1.8" />
+              <circle cx="28" cy="74" r="2.5" fill="#f472b6" opacity="0.7" />
+              <ellipse cx="72" cy="74" rx="10" ry="7" fill="#ffffff" stroke="#b45309" strokeWidth="1.8" />
+              <circle cx="72" cy="74" r="2.5" fill="#f472b6" opacity="0.7" />
             </svg>
           </div>
 
-          {/* Right Corner Cat: "Xúc động quá đúng hem? Biết mòoo~" */}
+          {/* Right Corner Puppy: "Xúc động quá đúng hem? Biết mòoo~" */}
           <div
-            onClick={() => handleCatTeaseTap('/sounds/meow_chirp.wav')}
+            onClick={() => handleCatTeaseTap('/sounds/dog_bark.wav')}
             style={{
               position: 'fixed',
               right: 'clamp(8px, 2.5vw, 24px)',
@@ -511,7 +522,7 @@ export default function WishesStack({ wishes, onComplete }: Props) {
               filter: 'drop-shadow(0 10px 24px rgba(0,0,0,0.35))',
               animation: 'catPopUpBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s forwards',
             }}
-            title="Bé mèo xúc động"
+            title="Bé cún xúc động"
           >
             {/* Comic Speech Bubble */}
             <div
@@ -531,11 +542,11 @@ export default function WishesStack({ wishes, onComplete }: Props) {
                 Xúc động quá đúng hem? 🥺💖
               </div>
               <div style={{ fontWeight: 600, color: '#881337', fontSize: '11.5px', fontStyle: 'italic', marginTop: 2 }}>
-                Biết mòoo~ Cứ đọc nha! 😽✨
+                Biết mòoo~ Cứ đọc nha! 🐶✨
               </div>
             </div>
 
-            {/* Handcrafted Watery-Eyed Loving Cat SVG */}
+            {/* Handcrafted Watery-Eyed Loving Puppy SVG */}
             <svg
               viewBox="0 0 110 90"
               width="96"
@@ -544,28 +555,41 @@ export default function WishesStack({ wishes, onComplete }: Props) {
               xmlns="http://www.w3.org/2000/svg"
               style={{ animation: 'catIdleBob 2.5s ease-in-out infinite alternate 0.3s' }}
             >
+              {/* Floating Heart */}
               <path d="M 50 14 C 50 8, 44 4, 40 8 C 36 4, 30 8, 30 14 C 30 20, 40 26, 40 26 C 40 26, 50 20, 50 14 Z" fill="#f43f5e" />
-              <path d="M 28 44 L 18 18 L 44 30 Z" fill="#fed7aa" stroke="#ea580c" strokeWidth="2" />
-              <path d="M 28 40 L 22 24 L 40 32 Z" fill="#fda4af" />
-              <path d="M 72 44 L 82 18 L 56 30 Z" fill="#fed7aa" stroke="#ea580c" strokeWidth="2" />
-              <path d="M 72 40 L 78 24 L 60 32 Z" fill="#fda4af" />
+
+              {/* Drooping Puppy Ears */}
+              <path d="M 28 38 C 14 40, 8 60, 16 66 C 24 72, 32 56, 36 46 Z" fill="#c2410c" stroke="#9a3412" strokeWidth="1.5" />
+              <path d="M 72 38 C 86 40, 92 60, 84 66 C 76 72, 68 56, 64 46 Z" fill="#c2410c" stroke="#9a3412" strokeWidth="1.5" />
+
+              {/* Puppy Head */}
               <circle cx="50" cy="48" r="26" fill="#fed7aa" stroke="#ea580c" strokeWidth="2" />
-              <ellipse cx="44" cy="54" rx="9" ry="6" fill="#ffffff" />
-              <ellipse cx="56" cy="54" rx="9" ry="6" fill="#ffffff" />
-              <ellipse cx="40" cy="44" rx="5" ry="6" fill="#1c1917" />
-              <circle cx="39" cy="42" r="2" fill="#ffffff" />
-              <circle cx="42" cy="46" r="1" fill="#ffffff" />
-              <ellipse cx="60" cy="44" rx="5" ry="6" fill="#1c1917" />
-              <circle cx="59" cy="42" r="2" fill="#ffffff" />
-              <circle cx="62" cy="46" r="1" fill="#ffffff" />
-              <polygon points="48,50 52,50 50,53" fill="#f43f5e" />
+              <ellipse cx="50" cy="55" rx="14" ry="10" fill="#ffffff" />
+
+              {/* Big Starry Loving Puppy Eyes */}
+              <ellipse cx="40" cy="44" rx="5.5" ry="6.5" fill="#1c1917" />
+              <circle cx="39" cy="42" r="2.2" fill="#ffffff" />
+              <circle cx="42" cy="46" r="1.2" fill="#ffffff" />
+              <ellipse cx="60" cy="44" rx="5.5" ry="6.5" fill="#1c1917" />
+              <circle cx="59" cy="42" r="2.2" fill="#ffffff" />
+              <circle cx="62" cy="46" r="1.2" fill="#ffffff" />
+
+              {/* Shiny Black Button Nose */}
+              <ellipse cx="50" cy="50" rx="4" ry="2.8" fill="#0f172a" />
+              <ellipse cx="48.5" cy="49" rx="1.4" ry="0.9" fill="#ffffff" />
+
+              {/* Sweet Puppy Smile */}
               <path d="M 44 54 Q 50 58 56 54" stroke="#1c1917" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+
+              {/* Rosy Cheeks */}
               <ellipse cx="30" cy="50" rx="5" ry="3" fill="#f43f5e" opacity="0.5" />
               <ellipse cx="70" cy="50" rx="5" ry="3" fill="#f43f5e" opacity="0.5" />
-              <path d="M 32 52 L 14 50 M 32 55 L 12 56" stroke="#c2410c" strokeWidth="1.2" strokeLinecap="round" />
-              <path d="M 68 52 L 86 50 M 68 55 L 88 56" stroke="#c2410c" strokeWidth="1.2" strokeLinecap="round" />
-              <ellipse cx="38" cy="74" rx="9" ry="6" fill="#ffffff" stroke="#ea580c" strokeWidth="1.8" />
-              <ellipse cx="62" cy="74" rx="9" ry="6" fill="#ffffff" stroke="#ea580c" strokeWidth="1.8" />
+
+              {/* Puppy Paws */}
+              <ellipse cx="36" cy="74" rx="9" ry="6" fill="#ffffff" stroke="#ea580c" strokeWidth="1.8" />
+              <circle cx="36" cy="74" r="2" fill="#f472b6" opacity="0.7" />
+              <ellipse cx="64" cy="74" rx="9" ry="6" fill="#ffffff" stroke="#ea580c" strokeWidth="1.8" />
+              <circle cx="64" cy="74" r="2" fill="#f472b6" opacity="0.7" />
             </svg>
           </div>
         </>

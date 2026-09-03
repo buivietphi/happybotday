@@ -58,7 +58,7 @@ export default function Celebration({ name, outroWish, prizes, onReplay }: Props
           setShowFireworkCat(true);
           setHasShownFireworkCat(true);
           try {
-            const audio = new Audio('/sounds/meow_chirp.wav');
+            const audio = new Audio('/sounds/dog_bark.wav');
             audio.volume = 0.7;
             audio.play().catch(() => {});
           } catch {}
@@ -273,7 +273,7 @@ function FireworkSunglassesCat() {
         }}
       >
         <div style={{ fontSize: '14px', color: '#854d0e', fontWeight: 800 }}>
-          Bắn gì mà dữ dằn dạ má?! 🙀💥🎆
+          Bắn gì mà dữ dằn dạ má?! 🐶💥🎆
         </div>
         <div style={{ fontSize: '12px', color: '#713f12', fontStyle: 'italic', marginTop: 2 }}>
           Mù con mắt tui gòy! Đẹp thì đẹp mà chói quáaa! 😎💖
@@ -294,26 +294,23 @@ function FireworkSunglassesCat() {
         />
       </div>
 
-      {/* Handcrafted Sunglasses Firework Cat SVG */}
+      {/* Handcrafted Sunglasses Firework Puppy SVG */}
       <svg viewBox="0 0 130 100" width="126" height="96" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginTop: 2 }}>
         {/* Ambient Sparkles */}
         <path d="M 20 20 L 22 25 L 27 27 L 22 29 L 20 34 L 18 29 L 13 27 L 18 25 Z" fill="#facc15" />
         <path d="M 112 24 L 113 28 L 117 29 L 113 30 L 112 34 L 111 30 L 107 29 L 111 28 Z" fill="#f43f5e" />
 
-        {/* Cat Body */}
+        {/* Puppy Body */}
         <ellipse cx="65" cy="74" rx="34" ry="22" fill="#f97316" stroke="#c2410c" strokeWidth="2" />
         <ellipse cx="65" cy="76" rx="20" ry="14" fill="#ffedd5" />
 
-        {/* Ears */}
-        <path d="M 40 46 L 30 18 L 54 32 Z" fill="#f97316" stroke="#c2410c" strokeWidth="2" />
-        <path d="M 40 42 L 34 24 L 50 34 Z" fill="#fda4af" />
-        <path d="M 90 46 L 100 18 L 76 32 Z" fill="#f97316" stroke="#c2410c" strokeWidth="2" />
-        <path d="M 90 42 L 96 24 L 80 34 Z" fill="#fda4af" />
+        {/* Drooping Puppy Ears */}
+        <path d="M 44 42 C 26 44, 18 64, 28 72 C 38 78, 46 62, 48 48 Z" fill="#c2410c" stroke="#9a3412" strokeWidth="1.5" />
+        <path d="M 86 42 C 104 44, 112 64, 102 72 C 92 78, 84 62, 82 48 Z" fill="#c2410c" stroke="#9a3412" strokeWidth="1.5" />
 
         {/* Head */}
         <circle cx="65" cy="48" r="26" fill="#f97316" stroke="#c2410c" strokeWidth="2" />
-        <ellipse cx="58" cy="56" rx="8" ry="6" fill="#ffedd5" />
-        <ellipse cx="72" cy="56" rx="8" ry="6" fill="#ffedd5" />
+        <ellipse cx="65" cy="56" rx="14" ry="9" fill="#ffedd5" />
 
         {/* Cool Black Sunglasses */}
         <ellipse cx="52" cy="46" rx="12" ry="9" fill="#0f172a" stroke="#ffffff" strokeWidth="1.5" />
@@ -322,14 +319,12 @@ function FireworkSunglassesCat() {
         <line x1="46" y1="42" x2="52" y2="50" stroke="rgba(255,255,255,0.7)" strokeWidth="1.6" strokeLinecap="round" />
         <line x1="72" y1="42" x2="78" y2="50" stroke="rgba(255,255,255,0.7)" strokeWidth="1.6" strokeLinecap="round" />
 
-        {/* Nose & Grinning Mouth */}
-        <polygon points="63,52 67,52 65,55" fill="#f43f5e" />
-        <path d="M 58 56 Q 65 62 72 56" stroke="#1c1917" strokeWidth="2" fill="#881337" strokeLinecap="round" />
-        <ellipse cx="65" cy="58" rx="3.5" ry="2" fill="#fda4af" />
+        {/* Shiny Black Button Nose */}
+        <ellipse cx="65" cy="53" rx="3.5" ry="2.4" fill="#0f172a" />
 
-        {/* Whiskers */}
-        <path d="M 44 56 L 24 53 M 44 59 L 22 61" stroke="#7c2d12" strokeWidth="1.2" strokeLinecap="round" />
-        <path d="M 86 56 L 106 53 M 86 59 L 108 61" stroke="#7c2d12" strokeWidth="1.2" strokeLinecap="round" />
+        {/* Laughing Puppy Mouth & Tongue */}
+        <path d="M 58 56 Q 65 62 72 56" stroke="#1c1917" strokeWidth="2" fill="none" strokeLinecap="round" />
+        <path d="M 62 58 C 61 66, 69 66, 68 58 Z" fill="#f43f5e" stroke="#be123c" strokeWidth="1" />
 
         {/* Clapping Paws */}
         <g transform="translate(38, 54)">
@@ -379,7 +374,7 @@ function Intro({
     const scheduleShow = () => {
       setShowIntroPromptCat(true);
       try {
-        const audio = new Audio('/sounds/meow1.wav');
+        const audio = new Audio('/sounds/dog_bark.wav');
         audio.volume = 0.65;
         audio.play().catch(() => {});
       } catch {}
@@ -549,7 +544,7 @@ function Intro({
                 }}
               >
                 <div style={{ fontSize: '14px', color: '#9a3412', fontWeight: 800 }}>
-                  Ủa tính đứng ngắm hoài dạ cô nương? 😸👑
+                  Ủa tính đứng ngắm hoài dạ cô nương? 🐶👑
                 </div>
                 <div style={{ fontSize: '12px', color: '#7c2d12', fontStyle: 'italic', marginTop: 2 }}>
                   Bấm mở vòng quay lẹ đii, quà xịn đang chờ kìa! 🎁✨
@@ -570,17 +565,15 @@ function Intro({
                 />
               </div>
 
-              {/* Handcrafted Fluffy Calico Party Hat Kitty with Waving Beckoning Paw */}
+              {/* Handcrafted Fluffy Party Hat Puppy with Waving Beckoning Paw */}
               <svg viewBox="0 0 130 100" width="124" height="96" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginTop: 2 }}>
-                {/* Cat Body */}
+                {/* Puppy Body */}
                 <ellipse cx="65" cy="74" rx="34" ry="22" fill="#ffffff" stroke="#e0e7ff" strokeWidth="2" />
                 <ellipse cx="65" cy="76" rx="20" ry="14" fill="#fff1f2" />
 
-                {/* Left & Right Fluffy Ears */}
-                <path d="M 40 46 L 30 18 L 54 32 Z" fill="#ffffff" stroke="#e0e7ff" strokeWidth="2" />
-                <path d="M 40 42 L 34 24 L 50 34 Z" fill="#fda4af" />
-                <path d="M 90 46 L 100 18 L 76 32 Z" fill="#ffffff" stroke="#e0e7ff" strokeWidth="2" />
-                <path d="M 90 42 L 96 24 L 80 34 Z" fill="#fda4af" />
+                {/* Left & Right Drooping Puppy Ears */}
+                <path d="M 44 42 C 26 44, 18 64, 28 72 C 38 78, 46 62, 48 48 Z" fill="#fde047" stroke="#ca8a04" strokeWidth="1.5" />
+                <path d="M 86 42 C 104 44, 112 64, 102 72 C 92 78, 84 62, 82 48 Z" fill="#fde047" stroke="#ca8a04" strokeWidth="1.5" />
 
                 {/* Festive Birthday Party Cone Hat */}
                 <path d="M 54 30 L 65 4 L 76 30 Z" fill="#f59e0b" stroke="#b45309" strokeWidth="1.5" />
@@ -591,7 +584,7 @@ function Intro({
 
                 {/* Head */}
                 <circle cx="65" cy="48" r="26" fill="#ffffff" stroke="#e0e7ff" strokeWidth="2" />
-                <path d="M 72 32 C 84 34, 88 44, 85 52 C 80 58, 70 54, 70 42 Z" fill="#fde047" opacity="0.8" />
+                <ellipse cx="65" cy="56" rx="14" ry="9" fill="#fef08a" opacity="0.6" />
 
                 {/* Eyes */}
                 <ellipse cx="53" cy="46" rx="5.5" ry="6.5" fill="#0f172a" />
@@ -602,17 +595,16 @@ function Intro({
                 <circle cx="75.5" cy="44" r="2.2" fill="#ffffff" />
                 <circle cx="79" cy="48" r="1.1" fill="#38bdf8" />
 
-                {/* Nose & Mouth */}
-                <polygon points="63,50 67,50 65,53" fill="#f43f5e" />
-                <path d="M 59 54 Q 65 58 71 54" stroke="#0f172a" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+                {/* Shiny Puppy Button Nose */}
+                <ellipse cx="65" cy="53" rx="3.5" ry="2.4" fill="#0f172a" />
+
+                {/* Happy Puppy Mouth & Tongue */}
+                <path d="M 59 55 Q 65 59 71 55" stroke="#0f172a" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+                <path d="M 62 57 C 61 64, 69 64, 68 57 Z" fill="#f43f5e" stroke="#be123c" strokeWidth="1" />
 
                 {/* Cheeks */}
                 <ellipse cx="44" cy="52" rx="4.5" ry="3" fill="#f43f5e" opacity="0.45" />
                 <ellipse cx="86" cy="52" rx="4.5" ry="3" fill="#f43f5e" opacity="0.45" />
-
-                {/* Whiskers */}
-                <path d="M 44 54 L 26 51 M 44 57 L 24 58" stroke="#94a3b8" strokeWidth="1.2" strokeLinecap="round" />
-                <path d="M 86 54 L 104 51 M 86 57 L 106 58" stroke="#94a3b8" strokeWidth="1.2" strokeLinecap="round" />
 
                 {/* Left Paw Resting */}
                 <g transform="translate(36, 60)">
@@ -682,7 +674,7 @@ function WheelStage({
     const scheduleShow = () => {
       setShowPromptCat(true);
       try {
-        const audio = new Audio('/sounds/meow_chirp.wav');
+        const audio = new Audio('/sounds/dog_bark.wav');
         audio.volume = 0.65;
         audio.play().catch(() => {});
       } catch {}
@@ -832,7 +824,7 @@ function WheelStage({
               }}
             >
               <div style={{ fontSize: '14px', color: '#854d0e', fontWeight: 800 }}>
-                Ủa không muốn mở quà hả? 😼🎁
+                Ủa không muốn mở quà hả? 🐶🎁
               </div>
               <div style={{ fontSize: '12px', color: '#713f12', fontStyle: 'italic', marginTop: 2 }}>
                 Chê đúng hơm, bấm quay lẹ đii nèee! 😜👇
@@ -853,36 +845,37 @@ function WheelStage({
               />
             </div>
 
-            {/* Handcrafted Vector Cat Pointing Down */}
+            {/* Handcrafted Vector Puppy Pointing Down */}
             <svg viewBox="0 0 130 95" width="124" height="90" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginTop: 2 }}>
               <ellipse cx="65" cy="68" rx="34" ry="22" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
               <ellipse cx="65" cy="70" rx="20" ry="14" fill="#fef3c7" />
 
-              <path d="M 42 44 L 32 16 L 56 30 Z" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
-              <path d="M 42 40 L 36 22 L 52 32 Z" fill="#fda4af" />
-              <path d="M 88 44 L 98 16 L 74 30 Z" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
-              <path d="M 88 40 L 94 22 L 78 32 Z" fill="#fda4af" />
+              {/* Drooping Puppy Ears */}
+              <path d="M 44 38 C 26 40, 18 60, 28 68 C 38 74, 46 58, 48 44 Z" fill="#b45309" stroke="#78350f" strokeWidth="1.5" />
+              <path d="M 86 38 C 104 40, 112 60, 102 68 C 92 74, 84 58, 82 44 Z" fill="#b45309" stroke="#78350f" strokeWidth="1.5" />
 
+              {/* Puppy Head */}
               <circle cx="65" cy="42" r="25" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
-              <ellipse cx="59" cy="48" rx="9" ry="6" fill="#ffffff" />
-              <ellipse cx="71" cy="48" rx="9" ry="6" fill="#ffffff" />
+              <ellipse cx="65" cy="49" rx="14" ry="9" fill="#ffffff" />
 
+              {/* Mischievous Eyes */}
               <path d="M 48 39 Q 54 34 60 39" stroke="#1c1917" strokeWidth="2.8" strokeLinecap="round" />
               <ellipse cx="76" cy="38" rx="4.5" ry="5.5" fill="#1c1917" />
               <circle cx="74.5" cy="36.5" r="1.8" fill="#ffffff" />
               <circle cx="77.5" cy="40" r="0.9" fill="#ffffff" />
 
-              <polygon points="63,44 67,44 65,47" fill="#f43f5e" />
-              <path d="M 60 48 Q 65 52 70 48" stroke="#1c1917" strokeWidth="2" fill="none" strokeLinecap="round" />
-              <polygon points="64,48 66,48 65,51" fill="#ffffff" />
+              {/* Shiny Puppy Nose */}
+              <ellipse cx="65" cy="45" rx="3.5" ry="2.4" fill="#0f172a" />
 
+              {/* Puppy Mouth & Tongue */}
+              <path d="M 59 48 Q 65 52 71 48" stroke="#0f172a" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+              <path d="M 62 50 C 61 57, 69 57, 68 50 Z" fill="#f43f5e" stroke="#be123c" strokeWidth="1" />
+
+              {/* Cheeks */}
               <ellipse cx="46" cy="45" rx="4" ry="2.5" fill="#f43f5e" opacity="0.45" />
               <ellipse cx="84" cy="45" rx="4" ry="2.5" fill="#f43f5e" opacity="0.45" />
 
-              <path d="M 46 47 L 28 44 M 46 50 L 26 51" stroke="#78350f" strokeWidth="1.2" strokeLinecap="round" />
-              <path d="M 84 47 L 102 44 M 84 50 L 104 51" stroke="#78350f" strokeWidth="1.2" strokeLinecap="round" />
-
-              {/* Pointing down paws */}
+              {/* Pointing down puppy paws */}
               <g transform="translate(34, 52)">
                 <ellipse cx="10" cy="10" rx="10" ry="8" fill="#fef3c7" stroke="#b45309" strokeWidth="1.8" />
                 <path d="M 10 16 L 10 26 L 6 20 M 10 26 L 14 20" stroke="#b45309" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
@@ -948,7 +941,7 @@ function Reveal({
     setShowCatScare(true);
 
     try {
-      const audio = new Audio('/sounds/meow_chirp.wav');
+      const audio = new Audio('/sounds/dog_bark.wav');
       audio.volume = 0.7;
       audio.play().catch(() => {});
     } catch {}
@@ -1131,7 +1124,7 @@ function Reveal({
                   position: 'relative',
                 }}
               >
-                <span style={{ fontSize: '15px' }}>Hù! 😼🐾</span> 1 Lần Thôi Người Ơi~!
+                <span style={{ fontSize: '15px' }}>Gâu! Hù! 🐶🐾</span> 1 Lần Thôi Người Ơi~!
                 {/* Bubble pointer triangle */}
                 <div
                   style={{
@@ -1148,26 +1141,23 @@ function Reveal({
                 />
               </div>
 
-              {/* Handcrafted Pouncing Vector Cat SVG */}
+              {/* Handcrafted Pouncing Vector Puppy SVG */}
               <svg viewBox="0 0 140 95" width="126" height="85" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginTop: 2 }}>
                 {/* Waving tail */}
                 <path d="M 25 70 C 10 55, 5 35, 18 25 C 24 20, 30 30, 26 43" stroke="#f59e0b" strokeWidth="6" strokeLinecap="round" />
                 <path d="M 18 25 C 24 20, 30 30, 26 43" stroke="#ffffff" strokeWidth="3.5" strokeLinecap="round" />
 
-                {/* Cat body */}
+                {/* Puppy body */}
                 <ellipse cx="70" cy="68" rx="36" ry="22" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
                 <ellipse cx="70" cy="70" rx="22" ry="14" fill="#fef3c7" />
 
-                {/* Ears */}
-                <path d="M 44 46 L 36 18 L 58 33 Z" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
-                <path d="M 44 42 L 40 24 L 54 34 Z" fill="#fda4af" />
-                <path d="M 96 46 L 104 18 L 82 33 Z" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
-                <path d="M 96 42 L 100 24 L 86 34 Z" fill="#fda4af" />
+                {/* Drooping Puppy Ears */}
+                <path d="M 44 40 C 26 42, 18 62, 28 70 C 38 76, 46 60, 48 46 Z" fill="#b45309" stroke="#78350f" strokeWidth="1.5" />
+                <path d="M 96 40 C 114 42, 122 62, 112 70 C 102 76, 94 60, 92 46 Z" fill="#b45309" stroke="#78350f" strokeWidth="1.5" />
 
                 {/* Head */}
                 <circle cx="70" cy="44" r="25" fill="#f59e0b" stroke="#b45309" strokeWidth="2" />
-                <ellipse cx="64" cy="50" rx="10" ry="7" fill="#ffffff" />
-                <ellipse cx="76" cy="50" rx="10" ry="7" fill="#ffffff" />
+                <ellipse cx="70" cy="51" rx="14" ry="9" fill="#ffffff" />
 
                 {/* Mischievous Wink & Sparkly Eye */}
                 <path d="M 54 40 Q 60 36 66 40" stroke="#1c1917" strokeWidth="2.8" strokeLinecap="round" />
@@ -1175,27 +1165,24 @@ function Reveal({
                 <circle cx="78.5" cy="37.5" r="1.8" fill="#ffffff" />
                 <circle cx="81.5" cy="41" r="0.9" fill="#ffffff" />
 
-                {/* Nose, mouth with playful fang */}
-                <polygon points="68,46 72,46 70,49" fill="#f43f5e" />
-                <path d="M 66 50 Q 70 53 74 50" stroke="#1c1917" strokeWidth="2" fill="none" strokeLinecap="round" />
-                <polygon points="69,50 71,50 70,53" fill="#ffffff" />
+                {/* Shiny Black Button Nose */}
+                <ellipse cx="70" cy="47" rx="3.5" ry="2.4" fill="#0f172a" />
 
-                {/* Whiskers */}
-                <path d="M 52 48 L 32 44 M 52 51 L 30 52 M 52 54 L 34 58" stroke="#78350f" strokeWidth="1.5" strokeLinecap="round" />
-                <path d="M 88 48 L 108 44 M 88 51 L 110 52 M 88 54 L 106 58" stroke="#78350f" strokeWidth="1.5" strokeLinecap="round" />
+                {/* Puppy Mouth & Tongue */}
+                <path d="M 64 50 Q 70 54 76 50" stroke="#1c1917" strokeWidth="2" fill="none" strokeLinecap="round" />
+                <path d="M 67 52 C 66 59, 74 59, 73 52 Z" fill="#f43f5e" stroke="#be123c" strokeWidth="1" />
 
                 {/* Cheeks */}
                 <ellipse cx="50" cy="46" rx="4" ry="2.5" fill="#f43f5e" opacity="0.45" />
                 <ellipse cx="90" cy="46" rx="4" ry="2.5" fill="#f43f5e" opacity="0.45" />
 
-                {/* Paws reaching out forward over the button */}
+                {/* Puppy Paws reaching out forward over the button */}
                 <g transform="translate(30, 52)">
                   <ellipse cx="8" cy="8" rx="11" ry="8" fill="#fef3c7" stroke="#b45309" strokeWidth="1.8" />
                   <circle cx="4" cy="5" r="2" fill="#f43f5e" />
                   <circle cx="8" cy="3" r="2" fill="#f43f5e" />
                   <circle cx="12" cy="5" r="2" fill="#f43f5e" />
                   <ellipse cx="8" cy="9" rx="3.5" ry="2.5" fill="#f43f5e" />
-                  <path d="M 4 2 L 3 0 M 8 1 L 8 -1 M 12 2 L 13 0" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
                 </g>
                 <g transform="translate(82, 52)">
                   <ellipse cx="8" cy="8" rx="11" ry="8" fill="#fef3c7" stroke="#b45309" strokeWidth="1.8" />
@@ -1203,7 +1190,6 @@ function Reveal({
                   <circle cx="8" cy="3" r="2" fill="#f43f5e" />
                   <circle cx="12" cy="5" r="2" fill="#f43f5e" />
                   <ellipse cx="8" cy="9" rx="3.5" ry="2.5" fill="#f43f5e" />
-                  <path d="M 4 2 L 3 0 M 8 1 L 8 -1 M 12 2 L 13 0" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
                 </g>
               </svg>
             </div>

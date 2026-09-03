@@ -76,13 +76,11 @@ export default function CakeSVG({ className }: Props) {
         yoyo: true,
         repeat: -1,
       });
-    }
-
-    // Gentle tail wagging back and forth — anchored firmly at cake base (0px 0px)
+    }    // Happy puppy tail wagging back and forth — anchored firmly at cake base (0px 0px)
     if (tailRef.current) {
       gsap.to(tailRef.current, {
-        rotate: 6,
-        duration: 1.8,
+        rotate: 14,
+        duration: 0.42,
         yoyo: true,
         repeat: -1,
         ease: 'sine.inOut',
@@ -90,67 +88,49 @@ export default function CakeSVG({ className }: Props) {
       });
     }
 
-    // Realistic Cat Ear Reflex Twitch (quick reflex flick like real cats)
+    // Playful Puppy Ear Twitch (gentle ear flop reflex)
     if (leftEarRef.current) {
-      const leftEarTl = gsap.timeline({ repeat: -1, repeatDelay: 3.6 });
+      const leftEarTl = gsap.timeline({ repeat: -1, repeatDelay: 3.2 });
       leftEarTl
         .to(leftEarRef.current, {
-          rotate: -7,
-          skewX: -3,
-          duration: 0.08,
+          rotate: -6,
+          duration: 0.12,
           ease: 'power2.out',
           transformOrigin: '185px 375px',
         })
         .to(leftEarRef.current, {
-          rotate: 4,
-          skewX: 2,
-          duration: 0.08,
-          ease: 'sine.inOut',
-          transformOrigin: '185px 375px',
-        })
-        .to(leftEarRef.current, {
-          rotate: -3,
-          duration: 0.06,
+          rotate: 3,
+          duration: 0.12,
           ease: 'sine.inOut',
           transformOrigin: '185px 375px',
         })
         .to(leftEarRef.current, {
           rotate: 0,
-          skewX: 0,
-          duration: 0.12,
-          ease: 'back.out(1.6)',
+          duration: 0.14,
+          ease: 'power2.out',
           transformOrigin: '185px 375px',
         });
     }
 
     if (rightEarRef.current) {
-      const rightEarTl = gsap.timeline({ repeat: -1, repeatDelay: 4.2 });
+      const rightEarTl = gsap.timeline({ repeat: -1, repeatDelay: 4.0 });
       rightEarTl
         .to(rightEarRef.current, {
-          rotate: 7,
-          skewX: 3,
-          duration: 0.08,
+          rotate: 6,
+          duration: 0.12,
           ease: 'power2.out',
           transformOrigin: '415px 375px',
         })
         .to(rightEarRef.current, {
-          rotate: -4,
-          skewX: -2,
-          duration: 0.08,
-          ease: 'sine.inOut',
-          transformOrigin: '415px 375px',
-        })
-        .to(rightEarRef.current, {
-          rotate: 3,
-          duration: 0.06,
+          rotate: -3,
+          duration: 0.12,
           ease: 'sine.inOut',
           transformOrigin: '415px 375px',
         })
         .to(rightEarRef.current, {
           rotate: 0,
-          skewX: 0,
-          duration: 0.12,
-          ease: 'back.out(1.6)',
+          duration: 0.14,
+          ease: 'power2.out',
           transformOrigin: '415px 375px',
         });
     }
@@ -343,47 +323,49 @@ export default function CakeSVG({ className }: Props) {
         </g>
       </g>
 
-      {/* === 3. CAT EARS (Deeply rooted inside the frosting dome) === */}
-      {/* Left Cat Ear */}
+      {/* === 3. PUPPY FLOPPY EARS (Deeply rooted inside the frosting dome) === */}
+      {/* Left Puppy Ear */}
       <g ref={leftEarRef} filter="url(#cakeShadow)">
-        {/* Main ear body extending deep into the frosting */}
+        {/* Main puppy ear body with soft drooping flap */}
         <path
-          d="M 160 395 L 138 290 Q 170 280 205 330 L 215 390 Z"
+          d="M 160 395 C 130 330, 110 270, 138 275 C 172 280, 195 325, 215 390 Z"
           fill="#fef3e7"
           stroke="#fbcfe8"
           strokeWidth="2.5"
           strokeLinejoin="round"
         />
-        {/* Inner Pink Fluff */}
+        {/* Inner Warm Fluff */}
         <path
-          d="M 165 375 L 148 302 Q 172 295 196 335 L 205 375 Z"
+          d="M 162 380 C 138 335, 126 288, 145 288 C 170 292, 188 330, 205 380 Z"
           fill="#f472b6"
+          opacity="0.85"
         />
-        <circle cx="145" cy="298" r="3.2" fill="#ffffff" opacity="0.8" />
+        <circle cx="140" cy="285" r="3.2" fill="#ffffff" opacity="0.8" />
         {/* Cute Strawberry Clip on Ear */}
-        <circle cx="198" cy="336" r="5" fill="#ef4444" />
-        <circle cx="198" cy="332" r="2" fill="#22c55e" />
+        <circle cx="196" cy="336" r="5" fill="#ef4444" />
+        <circle cx="196" cy="332" r="2" fill="#22c55e" />
       </g>
 
-      {/* Right Cat Ear */}
+      {/* Right Puppy Ear */}
       <g ref={rightEarRef} filter="url(#cakeShadow)">
-        {/* Main ear body extending deep into the frosting */}
+        {/* Main puppy ear body with soft drooping flap */}
         <path
-          d="M 440 395 L 462 290 Q 430 280 395 330 L 385 390 Z"
+          d="M 440 395 C 470 330, 490 270, 462 275 C 428 280, 405 325, 385 390 Z"
           fill="#fef3e7"
           stroke="#fbcfe8"
           strokeWidth="2.5"
           strokeLinejoin="round"
         />
-        {/* Inner Pink Fluff */}
+        {/* Inner Warm Fluff */}
         <path
-          d="M 435 375 L 452 302 Q 428 295 404 335 L 395 375 Z"
+          d="M 438 380 C 462 335, 474 288, 455 288 C 430 292, 412 330, 395 380 Z"
           fill="#f472b6"
+          opacity="0.85"
         />
-        <circle cx="455" cy="298" r="3.2" fill="#ffffff" opacity="0.8" />
+        <circle cx="460" cy="285" r="3.2" fill="#ffffff" opacity="0.8" />
         {/* Cute Strawberry Clip on Ear */}
-        <circle cx="402" cy="336" r="5" fill="#ef4444" />
-        <circle cx="402" cy="332" r="2" fill="#22c55e" />
+        <circle cx="404" cy="336" r="5" fill="#ef4444" />
+        <circle cx="404" cy="332" r="2" fill="#22c55e" />
       </g>
 
       {/* === 4. CAKE BODY & VELVET WRAPPER === */}
@@ -544,62 +526,81 @@ export default function CakeSVG({ className }: Props) {
           </g>
         </g>
 
-        {/* Cute Heart Nose */}
-        <path
-          d="M 300 445 C 296 438, 288 440, 288 448 C 288 456, 300 464, 300 464 C 300 464, 312 456, 312 448 C 312 440, 304 438, 300 445 Z"
-          fill="#e11d48"
-        />
+        {/* Puppy Snout Zone */}
+        <ellipse cx="300" cy="454" rx="34" ry="22" fill="#ffffff" opacity="0.88" />
 
-        {/* Sweet "ω" Cat Smile */}
+        {/* Shiny Black Puppy Button Nose */}
+        <ellipse cx="300" cy="442" rx="13" ry="8.5" fill="#0f172a" />
+        <ellipse cx="296" cy="439.5" rx="4" ry="2.2" fill="#ffffff" opacity="0.85" />
+
+        {/* Happy Panting Puppy Mouth & Tongue */}
         <path
-          d="M 284 462 Q 292 472 300 464 Q 308 472 316 462"
+          d="M 286 453 Q 294 461 300 453 Q 306 461 314 453"
           fill="none"
-          stroke="#1e1b4b"
+          stroke="#0f172a"
           strokeWidth="3.2"
           strokeLinecap="round"
         />
+        {/* Adorable Pink Puppy Tongue Panting Out */}
+        <path
+          d="M 295 456 C 294 472, 306 472, 305 456 Z"
+          fill="#f43f5e"
+          stroke="#be123c"
+          strokeWidth="1.4"
+        />
+        <line x1="300" y1="457" x2="300" y2="467" stroke="#be123c" strokeWidth="1.2" strokeLinecap="round" />
 
-        {/* Cute Cat Whiskers */}
-        <g ref={whiskersRef}>
-          <line x1="170" y1="448" x2="225" y2="452" stroke="#475569" strokeWidth="2" strokeLinecap="round" />
-          <line x1="168" y1="462" x2="225" y2="462" stroke="#475569" strokeWidth="2" strokeLinecap="round" />
-          <line x1="172" y1="476" x2="225" y2="472" stroke="#475569" strokeWidth="2" strokeLinecap="round" />
-
-          <line x1="375" y1="452" x2="430" y2="448" stroke="#475569" strokeWidth="2" strokeLinecap="round" />
-          <line x1="375" y1="462" x2="432" y2="462" stroke="#475569" strokeWidth="2" strokeLinecap="round" />
-          <line x1="375" y1="472" x2="428" y2="476" stroke="#475569" strokeWidth="2" strokeLinecap="round" />
+        {/* Cute Puppy Whisker Freckle Dots */}
+        <g fill="#475569" opacity="0.75">
+          <circle cx="278" cy="448" r="1.8" />
+          <circle cx="272" cy="452" r="1.8" />
+          <circle cx="278" cy="456" r="1.8" />
+          <circle cx="322" cy="448" r="1.8" />
+          <circle cx="328" cy="452" r="1.8" />
+          <circle cx="322" cy="456" r="1.8" />
         </g>
 
-        {/* Cute Chubby Cat Paws Peeking over Bottom Rim */}
+        {/* Cute Chubby Puppy Paws Peeking over Bottom Rim */}
         <g fill="#ffffff" stroke="#fbcfe8" strokeWidth="1.5">
-          {/* Left Paw */}
+          {/* Left Puppy Paw */}
           <ellipse cx="230" cy="515" rx="16" ry="12" />
-          <circle cx="223" cy="518" r="3" fill="#f472b6" opacity="0.6" />
-          <circle cx="230" cy="520" r="3" fill="#f472b6" opacity="0.6" />
-          <circle cx="237" cy="518" r="3" fill="#f472b6" opacity="0.6" />
+          <circle cx="222" cy="517" r="3.5" fill="#fb7185" opacity="0.65" />
+          <circle cx="230" cy="519" r="3.5" fill="#fb7185" opacity="0.65" />
+          <circle cx="238" cy="517" r="3.5" fill="#fb7185" opacity="0.65" />
+          <ellipse cx="230" cy="511" rx="6" ry="4" fill="#fb7185" opacity="0.65" />
 
-          {/* Right Paw */}
+          {/* Right Puppy Paw */}
           <ellipse cx="370" cy="515" rx="16" ry="12" />
-          <circle cx="363" cy="518" r="3" fill="#f472b6" opacity="0.6" />
-          <circle cx="370" cy="520" r="3" fill="#f472b6" opacity="0.6" />
-          <circle cx="377" cy="518" r="3" fill="#f472b6" opacity="0.6" />
+          <circle cx="362" cy="517" r="3.5" fill="#fb7185" opacity="0.65" />
+          <circle cx="370" cy="519" r="3.5" fill="#fb7185" opacity="0.65" />
+          <circle cx="378" cy="517" r="3.5" fill="#fb7185" opacity="0.65" />
+          <ellipse cx="370" cy="511" rx="6" ry="4" fill="#fb7185" opacity="0.65" />
         </g>
 
-        {/* === 7. GOLDEN COLLAR BELL & SATIN BOW TIE === */}
+        {/* === 7. GOLDEN COLLAR & BONE CHARM === */}
         <g ref={bowRef} transform="translate(300, 520)" filter="url(#cakeShadow)">
-          {/* Satin Pink/Red Ribbon Wings */}
+          {/* Ribbon Collar Wings */}
           <path d="M -48 -14 L -8 -4 L -8 16 L -48 24 Z" fill="#e11d48" stroke="#9f1239" strokeWidth="1.5" />
           <path d="M -44 -10 L -12 -3 L -12 12 L -44 18 Z" fill="#f43f5e" opacity="0.7" />
 
           <path d="M 48 -14 L 8 -4 L 8 16 L 48 24 Z" fill="#e11d48" stroke="#9f1239" strokeWidth="1.5" />
           <path d="M 44 -10 L 12 -3 L 12 12 L 44 18 Z" fill="#f43f5e" opacity="0.7" />
 
-          {/* Golden Bell Centerpiece */}
+          {/* Golden Bone Pendant Centerpiece */}
           <g ref={bellRef}>
-            <circle cx="0" cy="6" r="13" fill="url(#bellGoldGrad)" stroke="#854d0e" strokeWidth="1.5" />
-            <ellipse cx="-4" cy="2" rx="4" ry="6" fill="#ffffff" opacity="0.7" />
-            <line x1="-12" y1="8" x2="12" y2="8" stroke="#854d0e" strokeWidth="1.5" />
-            <circle cx="0" cy="12" r="3" fill="#713f12" />
+            <circle cx="0" cy="8" r="14" fill="url(#bellGoldGrad)" stroke="#854d0e" strokeWidth="1.5" />
+            <ellipse cx="-4" cy="4" rx="4" ry="6" fill="#ffffff" opacity="0.7" />
+            {/* Cute Golden Bone Icon engraved */}
+            <path
+              d="M -7 7 L 7 7"
+              stroke="#713f12"
+              strokeWidth="3.2"
+              strokeLinecap="round"
+            />
+            <circle cx="-6" cy="5.5" r="2" fill="#713f12" />
+            <circle cx="-6" cy="8.5" r="2" fill="#713f12" />
+            <circle cx="6" cy="5.5" r="2" fill="#713f12" />
+            <circle cx="6" cy="8.5" r="2" fill="#713f12" />
           </g>
         </g>
 
@@ -627,35 +628,37 @@ export default function CakeSVG({ className }: Props) {
             <line x1="-9" y1="-19" x2="9" y2="-13" stroke="#3b82f6" strokeWidth="2.8" strokeLinecap="round" />
             <line x1="-9" y1="-9" x2="9" y2="-3" stroke="#3b82f6" strokeWidth="2.8" strokeLinecap="round" />
 
-            {/* === Kawaii Cat Head on Candle === */}
+            {/* === Kawaii Puppy Head on Candle === */}
             <g>
-              {/* Left Cat Ear */}
+              {/* Left Puppy Floppy Ear */}
               <path
-                d="M -9 -34 L -14 -49 L -3 -40 Z"
-                fill="#ffffff"
+                d="M -9 -34 C -16 -40, -15 -48, -7 -44 Z"
+                fill={`oklch(82% 0.16 ${cfg.earHue})`}
                 stroke="#cbd5e1"
                 strokeWidth="1.2"
                 strokeLinejoin="round"
               />
               <path
-                d="M -8 -36 L -12 -46 L -4 -40 Z"
-                fill={`oklch(82% 0.16 ${cfg.earHue})`}
+                d="M -8 -36 C -13 -40, -12 -46, -6 -43 Z"
+                fill="#ffffff"
+                opacity="0.6"
               />
 
-              {/* Right Cat Ear */}
+              {/* Right Puppy Floppy Ear */}
               <path
-                d="M 9 -34 L 14 -49 L 3 -40 Z"
-                fill="#ffffff"
+                d="M 9 -34 C 16 -40, 15 -48, 7 -44 Z"
+                fill={`oklch(82% 0.16 ${cfg.earHue})`}
                 stroke="#cbd5e1"
                 strokeWidth="1.2"
                 strokeLinejoin="round"
               />
               <path
-                d="M 8 -36 L 12 -46 L 4 -40 Z"
-                fill={`oklch(82% 0.16 ${cfg.earHue})`}
+                d="M 8 -36 C 13 -40, 12 -46, 6 -43 Z"
+                fill="#ffffff"
+                opacity="0.6"
               />
 
-              {/* Chubby Cat Head Dome */}
+              {/* Chubby Puppy Head Dome */}
               <ellipse
                 cx="0"
                 cy="-36"
@@ -670,41 +673,34 @@ export default function CakeSVG({ className }: Props) {
               <ellipse cx="-6" cy="-34" rx="2.8" ry="1.6" fill="#f43f5e" opacity="0.65" />
               <ellipse cx="6" cy="-34" rx="2.8" ry="1.6" fill="#f43f5e" opacity="0.65" />
 
-              {/* Cat Face Expressions */}
+              {/* Puppy Face Expressions */}
               {cfg.expression === 'happy' && (
                 <g stroke="#0f172a" strokeWidth="1.6" strokeLinecap="round" fill="none">
-                  <path d="M -6 -37 Q -4 -41 -2 -37" />
-                  <path d="M 2 -37 Q 4 -41 6 -37" />
-                  <path d="M -2.5 -33 Q 0 -31 2.5 -33" />
+                  <path d="M -6 -38 Q -4 -42 -2 -38" />
+                  <path d="M 2 -38 Q 4 -42 6 -38" />
                 </g>
               )}
               {cfg.expression === 'wink' && (
                 <g stroke="#0f172a" strokeWidth="1.6" strokeLinecap="round" fill="none">
-                  <path d="M -6 -37 Q -4 -41 -2 -37" />
-                  <circle cx="4" cy="-37" r="1.6" fill="#0f172a" />
-                  <path d="M -2 -33 Q 0 -31 2 -33" />
+                  <path d="M -6 -38 Q -4 -42 -2 -38" />
+                  <circle cx="4" cy="-38" r="1.6" fill="#0f172a" />
                 </g>
               )}
               {cfg.expression === 'joy' && (
                 <g stroke="#0f172a" strokeWidth="1.6" strokeLinecap="round" fill="none">
-                  <path d="M -6 -39 L -2 -37 L -6 -35" />
-                  <path d="M 6 -39 L 2 -37 L 6 -35" />
-                  <path d="M -2 -33 Q 0 -30 2 -33" />
+                  <path d="M -6 -40 L -2 -38 L -6 -36" />
+                  <path d="M 6 -40 L 2 -38 L 6 -36" />
                 </g>
               )}
 
-              {/* Tiny Pink Nose */}
-              <circle cx="0" cy="-35" r="1" fill="#f43f5e" />
+              {/* Shiny Black Puppy Nose */}
+              <ellipse cx="0" cy="-35" rx="2.2" ry="1.4" fill="#0f172a" />
 
-              {/* Cute Cat Whiskers */}
-              <g stroke="#64748b" strokeWidth="0.8" strokeLinecap="round" opacity="0.8">
-                <line x1="-8" y1="-35" x2="-13" y2="-36" />
-                <line x1="-8" y1="-33" x2="-13" y2="-32" />
-                <line x1="8" y1="-35" x2="13" y2="-36" />
-                <line x1="8" y1="-33" x2="13" y2="-32" />
-              </g>
+              {/* Sweet Puppy Smile with Tiny Pink Tongue */}
+              <path d="M -2.5 -32.8 Q 0 -31.2 2.5 -32.8" stroke="#0f172a" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+              <circle cx="0" cy="-31.2" r="1.1" fill="#f43f5e" />
 
-              {/* Cute Cat Paws hugging candle body */}
+              {/* Cute Puppy Paws hugging candle body */}
               <ellipse cx="-6" cy="-22" rx="3.2" ry="2.4" fill="#ffffff" stroke="#cbd5e1" strokeWidth="0.9" />
               <ellipse cx="6" cy="-22" rx="3.2" ry="2.4" fill="#ffffff" stroke="#cbd5e1" strokeWidth="0.9" />
             </g>

@@ -19,15 +19,15 @@ import { validateSiteConfig } from '@/lib/validate-config';
  */
 const config: SiteConfig = {
   recipient: {
-    name: 'KIỀU LEE',
-    headline: 'Chúc mừng sinh nhật, KIỀU LEE!',
+    name: 'Dẹo Dẹo',
+    headline: 'Chúc mừng sinh nhật, Dẹo Dẹo!',
     outroWish:
       'Thổi nến, ước thật to, rồi cùng đón mừng món quà này nhé',
   },
   wishes: [
     {
       text:
-        'Chúc mừng sinh nhật KIỀU LEE! Thêm một tuổi — thế giới thêm một phiên bản dễ thương hơn của em.',
+        'Chúc mừng sinh nhật Dẹo Dẹo! Thêm một tuổi — thế giới thêm một phiên bản dễ thương hơn của em.',
     },
     {
       text:

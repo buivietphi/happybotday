@@ -147,29 +147,28 @@ export default function CatMascot({ type, className }: CatMascotProps) {
       />
 
       {/* Cat Head Group */}
+      {/* Puppy Head Group */}
       <g ref={headRef}>
-        {/* Left Ear */}
+        {/* Left Floppy Puppy Ear */}
         <g>
           <path
-            d="M 52 68 L 38 32 L 68 46 Z"
+            d="M 54 62 C 34 50, 26 78, 38 86 C 48 92, 58 76, 60 64 Z"
             fill={type === 0 ? '#fb923c' : type === 1 ? '#ffffff' : type === 2 ? '#f97316' : type === 3 ? '#1e293b' : '#a855f7'}
-            stroke={type === 1 ? '#fbcfe8' : '#e2e8f0'}
+            stroke={type === 1 ? '#fbcfe8' : '#cbd5e1'}
             strokeWidth="1.5"
-            strokeLinejoin="round"
           />
-          <path d="M 50 62 L 42 38 L 64 48 Z" fill="#f472b6" opacity="0.75" />
+          <path d="M 50 64 C 36 56, 32 76, 40 82 C 48 86, 54 74, 56 65 Z" fill="#f472b6" opacity="0.6" />
         </g>
 
-        {/* Right Ear */}
+        {/* Right Floppy Puppy Ear */}
         <g>
           <path
-            d="M 108 68 L 122 32 L 92 46 Z"
+            d="M 106 62 C 126 50, 134 78, 122 86 C 112 92, 102 76, 100 64 Z"
             fill={type === 0 ? '#38bdf8' : type === 1 ? '#ffffff' : type === 2 ? '#f97316' : type === 3 ? '#1e293b' : '#a855f7'}
-            stroke={type === 1 ? '#fbcfe8' : '#e2e8f0'}
+            stroke={type === 1 ? '#fbcfe8' : '#cbd5e1'}
             strokeWidth="1.5"
-            strokeLinejoin="round"
           />
-          <path d="M 110 62 L 118 38 L 96 48 Z" fill="#f472b6" opacity="0.75" />
+          <path d="M 110 64 C 124 56, 128 76, 120 82 C 112 86, 106 74, 104 65 Z" fill="#f472b6" opacity="0.6" />
         </g>
 
         {/* Head Main Dome */}
@@ -185,93 +184,79 @@ export default function CatMascot({ type, className }: CatMascotProps) {
           strokeWidth="2"
         />
 
-        {/* Special Calico Patches for Cat 0 */}
-        {type === 0 && (
-          <path d="M 44 65 Q 52 50 68 54 Q 58 72 44 65 Z" fill="#fb923c" />
-        )}
-        {/* Special Tiger Stripes for Cat 2 */}
-        {type === 2 && (
-          <g stroke="#ea580c" strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.6">
-            <line x1="76" y1="46" x2="76" y2="54" />
-            <line x1="84" y1="46" x2="84" y2="54" />
-            <line x1="80" y1="44" x2="80" y2="52" />
-          </g>
-        )}
-        {/* White face muzzle for Cat 3 */}
-        {type === 3 && (
-          <ellipse cx="80" cy="80" rx="16" ry="12" fill="#ffffff" />
-        )}
+        {/* Puppy Snout / Muzzle */}
+        <ellipse cx="80" cy="80" rx="16" ry="12" fill="#ffffff" stroke="#f1f5f9" strokeWidth="1" />
 
         {/* Rosy Cheeks */}
-        <ellipse cx="58" cy="80" rx="6" ry="3.5" fill="#fb7185" opacity="0.7" />
-        <ellipse cx="102" cy="80" rx="6" ry="3.5" fill="#fb7185" opacity="0.7" />
+        <ellipse cx="56" cy="78" rx="6" ry="3.5" fill="#fb7185" opacity="0.7" />
+        <ellipse cx="104" cy="78" rx="6" ry="3.5" fill="#fb7185" opacity="0.7" />
 
-        {/* Eyes & Expressions per Cat */}
+        {/* Eyes & Expressions per Puppy */}
         {type === 0 && (
           // Sparkling Happy Eyes
           <g fill="#1e1b4b">
-            <circle cx="66" cy="72" r="5" />
-            <circle cx="64" cy="70" r="1.8" fill="#ffffff" />
-            <circle cx="94" cy="72" r="5" />
-            <circle cx="92" cy="70" r="1.8" fill="#ffffff" />
+            <circle cx="66" cy="71" r="5" />
+            <circle cx="64" cy="69" r="1.8" fill="#ffffff" />
+            <circle cx="94" cy="71" r="5" />
+            <circle cx="92" cy="69" r="1.8" fill="#ffffff" />
           </g>
         )}
         {type === 1 && (
           // Sweet Wink (^_-)
           <g stroke="#1e1b4b" strokeWidth="2.5" strokeLinecap="round" fill="none">
-            <path d="M 60 72 Q 66 66 72 72" />
-            <circle cx="94" cy="71" r="5" fill="#1e1b4b" />
-            <circle cx="92" cy="69" r="1.8" fill="#ffffff" />
+            <path d="M 60 71 Q 66 65 72 71" />
+            <circle cx="94" cy="70" r="5" fill="#1e1b4b" />
+            <circle cx="92" cy="68" r="1.8" fill="#ffffff" />
           </g>
         )}
         {type === 2 && (
           // Joyful Crescent Closed Eyes (^^)
           <g stroke="#7c2d12" strokeWidth="2.8" strokeLinecap="round" fill="none">
-            <path d="M 60 72 Q 66 64 72 72" />
-            <path d="M 88 72 Q 94 64 100 72" />
+            <path d="M 60 71 Q 66 63 72 71" />
+            <path d="M 88 71 Q 94 63 100 71" />
           </g>
         )}
         {type === 3 && (
           // Kawaii Happy Anime Eyes (≧◡≦)
           <g stroke="#0f172a" strokeWidth="2.8" strokeLinecap="round" fill="none">
-            <path d="M 62 70 L 68 73 L 62 76" />
-            <path d="M 98 70 L 92 73 L 98 76" />
+            <path d="M 62 69 L 68 72 L 62 75" />
+            <path d="M 98 69 L 92 72 L 98 75" />
           </g>
         )}
         {type === 4 && (
           // Starry Eyes behind glasses
           <g fill="#4c1d95">
-            <circle cx="66" cy="72" r="5.5" />
-            <circle cx="64" cy="69" r="2" fill="#ffffff" />
-            <circle cx="94" cy="72" r="5.5" />
-            <circle cx="92" cy="69" r="2" fill="#ffffff" />
+            <circle cx="66" cy="71" r="5.5" />
+            <circle cx="64" cy="68" r="2" fill="#ffffff" />
+            <circle cx="94" cy="71" r="5.5" />
+            <circle cx="92" cy="68" r="2" fill="#ffffff" />
           </g>
         )}
 
-        {/* Tiny Pink Nose */}
-        <polygon points="78,77 82,77 80,80" fill="#e11d48" />
+        {/* Shiny Black Puppy Nose */}
+        <ellipse cx="80" cy="76" rx="4.5" ry="3.2" fill="#0f172a" />
+        <ellipse cx="78.5" cy="75" rx="1.5" ry="1" fill="#ffffff" />
 
-        {/* Cute "ω" Mouth */}
+        {/* Happy Puppy Mouth & Tongue */}
         <path
-          d="M 74 81 Q 77 84 80 81 Q 83 84 86 81"
+          d="M 75 80 Q 80 83 85 80"
           fill="none"
-          stroke={type === 3 ? '#0f172a' : '#1e1b4b'}
+          stroke="#0f172a"
           strokeWidth="1.8"
           strokeLinecap="round"
         />
+        <path d="M 77 81 C 76 88, 84 88, 83 81 Z" fill="#f43f5e" stroke="#be123c" strokeWidth="1" />
 
-        {/* Whiskers */}
-        <g stroke="#94a3b8" strokeWidth="1.2" strokeLinecap="round">
-          <line x1="42" y1="76" x2="52" y2="78" />
-          <line x1="40" y1="82" x2="52" y2="82" />
-          <line x1="108" y1="78" x2="118" y2="76" />
-          <line x1="108" y1="82" x2="120" y2="82" />
-        </g>
+        {/* Freckle dots */}
+        <circle cx="73" cy="77" r="0.8" fill="#64748b" />
+        <circle cx="87" cy="77" r="0.8" fill="#64748b" />
 
-        {/* Cat Front Paws */}
+        {/* Puppy Front Paws */}
         <g fill="#ffffff" stroke={type === 1 ? '#fbcfe8' : '#e2e8f0'} strokeWidth="1.5">
           <ellipse cx="65" cy="115" rx="8" ry="6" />
+          <circle cx="65" cy="115" r="2" fill="#fda4af" />
           <ellipse cx="95" cy="115" rx="8" ry="6" />
+          <circle cx="95" cy="115" r="2" fill="#fda4af" />
         </g>
       </g>
 

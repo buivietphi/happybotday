@@ -284,7 +284,7 @@ export default function BlowCandles({ onComplete }: Props) {
     const timer = window.setTimeout(() => {
       setShowCryingCat(true);
       try {
-        const audio = new Audio('/sounds/meow_chirp.wav');
+        const audio = new Audio('/sounds/dog_bark.wav');
         audio.volume = 0.65;
         audio.play().catch(() => {});
       } catch {}
@@ -903,7 +903,7 @@ export default function BlowCandles({ onComplete }: Props) {
           <div className="phase-caption" key="ready" style={captionStyle}>
             {!isMatchLit
               ? 'Chạm và kéo que diêm để quẹt lửa nhé 🕯️'
-              : 'Kéo diêm đến từng ngọn nến mèo để thắp nhé 🕯️'}
+              : 'Kéo diêm đến từng ngọn nến cún con để thắp nhé 🕯️'}
           </div>
         )}
         {isLit && (
@@ -1250,7 +1250,7 @@ export default function BlowCandles({ onComplete }: Props) {
         )}
         {(isLit || isBlowing) && (
           <span style={{ color: 'var(--color-accent-deep)', fontWeight: 600 }}>
-            ✨ {CANDLE_COUNT} ngọn nến mèo đang lung linh ✨
+            ✨ {CANDLE_COUNT} ngọn nến cún con đang lung linh ✨
           </span>
         )}
         {isCelebrate && (
@@ -1296,7 +1296,7 @@ export default function BlowCandles({ onComplete }: Props) {
                   }}
                 >
                   <div style={{ fontSize: '15px', color: '#e11d48', fontWeight: 800 }}>
-                    Tại sao không bấm nhanh điii... 😿💦
+                    Tại sao không bấm nhanh điii... 🐶💦
                   </div>
                   <div style={{ fontSize: '13px', color: '#9f1239', fontStyle: 'italic', marginTop: 2 }}>
                     Đang háo hức chờ xem thư nèee! 🥺💌✨
@@ -1317,7 +1317,7 @@ export default function BlowCandles({ onComplete }: Props) {
                   />
                 </div>
 
-                {/* Handcrafted Vector Crying Kitten SVG */}
+                {/* Handcrafted Vector Crying Puppy SVG */}
                 <svg
                   viewBox="0 0 130 95"
                   width="124"
@@ -1330,15 +1330,13 @@ export default function BlowCandles({ onComplete }: Props) {
                   <ellipse cx="22" cy="85" rx="14" ry="4" fill="#38bdf8" opacity="0.6" />
                   <ellipse cx="108" cy="85" rx="14" ry="4" fill="#38bdf8" opacity="0.6" />
 
-                  {/* Cat Body */}
+                  {/* Puppy Body */}
                   <ellipse cx="65" cy="68" rx="34" ry="22" fill="#fed7aa" stroke="#ea580c" strokeWidth="2" />
                   <ellipse cx="65" cy="70" rx="20" ry="14" fill="#ffffff" />
 
-                  {/* Drooping Sad Cat Ears */}
-                  <path d="M 42 44 L 22 28 L 48 35 Z" fill="#fed7aa" stroke="#ea580c" strokeWidth="2" />
-                  <path d="M 40 40 L 26 30 L 46 35 Z" fill="#fda4af" />
-                  <path d="M 88 44 L 108 28 L 82 35 Z" fill="#fed7aa" stroke="#ea580c" strokeWidth="2" />
-                  <path d="M 90 40 L 104 30 L 84 35 Z" fill="#fda4af" />
+                  {/* Drooping Sad Puppy Ears */}
+                  <path d="M 44 42 C 28 44, 20 62, 28 68 C 36 72, 44 58, 48 48 Z" fill="#c2410c" stroke="#9a3412" strokeWidth="1.5" />
+                  <path d="M 86 42 C 102 44, 110 62, 102 68 C 94 72, 86 58, 82 48 Z" fill="#c2410c" stroke="#9a3412" strokeWidth="1.5" />
 
                   {/* Head */}
                   <circle cx="65" cy="44" r="24" fill="#fed7aa" stroke="#ea580c" strokeWidth="2" />
@@ -1367,18 +1365,18 @@ export default function BlowCandles({ onComplete }: Props) {
                   <circle cx="102" cy="62" r="2.5" fill="#bae6fd" />
                   <circle cx="114" cy="74" r="2" fill="#38bdf8" />
 
+                  {/* Shiny Puppy Nose */}
+                  <ellipse cx="65" cy="47" rx="3.2" ry="2.2" fill="#0f172a" />
+
                   {/* Trembling Open Crying Mouth */}
-                  <polygon points="63,47 67,47 65,50" fill="#f43f5e" />
                   <path d="M 58 52 C 60 58, 70 58, 72 52 Z" fill="#e11d48" stroke="#1c1917" strokeWidth="1.5" />
                   <ellipse cx="65" cy="55" rx="3.5" ry="2" fill="#fda4af" />
 
-                  {/* Whiskers */}
-                  <path d="M 46 48 L 30 46 M 46 51 L 28 52" stroke="#c2410c" strokeWidth="1.2" strokeLinecap="round" />
-                  <path d="M 84 48 L 100 46 M 84 51 L 102 52" stroke="#c2410c" strokeWidth="1.2" strokeLinecap="round" />
-
                   {/* Front Paws Wiping Cheeks */}
                   <ellipse cx="44" cy="56" rx="7" ry="5.5" fill="#ffffff" stroke="#ea580c" strokeWidth="1.5" />
+                  <circle cx="44" cy="56" r="2" fill="#fda4af" />
                   <ellipse cx="86" cy="56" rx="7" ry="5.5" fill="#ffffff" stroke="#ea580c" strokeWidth="1.5" />
+                  <circle cx="86" cy="56" r="2" fill="#fda4af" />
                 </svg>
               </div>
             )}

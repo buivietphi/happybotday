@@ -37,8 +37,7 @@ export default function MischiefCatsParty() {
     setTappedEmoji((prev) => [...prev.slice(-6), { id, x, y, text }]);
 
     try {
-      const sounds = ['/sounds/meow_chirp.wav', '/sounds/meow1.wav', '/sounds/meow_double.wav'];
-      const audio = new Audio(sounds[Math.floor(Math.random() * sounds.length)]);
+      const audio = new Audio('/sounds/dog_bark.wav');
       audio.volume = 0.55;
       audio.play().catch(() => {});
     } catch {
