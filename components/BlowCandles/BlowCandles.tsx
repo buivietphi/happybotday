@@ -241,6 +241,9 @@ export default function BlowCandles({ onComplete }: Props) {
   const holdStartTimeRef = useRef<number>(0);
   const holdTimerRef = useRef<number | null>(null);
   const isHoldActiveRef = useRef(false);
+  const rapidClickTimestampsRef = useRef<number[]>([]);
+  const [showTiredAnt, setShowTiredAnt] = useState(false);
+  const hasShownTiredRef = useRef(false);
 
   // Crying cat state if user stays in celebrate phase for 30s without clicking proceed button
   const [showCryingCat, setShowCryingCat] = useState(false);
@@ -874,6 +877,21 @@ export default function BlowCandles({ onComplete }: Props) {
           audio.play().catch(() => {});
         } catch {}
         spawnPuff(false);
+
+        // Track rapid clicks: if >= 8 clicks within 3s → show tired ant teaser (once per blow session)
+        const now = Date.now();
+        rapidClickTimestampsRef.current = rapidClickTimestampsRef.current.filter((t) => now - t <= 3000);
+        rapidClickTimestampsRef.current.push(now);
+        if (rapidClickTimestampsRef.current.length >= 8 && !hasShownTiredRef.current) {
+          hasShownTiredRef.current = true;
+          setShowTiredAnt(true);
+          try {
+            const audio = new Audio('/sounds/ant_chirp.wav');
+            audio.volume = 0.8;
+            audio.play().catch(() => {});
+          } catch {}
+          window.setTimeout(() => setShowTiredAnt(false), 4500);
+        }
       }
     },
     [spawnPuff],
@@ -1384,6 +1402,36 @@ export default function BlowCandles({ onComplete }: Props) {
               </g>
             );
           })}
+
+          {/* Tired Ant Popup — khi bấm liên tục >= 8 lần trong 3s */}
+          {showTiredAnt && (
+            <g
+              transform={`translate(${WIND_CORNER.x + 22}, ${WIND_CORNER.y - 80})`}
+              style={{ pointerEvents: 'none', animation: 'promptCatPop 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards' }}
+            >
+              {/* Bubble background */}
+              <rect x="-88" y="-30" width="176" height="52" rx="14" ry="14"
+                fill="#fef08a" stroke="#ca8a04" strokeWidth="2"
+                filter="url(#windGlow)"
+              />
+              {/* Bubble tail pointing down toward ant */}
+              <polygon points="-6,22 6,22 0,34" fill="#fef08a" stroke="#ca8a04" strokeWidth="2" strokeLinejoin="round" />
+              <polygon points="-5,22 5,22 0,31" fill="#fef08a" />
+              {/* Text */}
+              <text x="0" y="-10" textAnchor="middle" fontSize="12.5" fontWeight="800"
+                fontFamily="var(--font-body)" fill="#854d0e"
+                style={{ userSelect: 'none' }}
+              >
+                bấm từ từ thôi tôi hết hơi
+              </text>
+              <text x="0" y="8" textAnchor="middle" fontSize="12" fontWeight="700"
+                fontFamily="var(--font-body)" fill="#713f12"
+                style={{ userSelect: 'none' }}
+              >
+                rồi má ơi 🐜💨😮‍💨
+              </text>
+            </g>
+          )}
 
           {/* === BÉ KIẾN THỔI GIÓ (Thay thế đám mây, nằm im tại x=55, y=260) === */}
           <g
