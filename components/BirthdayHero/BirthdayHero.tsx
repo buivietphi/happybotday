@@ -125,7 +125,7 @@ export default function BirthdayHero({
             <circle cx="44" cy="24" r="5" />
           </g>
         </svg>
-        <span>Hôm nay là của em · {name}</span>
+        <span>Hôm nay là ngày của {name} ✨</span>
       </span>
 
       <h1

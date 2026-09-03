@@ -320,7 +320,6 @@ export default function WishCard({
             }}
           >
             <span
-              aria-hidden
               style={{
                 fontSize: '10px',
                 letterSpacing: '0.24em',
@@ -330,7 +329,7 @@ export default function WishCard({
                 fontWeight: 600,
               }}
             >
-              gửi tới em
+              Chúc Dẹo Dẹo
             </span>
             <span
               style={{
@@ -340,7 +339,7 @@ export default function WishCard({
                 color: theme.accent,
               }}
             >
-              — anh yêu —
+              — Bạn Thân —
             </span>
           </div>
 

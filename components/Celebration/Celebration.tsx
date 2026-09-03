@@ -1033,7 +1033,7 @@ function Reveal({
           fontWeight: 700,
         }}
       >
-        🎉 Chúc Mừng Em Đã Trúng Thưởng 🎉
+        🎉 Chúc Mừng Dẹo Dẹo Đã Trúng Thưởng 🎉
       </p>
 
       <ShimmerText as="h2" className="reveal-prize">
