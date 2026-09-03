@@ -882,7 +882,7 @@ export default function BlowCandles({ onComplete }: Props) {
         const now = Date.now();
         rapidClickTimestampsRef.current = rapidClickTimestampsRef.current.filter((t) => now - t <= 3000);
         rapidClickTimestampsRef.current.push(now);
-        if (rapidClickTimestampsRef.current.length >= 8 && !hasShownTiredRef.current) {
+        if (rapidClickTimestampsRef.current.length >= 5 && !hasShownTiredRef.current) {
           hasShownTiredRef.current = true;
           setShowTiredAnt(true);
           try {
