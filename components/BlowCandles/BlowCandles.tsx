@@ -82,12 +82,15 @@ export default function BlowCandles({ onComplete }: Props) {
   // Dynamic nitro angle trailing directly behind drag motion
   const [dragAngle, setDragAngle] = useState(180);
 
-  // Blowing Ant interactive wind combo states
+  // Blowing Ant interactive wind combo & press-and-hold states
   const [windCombo, setWindCombo] = useState(0);
   const [antIsPuffing, setAntIsPuffing] = useState(false);
-  const [windHint, setWindHint] = useState('Bấm vào bé kiến để thổi gió nha! 🐜💨');
+  const [isHoldingBlow, setIsHoldingBlow] = useState(false);
+  const [windHint, setWindHint] = useState('Bấm hoặc nhấn giữ con kiến để thổi gió nha! 🐜💨');
   const comboCountRef = useRef(0);
-  const comboTimerRef = useRef<number | null>(null);
+  const comboDecayTimerRef = useRef<number | null>(null);
+  const holdIntervalRef = useRef<number | null>(null);
+  const isHoldActiveRef = useRef(false);
 
   // Crying cat state if user stays in celebrate phase for 30s without clicking proceed button
   const [showCryingCat, setShowCryingCat] = useState(false);
@@ -579,72 +582,114 @@ export default function BlowCandles({ onComplete }: Props) {
     [extinguished],
   );
 
-  /** Interactive Blowing Ant Click Handler: click 1 = gentle breeze, click multiple = mega gust */
-  const handleAntBlowClick = useCallback(() => {
-    if (phase !== 'blowing') return;
+  /** Execute wind power action (level 1 = gentle, 2 = medium, 3 = mega storm) */
+  const applyWindPower = useCallback(
+    (power: number) => {
+      setWindCombo(power);
+      setAntIsPuffing(true);
 
-    if (comboTimerRef.current) {
-      window.clearTimeout(comboTimerRef.current);
-      comboTimerRef.current = null;
-    }
-
-    comboCountRef.current += 1;
-    const currentCombo = comboCountRef.current;
-    setWindCombo(currentCombo);
-    setAntIsPuffing(true);
-
-    setTimeout(() => setAntIsPuffing(false), 350);
-
-    if (currentCombo === 1) {
-      // Level 1: Gentle breeze, candle flames sway and flicker without extinguishing
-      try {
-        const audio = new Audio('/sounds/ant_chirp.wav');
-        audio.volume = 0.6;
-        audio.play().catch(() => {});
-      } catch {}
-
-      setWindHint('Gió nhẹ quá nến chỉ đung đưa thui, bấm nhanh dồn dập lên nào! 🐜💨');
-      flickerAndSwayCandles(1);
-
-      comboTimerRef.current = window.setTimeout(() => {
-        comboCountRef.current = 0;
-        setWindCombo(0);
-        setWindHint('Bấm vào bé kiến để thổi gió nha! 🐜💨');
-      }, 1500);
-    } else if (currentCombo === 2) {
-      // Level 2: Moderate gust, flames tilt heavily, still standing
-      try {
-        const audio = new Audio('/sounds/ant_chirp.wav');
-        audio.volume = 0.8;
-        audio.play().catch(() => {});
-      } catch {}
-
-      setWindHint('Sắp tắt rồi, bấm dồn dập nữa đi nào! 🔥💨');
-      flickerAndSwayCandles(2);
-
-      comboTimerRef.current = window.setTimeout(() => {
-        comboCountRef.current = 0;
-        setWindCombo(0);
-        setWindHint('Bấm vào bé kiến để thổi gió nha! 🐜💨');
-      }, 1300);
-    } else {
-      // Level 3+: Super whirlwind blast! All candles extinguished!
-      try {
-        const audio = new Audio('/sounds/wind_breeze.wav');
-        audio.volume = 0.85;
-        audio.play().catch(() => {});
-      } catch {}
-
-      setWindHint('Phùuuu~! Tắt hết rồiii! 🎉🎂');
-      for (let i = 0; i < CANDLE_COUNT; i++) {
-        if (!extinguished[i]) {
-          setTimeout(() => {
-            extinguishCandle(i, -1);
-          }, i * 140);
+      if (power === 1) {
+        try {
+          const audio = new Audio('/sounds/ant_chirp.wav');
+          audio.volume = 0.6;
+          audio.play().catch(() => {});
+        } catch {}
+        setWindHint('Gió nhẹ thoảng qua~ (Nhấn nhiều lần hoặc nhấn giữ để thổi to hơn!) 🐜💨');
+        flickerAndSwayCandles(1);
+      } else if (power === 2) {
+        try {
+          const audio = new Audio('/sounds/ant_chirp.wav');
+          audio.volume = 0.85;
+          audio.play().catch(() => {});
+        } catch {}
+        setWindHint('Gió mạnh lên rồi! Thổi thêm xíu nữa nào! 🔥💨');
+        flickerAndSwayCandles(2);
+      } else if (power >= 3) {
+        try {
+          const audio = new Audio('/sounds/wind_breeze.wav');
+          audio.volume = 0.9;
+          audio.play().catch(() => {});
+        } catch {}
+        setWindHint('🌪️ Bão lốc thổi tắt ngọn nến rồiii! 🎉🎂');
+        for (let i = 0; i < CANDLE_COUNT; i++) {
+          if (!extinguished[i]) {
+            setTimeout(() => {
+              extinguishCandle(i, -1);
+            }, i * 140);
+          }
         }
       }
+    },
+    [extinguished, extinguishCandle, flickerAndSwayCandles],
+  );
+
+  /** Triggered on pointer down on the ant - supports both rapid tap and press-and-hold */
+  const startAntBlow = useCallback(
+    (e: React.PointerEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Clear any pending combo decay
+      if (comboDecayTimerRef.current) {
+        window.clearTimeout(comboDecayTimerRef.current);
+        comboDecayTimerRef.current = null;
+      }
+
+      // Step 1: Immediate Click/Tap Increment (Always works at any time!)
+      comboCountRef.current = Math.min(comboCountRef.current + 1, 3);
+      const initialPower = comboCountRef.current;
+      applyWindPower(initialPower);
+
+      // Step 2: Press & Hold (Nhấn giữ) timer
+      isHoldActiveRef.current = true;
+      setIsHoldingBlow(true);
+      const holdStartTime = Date.now();
+      if (holdIntervalRef.current) window.clearInterval(holdIntervalRef.current);
+
+      holdIntervalRef.current = window.setInterval(() => {
+        if (!isHoldActiveRef.current) return;
+        const elapsed = Date.now() - holdStartTime;
+        if (elapsed >= 700) {
+          // Level 3 reached by holding
+          comboCountRef.current = 3;
+          applyWindPower(3);
+          if (holdIntervalRef.current) {
+            window.clearInterval(holdIntervalRef.current);
+            holdIntervalRef.current = null;
+          }
+        } else if (elapsed >= 320) {
+          // Level 2 reached by holding
+          if (comboCountRef.current < 2) {
+            comboCountRef.current = 2;
+            applyWindPower(2);
+          }
+        }
+      }, 80);
+    },
+    [applyWindPower],
+  );
+
+  /** Triggered on pointer up / leave / cancel */
+  const endAntBlow = useCallback(() => {
+    isHoldActiveRef.current = false;
+    setIsHoldingBlow(false);
+    if (holdIntervalRef.current) {
+      window.clearInterval(holdIntervalRef.current);
+      holdIntervalRef.current = null;
     }
-  }, [phase, extinguished, extinguishCandle, flickerAndSwayCandles]);
+
+    setTimeout(() => setAntIsPuffing(false), 250);
+
+    // If power < 3, decay back to 0 after 1400ms if no other tap/hold occurs
+    if (comboCountRef.current < 3) {
+      if (comboDecayTimerRef.current) window.clearTimeout(comboDecayTimerRef.current);
+      comboDecayTimerRef.current = window.setTimeout(() => {
+        comboCountRef.current = 0;
+        setWindCombo(0);
+        setWindHint('Bấm hoặc nhấn giữ con kiến để thổi gió nha! 🐜💨');
+      }, 1400);
+    }
+  }, []);
 
   // === Pointer Drag Handlers ===
   const handlePointerDown = useCallback(
@@ -653,7 +698,12 @@ export default function BlowCandles({ onComplete }: Props) {
       const target = e.target as Element | null;
       if (!target) return;
       const msHandle = target.closest('[data-drag-matchstick]');
-      const wHandle = target.closest('[data-drag-wind]');
+      const antHandle = target.closest('[data-ant-blow]');
+
+      if (antHandle) {
+        // Ant handles its own pointer down hypersensitively
+        return;
+      }
 
       // Matchstick is draggable AT ANY TIME
       if (msHandle && matchstickRef.current) {
@@ -670,22 +720,6 @@ export default function BlowCandles({ onComplete }: Props) {
         dragMode.current = 'matchstick';
         litInThisDrag.current = new Set();
         gsap.killTweensOf(ms);
-        (e.currentTarget as Element).setPointerCapture?.(e.pointerId);
-      } else if (wHandle && windGroupRef.current) {
-        e.preventDefault();
-        e.stopPropagation();
-        const wg = windGroupRef.current;
-        syncRefsFromDOM();
-        const { x, y } = clientToViewBox(e.clientX, e.clientY);
-        windOffset.current = {
-          x: windCenterVB.current.x - x,
-          y: windCenterVB.current.y - y,
-        };
-        dragMode.current = 'wind';
-        setIsDraggingWind(true);
-        // Default pointing left (behind rightward movement into cake)
-        setDragAngle(180);
-        gsap.killTweensOf(wg);
         (e.currentTarget as Element).setPointerCapture?.(e.pointerId);
       }
     },
@@ -716,38 +750,9 @@ export default function BlowCandles({ onComplete }: Props) {
             lightCandle(i);
           }
         }
-      } else if (dragMode.current === 'wind' && windGroupRef.current) {
-        const { x, y } = clientToViewBox(e.clientX, e.clientY);
-        const wg = windGroupRef.current;
-        const newX = x + windOffset.current.x;
-        const newY = y + windOffset.current.y;
-        gsap.set(wg, { x: newX, y: newY });
-
-        // Calculate dynamic drag angle so nitro streams out opposite to movement
-        const dx = newX - windCenterVB.current.x;
-        const dy = newY - windCenterVB.current.y;
-        if (Math.hypot(dx, dy) > 1.2) {
-          const moveAngle = (Math.atan2(dy, dx) * 180) / Math.PI;
-          // Nitro exhaust shoots directly opposite to drag direction
-          const exhaustAngle = moveAngle + 180;
-          setDragAngle(exhaustAngle);
-        }
-
-        windCenterVB.current = { x: newX, y: newY };
-
-        // Cross-test against lit candles to extinguish them
-        for (let i = 0; i < CANDLE_COUNT; i++) {
-          if (extinguished[i]) continue;
-          const wickY = CANDLE_CONFIGS[i].y - 54;
-          const dist = Math.hypot(newX - CANDLE_CONFIGS[i].x, newY - wickY);
-          if (dist < 65 || (Math.abs(newY - wickY) < 55 && Math.abs(newX - CANDLE_CONFIGS[i].x) < 55)) {
-            const dir = newX < CANDLE_CONFIGS[i].x ? -1 : 1;
-            extinguishCandle(i, dir);
-          }
-        }
       }
     },
-    [clientToViewBox, reduced, extinguished, lightCandle, extinguishCandle],
+    [clientToViewBox, reduced, extinguished, lightCandle],
   );
 
   const handlePointerUp = useCallback(
@@ -1197,24 +1202,40 @@ export default function BlowCandles({ onComplete }: Props) {
           {/* === BÉ KIẾN THỔI GIÓ (Thay thế đám mây, nằm im tại x=55, y=260) === */}
           <g
             ref={windGroupRef}
-            onClick={handleAntBlowClick}
+            data-ant-blow=""
+            onPointerDown={startAntBlow}
+            onPointerUp={endAntBlow}
+            onPointerLeave={endAntBlow}
+            onPointerCancel={endAntBlow}
             transform={`translate(${WIND_CORNER.x}, ${WIND_CORNER.y})`}
             filter="url(#windGlow)"
             style={{
               cursor: 'pointer',
               pointerEvents: 'auto',
               opacity: 0,
+              touchAction: 'none',
+              userSelect: 'none',
             }}
             role="button"
             tabIndex={0}
-            aria-label="Bấm vào bé kiến để thổi gió"
+            aria-label="Bấm hoặc nhấn giữ con kiến để thổi gió"
           >
+            {/* Hypersensitive Large Touch Hit Area */}
+            <rect
+              x="-65"
+              y="-75"
+              width="180"
+              height="160"
+              fill="transparent"
+              style={{ cursor: 'pointer', touchAction: 'none' }}
+            />
+
             {/* Note Speech Bubble above Bé Kiến */}
             <g transform="translate(0, -62)" style={{ pointerEvents: 'none' }}>
               <rect
-                x="-85"
+                x="-105"
                 y="-24"
-                width="170"
+                width="210"
                 height="34"
                 rx="14"
                 fill="#ffffff"
@@ -1228,23 +1249,23 @@ export default function BlowCandles({ onComplete }: Props) {
                 y="-3"
                 textAnchor="middle"
                 fill="#0369a1"
-                fontSize="11.5"
+                fontSize="11"
                 fontWeight="bold"
                 fontFamily="var(--font-body)"
               >
-                Bấm vào con kiến để thổi gió 🐜💨
+                Bấm hoặc nhấn giữ con kiến để thổi gió 🐜💨
               </text>
               {windCombo > 0 ? (
                 <text x="0" y="8" textAnchor="middle" fill="#e11d48" fontSize="9.5" fontWeight="bold">
                   {windCombo === 1
-                    ? '💨 Gió nhẹ · Bấm nhanh nữa nào!'
+                    ? '💨 Gió nhẹ · Bấm dồn dập hoặc nhấn giữ!'
                     : windCombo === 2
-                    ? '💨💨 Sắp tắt rồi · Bấm tiếp đi!'
+                    ? '💨💨 Gió to dần · Sắp tắt rồi!'
                     : '🌪️ Bão lốc · Phùuu!'}
                 </text>
               ) : (
                 <text x="0" y="8" textAnchor="middle" fill="#0284c7" fontSize="9" fontStyle="italic">
-                  (Click nhiều lần gió tăng dần)
+                  (Nhấn nhiều lần hoặc nhấn giữ để thổi to hơn)
                 </text>
               )}
             </g>
@@ -1428,7 +1449,7 @@ export default function BlowCandles({ onComplete }: Props) {
             }}
           >
             <span style={{ fontSize: '14px', color: 'var(--color-accent-deep)', fontWeight: 600 }}>
-              👈 Bấm vào bé kiến bên trái để thổi gió (hoặc chạm vào nến nhé ✨)
+              👈 Bấm hoặc nhấn giữ bé kiến để thổi gió (hoặc chạm vào nến nhé ✨)
             </span>
           </div>
         )}
