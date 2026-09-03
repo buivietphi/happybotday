@@ -44,8 +44,8 @@ const CANDLE_COUNT = CANDLE_CONFIGS.length; // 3 cute cat candles
 const MATCH_CORNER = { x: 510, y: 440, rotate: 18 };
 const MATCH_HIT_RADIUS = 46;
 
-// Wind breeze coordinate
-const WIND_CORNER = { x: 15, y: 238 };
+// Blowing Ant in place of cloud sits on the left
+const WIND_CORNER = { x: 55, y: 260 };
 
 // Timings (ms)
 const T_DARK = 600;
@@ -367,7 +367,7 @@ export default function BlowCandles({ onComplete }: Props) {
         opacity: 0,
         scale: 0.7,
       });
-      // Slide into permanent left position
+      // Slide into permanent left position and stay still (no bobbing)
       gsap.to(el, {
         x: WIND_CORNER.x,
         y: WIND_CORNER.y,
@@ -376,16 +376,6 @@ export default function BlowCandles({ onComplete }: Props) {
         duration: T_ENTERING / 1000,
         delay: T_DARK / 1000,
         ease: 'back.out(1.4)',
-      });
-      // Gentle constant floating hover
-      const tEnter = (T_DARK + T_ENTERING) / 1000;
-      gsap.to(el, {
-        y: WIND_CORNER.y - 7,
-        duration: 1.8,
-        delay: tEnter,
-        yoyo: true,
-        repeat: -1,
-        ease: 'sine.inOut',
       });
     });
     return () => ctx.revert();
@@ -1204,135 +1194,163 @@ export default function BlowCandles({ onComplete }: Props) {
             );
           })}
 
-          {/* === GORGEOUS FULL-SCALE WIND BREEZE CLOUD (Facing LEFT at x=15, y=238) === */}
+          {/* === BÉ KIẾN THỔI GIÓ (Thay thế đám mây, nằm im tại x=55, y=260) === */}
           <g
             ref={windGroupRef}
-            data-drag-wind=""
+            onClick={handleAntBlowClick}
             transform={`translate(${WIND_CORNER.x}, ${WIND_CORNER.y})`}
             filter="url(#windGlow)"
             style={{
-              cursor: 'grab',
+              cursor: 'pointer',
               pointerEvents: 'auto',
-              touchAction: 'none',
               opacity: 0,
             }}
+            role="button"
+            tabIndex={0}
+            aria-label="Bấm vào bé kiến để thổi gió"
           >
-            {/* Ambient Cyan Aura Halo */}
-            <ellipse cx="-10" cy="0" rx="60" ry="32" fill="#e0f2fe" opacity="0.65" filter="blur(8px)" />
-
-            {/* === NITRO WIND JET STREAM (Shoots out behind the cloud based on drag direction) === */}
-            {isDraggingWind && (
-              <g
-                className="nitro-thruster-active"
-                transform={`rotate(${dragAngle})`}
-                style={{
-                  animation: 'nitroPulse 0.35s infinite alternate ease-in-out',
-                  transformOrigin: '0px 0px',
-                }}
+            {/* Note Speech Bubble above Bé Kiến */}
+            <g transform="translate(0, -62)" style={{ pointerEvents: 'none' }}>
+              <rect
+                x="-85"
+                y="-24"
+                width="170"
+                height="34"
+                rx="14"
+                fill="#ffffff"
+                stroke="#0284c7"
+                strokeWidth="2"
+                filter="url(#patisserieShadow)"
+              />
+              <polygon points="-6,10 6,10 0,16" fill="#0284c7" />
+              <text
+                x="0"
+                y="-3"
+                textAnchor="middle"
+                fill="#0369a1"
+                fontSize="11.5"
+                fontWeight="bold"
+                fontFamily="var(--font-body)"
               >
-                {/* 1. Luminous Plasma Cone Core */}
-                <path
-                  d="M 15 -14 C 55 -20, 110 -26, 175 -15 C 135 -2, 135 2, 175 15 C 110 26, 55 20, 15 14 Z"
-                  fill="url(#nitroCoreGrad)"
-                  filter="blur(4px)"
-                  opacity="0.92"
-                />
-
-                {/* 2. Concentric Supersonic Shockwave Rings */}
-                <ellipse cx="45" cy="0" rx="5" ry="22" fill="none" stroke="url(#nitroShockRingGrad)" strokeWidth="3" opacity="0.95" />
-                <ellipse cx="78" cy="0" rx="7" ry="32" fill="none" stroke="url(#nitroShockRingGrad)" strokeWidth="2.5" opacity="0.85" />
-                <ellipse cx="115" cy="0" rx="9" ry="42" fill="none" stroke="url(#nitroShockRingGrad)" strokeWidth="2" opacity="0.65" />
-                <ellipse cx="155" cy="0" rx="11" ry="50" fill="none" stroke="url(#nitroShockRingGrad)" strokeWidth="1.5" opacity="0.4" />
-
-                {/* 3. Aerodynamic Nitro Speed Streaks */}
-                <g stroke="url(#nitroJetGrad)" strokeLinecap="round" fill="none" style={{ animation: 'nitroStreamFlicker 0.25s infinite linear' }}>
-                  <path d="M 20 -20 C 65 -30, 120 -38, 195 -24" strokeWidth="4.5" strokeDasharray="30 15" />
-                  <path d="M 28 -10 C 75 -14, 140 -16, 215 -8" strokeWidth="6" strokeDasharray="40 20" />
-                  <path d="M 32 0 C 85 0, 160 0, 235 0" strokeWidth="8" strokeDasharray="50 25" />
-                  <path d="M 28 10 C 75 14, 140 16, 215 8" strokeWidth="6" strokeDasharray="40 20" />
-                  <path d="M 20 20 C 65 30, 120 38, 195 24" strokeWidth="4.5" strokeDasharray="30 15" />
-                </g>
-
-                {/* 4. Blazing Nitro Sparkles & Energy Orbs */}
-                <g fill="#ffffff">
-                  <circle cx="140" cy="-14" r="3.5" filter="drop-shadow(0 0 6px #38bdf8)" />
-                  <circle cx="170" cy="18" r="3" filter="drop-shadow(0 0 6px #38bdf8)" />
-                  <circle cx="205" cy="-4" r="4" filter="drop-shadow(0 0 8px #0284c7)" />
-                  <circle cx="225" cy="6" r="3.2" filter="drop-shadow(0 0 6px #ffffff)" />
-                  <circle cx="110" cy="20" r="2.8" fill="#facc15" filter="drop-shadow(0 0 6px #facc15)" />
-                </g>
-              </g>
-            )}
-
-            {/* Full Luxurious Flowing Wind Gust Streams (Trailing to the left) */}
-            <g stroke="url(#windStreamGrad)" strokeLinecap="round" fill="none">
-              {/* Top swirl trail */}
-              <path
-                d="M 5 -16 C -25 -22, -45 -16, -65 -20 C -78 -23, -84 -13, -78 -3 C -72 7, -62 -3, -70 -10"
-                strokeWidth="3.2"
-                opacity="0.9"
-              />
-              {/* Mid strong breeze stream */}
-              <path
-                d="M 15 0 C -20 -2, -45 4, -72 -2 C -88 -6, -96 8, -84 12 C -75 15, -68 5, -76 0"
-                strokeWidth="4"
-                opacity="0.95"
-              />
-              {/* Bottom swirl trail */}
-              <path
-                d="M 5 16 C -18 20, -40 16, -60 22 C -72 26, -78 16, -72 8 C -66 0, -56 10, -64 16"
-                strokeWidth="3"
-                opacity="0.85"
-              />
+                Bấm vào con kiến để thổi gió 🐜💨
+              </text>
+              {windCombo > 0 ? (
+                <text x="0" y="8" textAnchor="middle" fill="#e11d48" fontSize="9.5" fontWeight="bold">
+                  {windCombo === 1
+                    ? '💨 Gió nhẹ · Bấm nhanh nữa nào!'
+                    : windCombo === 2
+                    ? '💨💨 Sắp tắt rồi · Bấm tiếp đi!'
+                    : '🌪️ Bão lốc · Phùuu!'}
+                </text>
+              ) : (
+                <text x="0" y="8" textAnchor="middle" fill="#0284c7" fontSize="9" fontStyle="italic">
+                  (Click nhiều lần gió tăng dần)
+                </text>
+              )}
             </g>
 
-            {/* Grand Fluffy Kawaii Breeze Cloud Body */}
-            <g>
-              {/* Main Cloud Puffs */}
-              <ellipse cx="5" cy="0" rx="34" ry="24" fill="url(#windBreezeGrad)" stroke="#7dd3fc" strokeWidth="1.5" />
-              <ellipse cx="-16" cy="4" rx="22" ry="18" fill="url(#windBreezeGrad)" stroke="#7dd3fc" strokeWidth="1.2" />
-              <ellipse cx="20" cy="-4" rx="20" ry="16" fill="url(#windBreezeGrad)" stroke="#7dd3fc" strokeWidth="1.2" />
-              <circle cx="2" cy="-14" r="16" fill="url(#windBreezeGrad)" />
-              <circle cx="2" cy="-14" r="16" fill="none" stroke="#7dd3fc" strokeWidth="1.2" />
+            {/* Ambient Cyan Aura Halo behind Bé Kiến */}
+            <ellipse cx="20" cy="8" rx="48" ry="32" fill="#e0f2fe" opacity="0.65" filter="blur(8px)" />
 
-              {/* Cloud Gloss Highlights */}
-              <ellipse cx="5" cy="-8" rx="14" ry="6" fill="#ffffff" opacity="0.85" />
-              <circle cx="-16" cy="-2" r="5" fill="#ffffff" opacity="0.8" />
-
-              {/* Cute Smiling Face on Cloud (Facing LEFT) */}
-              <g stroke="#0369a1" strokeWidth="1.6" strokeLinecap="round" fill="none">
-                {/* Happy sleeping eyes facing left */}
-                <path d="M -2 -2 Q 2 -6 6 -2" />
-                <path d="M 14 -2 Q 18 -6 22 -2" />
-                {/* Sweet blowing whistle mouth blowing LEFTWARD */}
-                <circle cx="-16" cy="5" r="3.2" fill="#38bdf8" stroke="#0284c7" strokeWidth="1.2" />
-                <circle cx="-16" cy="5" r="1.5" fill="#ffffff" />
-              </g>
-
-              {/* Cute Rosy Blushing Cheeks */}
-              <ellipse cx="-8" cy="4" rx="3.5" ry="2" fill="#f43f5e" opacity="0.5" />
-              <ellipse cx="20" cy="4" rx="3.5" ry="2" fill="#f43f5e" opacity="0.5" />
+            {/* Wind Gust Streams issuing from mouth towards the candle (rightward) */}
+            <g stroke="#38bdf8" strokeLinecap="round" fill="none">
+              {windCombo >= 1 && (
+                <g>
+                  <path
+                    d="M 52 4 Q 100 -4 145 -8"
+                    strokeWidth="3"
+                    opacity="0.9"
+                    strokeDasharray="14 8"
+                  />
+                  <path
+                    d="M 54 12 Q 105 8 155 4"
+                    strokeWidth="2.5"
+                    opacity="0.85"
+                    strokeDasharray="12 6"
+                  />
+                </g>
+              )}
+              {windCombo >= 2 && (
+                <g stroke="#0284c7">
+                  <path
+                    d="M 52 -2 Q 115 -14 175 -16"
+                    strokeWidth="4"
+                    opacity="0.95"
+                    strokeDasharray="18 8"
+                  />
+                  <path
+                    d="M 55 18 Q 120 16 185 10"
+                    strokeWidth="3.5"
+                    opacity="0.9"
+                    strokeDasharray="16 8"
+                  />
+                </g>
+              )}
+              {windCombo >= 3 && (
+                <g stroke="#e11d48" strokeWidth="4.5">
+                  <path
+                    d="M 52 4 Q 120 -8 210 -12"
+                    strokeDasharray="24 10"
+                    opacity="0.98"
+                  />
+                  <path
+                    d="M 52 14 Q 125 10 215 6"
+                    strokeDasharray="24 10"
+                    opacity="0.98"
+                  />
+                </g>
+              )}
             </g>
 
-            {/* Sparkling Breeze Stars (✦) and Magic Dust Particles blowing left */}
-            <g fill="#38bdf8">
-              {/* Big Star 1 */}
-              <path
-                d="M -45 -14 Q -45 -6 -37 -6 Q -45 -6 -45 2 Q -45 -6 -53 -6 Q -45 -6 -45 -14 Z"
-                fill="#0284c7"
-                opacity="0.9"
+            {/* Bé Kiến Body (Facing RIGHT towards cake) */}
+            <g transform="scale(1.15) translate(-15, -15)">
+              {/* Ant Round Abdomen (Nằm im vững chãi) */}
+              <ellipse cx="0" cy="22" rx="20" ry="14" fill="#ea580c" stroke="#c2410c" strokeWidth="2" />
+              <ellipse cx="0" cy="24" rx="13" ry="9" fill="#fed7aa" />
+
+              {/* Ant Thorax */}
+              <ellipse cx="18" cy="16" rx="13" ry="10" fill="#f97316" stroke="#c2410c" strokeWidth="1.8" />
+
+              {/* Ant Antennae pointing up & forward */}
+              <path d="M 22 -4 Q 14 -18 20 -24" stroke="#c2410c" strokeWidth="2.4" strokeLinecap="round" fill="none" />
+              <circle cx="20" cy="-24" r="3" fill="#facc15" stroke="#c2410c" strokeWidth="1" />
+              <path d="M 32 -4 Q 44 -18 40 -24" stroke="#c2410c" strokeWidth="2.4" strokeLinecap="round" fill="none" />
+              <circle cx="40" cy="-24" r="3" fill="#facc15" stroke="#c2410c" strokeWidth="1" />
+
+              {/* Ant Head (Phồng má khi thổi) */}
+              <ellipse
+                cx="28"
+                cy="8"
+                rx={antIsPuffing ? 20 : 17}
+                ry={antIsPuffing ? 17 : 14}
+                fill="#ea580c"
+                stroke="#c2410c"
+                strokeWidth="2"
               />
-              {/* Star 2 */}
-              <path
-                d="M -65 12 Q -65 17 -60 17 Q -65 17 -65 22 Q -65 17 -70 17 Q -65 17 -65 12 Z"
-                fill="#38bdf8"
-                opacity="0.85"
-              />
-              {/* Sparkle dots */}
-              <circle cx="-55" cy="-4" r="2" fill="#7dd3fc" opacity="0.9" />
-              <circle cx="-75" cy="-10" r="1.5" fill="#bae6fd" opacity="0.8" />
-              <circle cx="-35" cy="16" r="1.8" fill="#38bdf8" opacity="0.85" />
-              <circle cx="28" cy="-18" r="1.6" fill="#facc15" opacity="0.9" />
+
+              {/* Rosy Cheeks */}
+              <ellipse cx="22" cy="12" rx="4" ry="2.5" fill="#f43f5e" opacity="0.65" />
+              <ellipse cx="36" cy="12" rx="4" ry="2.5" fill="#f43f5e" opacity="0.65" />
+
+              {/* Squinting / Blowing Eyes */}
+              <path d="M 20 4 Q 24 1 28 4" stroke="#1e293b" strokeWidth="2.2" strokeLinecap="round" />
+              <path d="M 32 4 Q 36 1 40 4" stroke="#1e293b" strokeWidth="2.2" strokeLinecap="round" />
+
+              {/* Puckered Whistle Mouth blowing wind to the right */}
+              <ellipse cx="40" cy="10" rx="3.5" ry="4.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1.2" />
+              <circle cx="40" cy="10" r="1.5" fill="#e0f2fe" />
+
+              {/* Ant Legs supporting body */}
+              <ellipse cx="12" cy="22" rx="5" ry="4" fill="#ffffff" stroke="#ea580c" strokeWidth="1.2" />
+              <ellipse cx="26" cy="22" rx="5" ry="4" fill="#ffffff" stroke="#ea580c" strokeWidth="1.2" />
+            </g>
+
+            {/* Combo Power Gauge Pills under Bé Kiến */}
+            <g transform="translate(10, 50)" style={{ pointerEvents: 'none' }}>
+              <rect x="-42" y="-10" width="84" height="20" rx="10" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1" opacity="0.95" />
+              <circle cx="-24" cy="0" r="5" fill={windCombo >= 1 ? '#38bdf8' : '#e2e8f0'} />
+              <circle cx="0" cy="0" r="5" fill={windCombo >= 2 ? '#0284c7' : '#e2e8f0'} />
+              <circle cx="24" cy="0" r="5" fill={windCombo >= 3 ? '#e11d48' : '#e2e8f0'} />
             </g>
           </g>
 
@@ -1396,7 +1414,7 @@ export default function BlowCandles({ onComplete }: Props) {
         )}
         {isLit && (
           <span style={{ color: 'var(--color-accent-deep)', fontWeight: 600 }}>
-            ✨ {CANDLE_COUNT} ngọn nến kiến con đang lung linh ✨
+            ✨ Ngọn nến hoàng gia đang lung linh ✨
           </span>
         )}
         {isBlowing && (
@@ -1405,211 +1423,12 @@ export default function BlowCandles({ onComplete }: Props) {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: 8,
-              marginTop: 4,
+              gap: 4,
               animation: 'promptCatPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
             }}
           >
-            {/* Interactive Comic Speech Bubble */}
-            <div
-              style={{
-                background: 'linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%)',
-                color: '#15803d',
-                padding: '7px 18px',
-                borderRadius: 18,
-                border: '2px solid #22c55e',
-                boxShadow: '0 8px 24px rgba(34, 197, 94, 0.28)',
-                fontFamily: 'var(--font-display, "Cormorant Garamond", serif)',
-                fontWeight: 700,
-                fontSize: '14px',
-                textAlign: 'center',
-                whiteSpace: 'nowrap',
-                position: 'relative',
-                pointerEvents: 'none',
-              }}
-            >
-              <span>{windHint}</span>
-              {/* Pointer triangle */}
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: -6,
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: 0,
-                  height: 0,
-                  borderLeft: '6px solid transparent',
-                  borderRight: '6px solid transparent',
-                  borderTop: '6px solid #22c55e',
-                }}
-              />
-            </div>
-
-            {/* Clickable Bé Kiến Thổi Gió Button Avatar */}
-            <div
-              onClick={handleAntBlowClick}
-              role="button"
-              tabIndex={0}
-              aria-label="Bấm vào bé kiến để thổi gió"
-              style={{
-                position: 'relative',
-                cursor: 'pointer',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                transform: antIsPuffing ? 'scale(1.18)' : 'scale(1)',
-                transition: 'transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                userSelect: 'none',
-              }}
-            >
-              {/* Pulsing Aura */}
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: -6,
-                  borderRadius: 999,
-                  background: 'radial-gradient(circle, rgba(56, 189, 248, 0.35) 0%, transparent 70%)',
-                  animation: 'pulse 1.4s infinite alternate',
-                  pointerEvents: 'none',
-                }}
-              />
-
-              {/* Handcrafted Vector Bé Kiến Thổi Gió SVG */}
-              <svg
-                viewBox="0 0 120 90"
-                width="110"
-                height="82"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{ filter: 'drop-shadow(0 6px 14px rgba(0,0,0,0.18))' }}
-              >
-                {/* Wind Gust Streams issuing from mouth */}
-                <g stroke="#38bdf8" strokeLinecap="round" fill="none">
-                  {windCombo >= 1 && (
-                    <path
-                      d="M 68 46 Q 85 40 102 32 M 72 50 Q 90 46 108 40"
-                      strokeWidth="2.5"
-                      opacity="0.9"
-                      strokeDasharray="12 6"
-                      style={{ animation: 'pawWave 0.5s infinite alternate ease-in-out' }}
-                    />
-                  )}
-                  {windCombo >= 2 && (
-                    <path
-                      d="M 66 42 Q 88 32 112 22 M 70 54 Q 94 50 114 46"
-                      strokeWidth="3.2"
-                      stroke="#0284c7"
-                      opacity="0.95"
-                      strokeDasharray="16 8"
-                    />
-                  )}
-                </g>
-
-                {/* Ant Round Abdomen */}
-                <ellipse cx="32" cy="58" rx="20" ry="14" fill="#ea580c" stroke="#c2410c" strokeWidth="1.8" />
-                <ellipse cx="32" cy="60" rx="13" ry="9" fill="#fed7aa" />
-
-                {/* Ant Thorax with cute little vest */}
-                <ellipse cx="50" cy="52" rx="12" ry="10" fill="#f97316" stroke="#c2410c" strokeWidth="1.6" />
-
-                {/* Ant Antennae (wobbling with wind) */}
-                <path
-                  d="M 52 32 Q 40 14 46 6"
-                  stroke="#c2410c"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                  fill="none"
-                />
-                <circle cx="46" cy="6" r="3" fill="#facc15" stroke="#c2410c" strokeWidth="1" />
-                <path
-                  d="M 66 32 Q 80 14 74 6"
-                  stroke="#c2410c"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                  fill="none"
-                />
-                <circle cx="74" cy="6" r="3" fill="#facc15" stroke="#c2410c" strokeWidth="1" />
-
-                {/* Ant Head (puffed cheeks when blowing) */}
-                <ellipse
-                  cx="58"
-                  cy="44"
-                  rx={antIsPuffing ? 20 : 17}
-                  ry={antIsPuffing ? 18 : 15}
-                  fill="#ea580c"
-                  stroke="#c2410c"
-                  strokeWidth="1.8"
-                />
-
-                {/* Cheeks Blush */}
-                <ellipse cx="52" cy="48" rx="4" ry="2.5" fill="#f43f5e" opacity="0.65" />
-                <ellipse cx="68" cy="48" rx="4" ry="2.5" fill="#f43f5e" opacity="0.65" />
-
-                {/* Closed eyes blowing hard */}
-                <path d="M 48 40 Q 52 36 56 40" stroke="#1e293b" strokeWidth="2.2" strokeLinecap="round" />
-                <path d="M 62 40 Q 66 36 70 40" stroke="#1e293b" strokeWidth="2.2" strokeLinecap="round" />
-
-                {/* Puckered Whistle Mouth blowing wind to the right */}
-                <ellipse cx="68" cy="47" rx="3.5" ry="4.5" fill="#0284c7" stroke="#ffffff" strokeWidth="1.2" />
-                <circle cx="68" cy="47" r="1.5" fill="#e0f2fe" />
-
-                {/* Paws holding belly or gesturing */}
-                <ellipse cx="44" cy="56" rx="5" ry="4" fill="#ffffff" stroke="#ea580c" strokeWidth="1.2" />
-                <ellipse cx="60" cy="56" rx="5" ry="4" fill="#ffffff" stroke="#ea580c" strokeWidth="1.2" />
-              </svg>
-
-              {/* Combo Power Gauge Pills */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  marginTop: 2,
-                }}
-              >
-                <span
-                  style={{
-                    padding: '3px 8px',
-                    borderRadius: 999,
-                    fontSize: '11px',
-                    fontWeight: 700,
-                    background: windCombo >= 1 ? '#38bdf8' : '#e2e8f0',
-                    color: windCombo >= 1 ? '#ffffff' : '#64748b',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  💨 Nhẹ
-                </span>
-                <span
-                  style={{
-                    padding: '3px 8px',
-                    borderRadius: 999,
-                    fontSize: '11px',
-                    fontWeight: 700,
-                    background: windCombo >= 2 ? '#0284c7' : '#e2e8f0',
-                    color: windCombo >= 2 ? '#ffffff' : '#64748b',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  💨💨 Vừa
-                </span>
-                <span
-                  style={{
-                    padding: '3px 8px',
-                    borderRadius: 999,
-                    fontSize: '11px',
-                    fontWeight: 700,
-                    background: windCombo >= 3 ? '#e11d48' : '#e2e8f0',
-                    color: windCombo >= 3 ? '#ffffff' : '#64748b',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  🌪️ Bão Lốc
-                </span>
-              </div>
-            </div>
-            <span style={{ fontSize: '12px', fontStyle: 'italic', color: '#854d0e', marginTop: 2 }}>
-              (Hoặc chạm vào từng cây nến để thổi từng cây nhé ✨)
+            <span style={{ fontSize: '14px', color: 'var(--color-accent-deep)', fontWeight: 600 }}>
+              👈 Bấm vào bé kiến bên trái để thổi gió (hoặc chạm vào nến nhé ✨)
             </span>
           </div>
         )}

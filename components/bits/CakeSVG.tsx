@@ -24,9 +24,7 @@ type Props = {
 };
 
 export const CANDLE_CONFIGS = [
-  { x: 245, y: 298, earHue: 350, expression: 'wink' as const },
   { x: 300, y: 286, earHue: 40, expression: 'happy' as const },
-  { x: 355, y: 298, earHue: 200, expression: 'joy' as const },
 ];
 
 export default function CakeSVG({ className }: Props) {
@@ -36,16 +34,7 @@ export default function CakeSVG({ className }: Props) {
   const antChefRef = useRef<SVGGElement>(null);
 
   useEffect(() => {
-    // Little Ant Chef gentle breathing & proud head sway
-    if (antChefRef.current) {
-      gsap.to(antChefRef.current, {
-        y: -3,
-        duration: 1.8,
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1,
-      });
-    }
+    // Little Ant Chef sits still without up-and-down bobbing
 
     // Honey drop shimmering pulse
     if (honeyGlowRef.current) {
