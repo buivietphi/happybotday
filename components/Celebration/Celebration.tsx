@@ -7,7 +7,6 @@ import { useReducedMotionSafe } from '@/lib/useReducedMotion';
 import ShimmerText from '@/components/bits/ShimmerText';
 import Avatar from '@/components/bits/Avatar';
 import LuckyWheel, { type LuckyWheelHandle } from '@/components/bits/LuckyWheel';
-import MischiefCatsParty from '@/components/bits/MischiefCatsParty';
 import GrandFireworksShow from '@/components/bits/GrandFireworksShow';
 import type { WheelPrize } from '@/lib/types';
 
@@ -177,9 +176,6 @@ export default function Celebration({ name, outroWish, prizes, onReplay }: Props
 
       {/* === GRAND FIREWORKS & CASCADING HEARTS SHOW (Continuous Ambient + On Demand) === */}
       <GrandFireworksShow triggerKey={fireworkKey} autoLoop={true} />
-
-      {/* === MISCHIEVOUS CATS PARTY (Running, Biting, Licking, Tumbling across screen) === */}
-      <MischiefCatsParty />
 
       {/* Ambient Starlight Glow Halo */}
       <div

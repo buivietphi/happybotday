@@ -87,7 +87,7 @@ export default function BirthdayHero({
       <FloatingBalloons />
       <ConfettiRain />
 
-      {/* Subtle paw-print watermark behind content */}
+      {/* Subtle golden honeycomb watermark behind content (ZERO CAT PAWS) */}
       <div
         aria-hidden
         style={{
@@ -96,8 +96,8 @@ export default function BirthdayHero({
           opacity: 0.04,
           pointerEvents: 'none',
           backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 64 64'><g fill='%23e34d8c'><circle cx='32' cy='38' r='10'/><circle cx='20' cy='24' r='5'/><circle cx='32' cy='16' r='5'/><circle cx='44' cy='24' r='5'/></g></svg>\")",
-          backgroundSize: '160px 160px',
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 40 40'><path d='M20 0 L40 10 L40 30 L20 40 L0 30 L0 10 Z' fill='none' stroke='%23ca8a04' stroke-width='1.2'/></svg>\")",
+          backgroundSize: '80px 80px',
           backgroundRepeat: 'repeat',
           zIndex: 1,
         }}
@@ -109,22 +109,14 @@ export default function BirthdayHero({
           fontSize: '12px',
           letterSpacing: '0.24em',
           textTransform: 'uppercase',
-          color: 'var(--color-text-soft)',
+          color: 'var(--color-primary)',
           fontWeight: 600,
-          zIndex: 3,
           display: 'inline-flex',
           alignItems: 'center',
-          gap: '10px',
+          gap: '8px',
         }}
       >
-        <svg width="14" height="14" viewBox="0 0 64 64" aria-hidden>
-          <g fill="currentColor" opacity="0.7">
-            <circle cx="32" cy="38" r="10" />
-            <circle cx="20" cy="24" r="5" />
-            <circle cx="32" cy="16" r="5" />
-            <circle cx="44" cy="24" r="5" />
-          </g>
-        </svg>
+        <span style={{ fontSize: '15px' }}>✨</span>
         <span>Hôm nay là ngày của {name} ✨</span>
       </span>
 

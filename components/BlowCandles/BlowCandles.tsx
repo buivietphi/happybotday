@@ -10,7 +10,6 @@ import ConfettiBurst from '@/components/bits/ConfettiBurst';
 import Matchstick from '@/components/bits/Matchstick';
 import IgniteBurst from '@/components/bits/IgniteBurst';
 import FloatingHearts from '@/components/bits/FloatingHearts';
-import CatsStage from '@/components/bits/CatsStage';
 import Avatar from '@/components/bits/Avatar';
 import config from '@/content/site.config';
 
@@ -988,19 +987,17 @@ export default function BlowCandles({ onComplete }: Props) {
         }
       `}</style>
 
-      <CatsStage count={2} yBand={[6, 16]} theme="light" />
-
-      {/* Soft paw-print watermark */}
+      {/* Soft golden honeycomb watermark (ZERO CAT PAWS) */}
       <div
         aria-hidden
         style={{
           position: 'absolute',
           inset: 0,
-          opacity: 0.05,
+          opacity: 0.04,
           pointerEvents: 'none',
           backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 64 64'><g fill='%23e34d8c'><circle cx='32' cy='38' r='10'/><circle cx='20' cy='24' r='5'/><circle cx='32' cy='16' r='5'/><circle cx='44' cy='24' r='5'/></g></svg>\")",
-          backgroundSize: '160px 160px',
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 40 40'><path d='M20 0 L40 10 L40 30 L20 40 L0 30 L0 10 Z' fill='none' stroke='%23ca8a04' stroke-width='1.2'/></svg>\")",
+          backgroundSize: '80px 80px',
           backgroundRepeat: 'repeat',
           zIndex: 1,
         }}

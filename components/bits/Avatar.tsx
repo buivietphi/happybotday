@@ -110,7 +110,7 @@ export default function Avatar({ name, size = 'md', caption, hideName, imageUrl,
             </span>
           )}
 
-          {/* Paw-print marks around the inner ring */}
+          {/* Golden star marks around the inner ring (ZERO CAT PAWS) */}
           <svg
             aria-hidden
             viewBox="0 0 200 200"
@@ -119,35 +119,15 @@ export default function Avatar({ name, size = 'md', caption, hideName, imageUrl,
               inset: 0,
               width: '100%',
               height: '100%',
-              opacity: 0.18,
+              opacity: 0.25,
               pointerEvents: 'none',
             }}
           >
             <g fill="var(--color-accent)">
-              {/* Top */}
-              <g transform="translate(100, 14)">
-                <circle cx="0" cy="3" r="3.5" />
-                <circle cx="-7" cy="-3" r="2.5" />
-                <circle cx="7" cy="-3" r="2.5" />
-              </g>
-              {/* Right */}
-              <g transform="translate(186, 100)">
-                <circle cx="0" cy="3" r="3.5" />
-                <circle cx="-7" cy="-3" r="2.5" />
-                <circle cx="7" cy="-3" r="2.5" />
-              </g>
-              {/* Bottom */}
-              <g transform="translate(100, 186)">
-                <circle cx="0" cy="3" r="3.5" />
-                <circle cx="-7" cy="-3" r="2.5" />
-                <circle cx="7" cy="-3" r="2.5" />
-              </g>
-              {/* Left */}
-              <g transform="translate(14, 100)">
-                <circle cx="0" cy="3" r="3.5" />
-                <circle cx="-7" cy="-3" r="2.5" />
-                <circle cx="7" cy="-3" r="2.5" />
-              </g>
+              <circle cx="100" cy="14" r="3" />
+              <circle cx="186" cy="100" r="3" />
+              <circle cx="100" cy="186" r="3" />
+              <circle cx="14" cy="100" r="3" />
             </g>
           </svg>
         </div>

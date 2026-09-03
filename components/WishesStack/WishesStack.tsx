@@ -323,7 +323,7 @@ export default function WishesStack({ wishes, onComplete }: Props) {
                 transition: 'all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
               }}
             >
-              <span>🐾</span>
+              <span>🐜</span>
               {i === topIndex && <span>{i + 1}</span>}
             </button>
           ))}
