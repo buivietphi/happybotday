@@ -40,11 +40,11 @@ type Phase =
 
 const CANDLE_COUNT = CANDLE_CONFIGS.length; // 3 cute cat candles
 
-// Matchstick sits in the lower-left corner
-const MATCH_CORNER = { x: 35, y: 490, rotate: -28 };
-const MATCH_HIT_RADIUS = 38;
+// Matchstick sits comfortably on the lower-right side
+const MATCH_CORNER = { x: 510, y: 440, rotate: 18 };
+const MATCH_HIT_RADIUS = 46;
 
-// Wind breeze sits far out on the LEFT margin (x = 15, y = 238), with 230px spacious distance from the cake and 0 clipping
+// Wind breeze coordinate
 const WIND_CORNER = { x: 15, y: 238 };
 
 // Timings (ms)
@@ -284,7 +284,7 @@ export default function BlowCandles({ onComplete }: Props) {
     const timer = window.setTimeout(() => {
       setShowCryingCat(true);
       try {
-        const audio = new Audio('/sounds/dog_bark.wav');
+        const audio = new Audio('/sounds/ant_chirp.wav');
         audio.volume = 0.65;
         audio.play().catch(() => {});
       } catch {}
@@ -325,11 +325,11 @@ export default function BlowCandles({ onComplete }: Props) {
     if (reduced || !matchstickRef.current) return;
     const el = matchstickRef.current;
     const ctx = gsap.context(() => {
-      // Start off-screen lower-left
+      // Start off-screen lower-right
       gsap.set(el, {
-        x: MATCH_CORNER.x - 140,
-        y: MATCH_CORNER.y + 140,
-        rotate: -50,
+        x: MATCH_CORNER.x + 120,
+        y: MATCH_CORNER.y + 120,
+        rotate: 35,
         opacity: 0,
       });
       // Slide into corner
@@ -522,6 +522,23 @@ export default function BlowCandles({ onComplete }: Props) {
       });
     }
   }, []);
+
+  /** Interactive Big Blow Button: sweeps wind and blows out all lit candles */
+  const handleBlowAll = useCallback(() => {
+    try {
+      const audio = new Audio('/sounds/wind_breeze.wav');
+      audio.volume = 0.75;
+      audio.play().catch(() => {});
+    } catch {}
+
+    for (let i = 0; i < CANDLE_COUNT; i++) {
+      if (!extinguished[i]) {
+        setTimeout(() => {
+          extinguishCandle(i, -1);
+        }, i * 150);
+      }
+    }
+  }, [extinguished, extinguishCandle]);
 
   // === Pointer Drag Handlers ===
   const handlePointerDown = useCallback(
@@ -903,7 +920,7 @@ export default function BlowCandles({ onComplete }: Props) {
           <div className="phase-caption" key="ready" style={captionStyle}>
             {!isMatchLit
               ? 'Chạm và kéo que diêm để quẹt lửa nhé 🕯️'
-              : 'Kéo diêm đến từng ngọn nến cún con để thắp nhé 🕯️'}
+              : 'Kéo diêm đến từng ngọn nến kiến con để thắp nhé 🕯️'}
           </div>
         )}
         {isLit && (
@@ -918,12 +935,12 @@ export default function BlowCandles({ onComplete }: Props) {
               letterSpacing: '0.02em',
             }}
           >
-            Em ước đi nhé ✨
+            Em ước một điều thật đẹp nhé ✨
           </div>
         )}
         {isBlowing && (
           <div className="phase-caption" key="blow" style={captionStyle}>
-            Kéo đám mây gió qua bánh kem để thổi tắt nến 💨
+            Chạm vào nến hoặc bấm nút bên dưới để thổi tắt nhé 🌬️
           </div>
         )}
         {isCelebrate && (
@@ -933,13 +950,13 @@ export default function BlowCandles({ onComplete }: Props) {
             style={{
               ...captionStyle,
               fontFamily: 'var(--font-script)',
-              fontSize: 'clamp(32px, 3.8vw, 46px)',
+              fontSize: 'clamp(30px, 3.6vw, 44px)',
               color: 'var(--color-accent-deep)',
               fontWeight: 700,
               letterSpacing: '0.02em',
             }}
           >
-            Chúc mừng em yêu! 🎉
+            Chúc mừng sinh nhật Dẹo Dẹo! 🎉🎂
           </div>
         )}
       </div>
@@ -1028,14 +1045,27 @@ export default function BlowCandles({ onComplete }: Props) {
             </linearGradient>
           </defs>
 
-          {/* Candle flames (placed at each cat candle's position) */}
+          {/* Candle flames (placed at each ant candle's position) */}
           {CANDLE_CONFIGS.map((cfg, i) => (
             <g
               key={`flame-wrap-${i}`}
               data-flame-wrap={i}
               transform={`translate(${cfg.x}, ${cfg.y})`}
-              style={{ transformBox: 'fill-box', pointerEvents: 'none' }}
+              onClick={() => {
+                if (isBlowing && !extinguished[i]) {
+                  extinguishCandle(i, -1);
+                }
+              }}
+              style={{
+                transformBox: 'fill-box',
+                pointerEvents: isBlowing && !extinguished[i] ? 'auto' : 'none',
+                cursor: isBlowing && !extinguished[i] ? 'pointer' : 'default',
+              }}
             >
+              {/* Invisible touch target for easy candle blowing */}
+              {isBlowing && !extinguished[i] && (
+                <circle cx="0" cy="-52" r="36" fill="transparent" />
+              )}
               <CandleFlame
                 state={extinguished[i] ? 'extinguished' : 'lit'}
                 phaseOffset={i}
@@ -1248,10 +1278,40 @@ export default function BlowCandles({ onComplete }: Props) {
         {(isDark || isReady) && isMatchLit && (
           <span>Đang thắp · {litCount}/{CANDLE_COUNT}</span>
         )}
-        {(isLit || isBlowing) && (
+        {isLit && (
           <span style={{ color: 'var(--color-accent-deep)', fontWeight: 600 }}>
-            ✨ {CANDLE_COUNT} ngọn nến cún con đang lung linh ✨
+            ✨ {CANDLE_COUNT} ngọn nến kiến con đang lung linh ✨
           </span>
+        )}
+        {isBlowing && (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 8,
+              marginTop: 4,
+            }}
+          >
+            <button
+              onClick={handleBlowAll}
+              className="hallmark-primary-btn"
+              style={{
+                padding: '11px 26px',
+                fontSize: '16px',
+                borderRadius: '999px',
+                background: 'linear-gradient(135deg, #0284c7 0%, #38bdf8 100%)',
+                boxShadow: '0 8px 24px rgba(2, 132, 199, 0.45)',
+                cursor: 'pointer',
+              }}
+            >
+              <div className="celebration-shimmer" />
+              <span>🌬️ Thổi Phùuu Tắt Nến! 💨</span>
+            </button>
+            <span style={{ fontSize: '12px', fontStyle: 'italic', color: '#854d0e' }}>
+              (Chạm vào từng cây nến hoặc bấm nút để thổi nhé ✨)
+            </span>
+          </div>
         )}
         {isCelebrate && (
           <div
@@ -1296,7 +1356,7 @@ export default function BlowCandles({ onComplete }: Props) {
                   }}
                 >
                   <div style={{ fontSize: '15px', color: '#e11d48', fontWeight: 800 }}>
-                    Tại sao không bấm nhanh điii... 🐶💦
+                    Tại sao không bấm nhanh điii... 🐜💦
                   </div>
                   <div style={{ fontSize: '13px', color: '#9f1239', fontStyle: 'italic', marginTop: 2 }}>
                     Đang háo hức chờ xem thư nèee! 🥺💌✨
@@ -1317,7 +1377,7 @@ export default function BlowCandles({ onComplete }: Props) {
                   />
                 </div>
 
-                {/* Handcrafted Vector Crying Puppy SVG */}
+                {/* Handcrafted Vector Crying Ant SVG */}
                 <svg
                   viewBox="0 0 130 95"
                   width="124"
@@ -1330,18 +1390,18 @@ export default function BlowCandles({ onComplete }: Props) {
                   <ellipse cx="22" cy="85" rx="14" ry="4" fill="#38bdf8" opacity="0.6" />
                   <ellipse cx="108" cy="85" rx="14" ry="4" fill="#38bdf8" opacity="0.6" />
 
-                  {/* Puppy Body */}
+                  {/* Ant Body */}
                   <ellipse cx="65" cy="68" rx="34" ry="22" fill="#fed7aa" stroke="#ea580c" strokeWidth="2" />
                   <ellipse cx="65" cy="70" rx="20" ry="14" fill="#ffffff" />
 
-                  {/* Drooping Sad Puppy Ears */}
-                  <path d="M 44 42 C 28 44, 20 62, 28 68 C 36 72, 44 58, 48 48 Z" fill="#c2410c" stroke="#9a3412" strokeWidth="1.5" />
-                  <path d="M 86 42 C 102 44, 110 62, 102 68 C 94 72, 86 58, 82 48 Z" fill="#c2410c" stroke="#9a3412" strokeWidth="1.5" />
+                  {/* Trembling Ant Antennae */}
+                  <path d="M 52 30 Q 36 12 42 4" stroke="#ea580c" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+                  <circle cx="42" cy="4" r="3.5" fill="#facc15" stroke="#ea580c" strokeWidth="1" />
+                  <path d="M 78 30 Q 94 12 88 4" stroke="#ea580c" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+                  <circle cx="88" cy="4" r="3.5" fill="#facc15" stroke="#ea580c" strokeWidth="1" />
 
                   {/* Head */}
-                  <circle cx="65" cy="44" r="24" fill="#fed7aa" stroke="#ea580c" strokeWidth="2" />
-                  <ellipse cx="60" cy="50" rx="8" ry="6" fill="#ffffff" />
-                  <ellipse cx="70" cy="50" rx="8" ry="6" fill="#ffffff" />
+                  <ellipse cx="65" cy="44" rx="28" ry="24" fill="#fed7aa" stroke="#ea580c" strokeWidth="2" />
 
                   {/* Big Watery Crying Eyes */}
                   <ellipse cx="52" cy="40" rx="6" ry="7" fill="#1c1917" />
@@ -1365,18 +1425,13 @@ export default function BlowCandles({ onComplete }: Props) {
                   <circle cx="102" cy="62" r="2.5" fill="#bae6fd" />
                   <circle cx="114" cy="74" r="2" fill="#38bdf8" />
 
-                  {/* Shiny Puppy Nose */}
-                  <ellipse cx="65" cy="47" rx="3.2" ry="2.2" fill="#0f172a" />
-
                   {/* Trembling Open Crying Mouth */}
                   <path d="M 58 52 C 60 58, 70 58, 72 52 Z" fill="#e11d48" stroke="#1c1917" strokeWidth="1.5" />
                   <ellipse cx="65" cy="55" rx="3.5" ry="2" fill="#fda4af" />
 
-                  {/* Front Paws Wiping Cheeks */}
-                  <ellipse cx="44" cy="56" rx="7" ry="5.5" fill="#ffffff" stroke="#ea580c" strokeWidth="1.5" />
-                  <circle cx="44" cy="56" r="2" fill="#fda4af" />
-                  <ellipse cx="86" cy="56" rx="7" ry="5.5" fill="#ffffff" stroke="#ea580c" strokeWidth="1.5" />
-                  <circle cx="86" cy="56" r="2" fill="#fda4af" />
+                  {/* Front Legs Wiping Cheeks */}
+                  <ellipse cx="44" cy="56" rx="7" ry="5" fill="#ffffff" stroke="#ea580c" strokeWidth="1.5" />
+                  <ellipse cx="86" cy="56" rx="7" ry="5" fill="#ffffff" stroke="#ea580c" strokeWidth="1.5" />
                 </svg>
               </div>
             )}

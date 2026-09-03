@@ -517,12 +517,12 @@ const CatRunner = forwardRef<CatRunnerHandle, Props>(function CatRunner(
 
         {/* Head */}
         <g ref={head} style={{ transformOrigin: '60px 60px' }}>
-          {/* Floppy Puppy Ears */}
+          {/* Ant Antennae */}
           <g ref={ears}>
-            <path d="M 44 48 C 30 42, 24 64, 34 72 C 42 78, 48 62, 50 50 Z" fill={colors.ear} stroke={colors.bodyShadow} strokeWidth="0.8" />
-            <path d="M 42 52 C 32 48, 28 66, 36 72 C 40 76, 46 64, 48 54 Z" fill={colors.innerEar} />
-            <path d="M 76 48 C 90 42, 96 64, 86 72 C 78 78, 72 62, 70 50 Z" fill={colors.ear} stroke={colors.bodyShadow} strokeWidth="0.8" />
-            <path d="M 78 52 C 88 48, 92 66, 84 72 C 80 76, 74 64, 72 54 Z" fill={colors.innerEar} />
+            <path d="M 52 48 Q 40 32 46 22" fill="none" stroke={colors.bodyShadow} strokeWidth="1.8" strokeLinecap="round" />
+            <circle cx="46" cy="22" r="2.8" fill={colors.accent} />
+            <path d="M 68 48 Q 80 32 74 22" fill="none" stroke={colors.bodyShadow} strokeWidth="1.8" strokeLinecap="round" />
+            <circle cx="74" cy="22" r="2.8" fill={colors.accent} />
           </g>
 
           {/* Head circle */}
@@ -532,7 +532,7 @@ const CatRunner = forwardRef<CatRunnerHandle, Props>(function CatRunner(
           {/* Chin highlight */}
           <ellipse cx="60" cy="72" rx="8" ry="3" fill={colors.belly} opacity="0.45" />
 
-          {/* Puppy Eyes (round and sparkling) */}
+          {/* Ant Eyes (round and sparkling) */}
           <g className={`cat-eye-${fur}`}>
             <circle cx="50" cy="58" r="3.8" fill="#0f172a" />
             <circle cx="49" cy="57" r="1.2" fill="#ffffff" />
@@ -540,17 +540,15 @@ const CatRunner = forwardRef<CatRunnerHandle, Props>(function CatRunner(
             <circle cx="69" cy="57" r="1.2" fill="#ffffff" />
           </g>
 
-          {/* Puppy Black Button Nose */}
-          <ellipse cx="60" cy="69" rx="3.2" ry="2.2" fill="#0f172a" />
-
-          {/* Puppy Smile */}
+          {/* Ant Smile */}
           <path
-            d="M 60 71 Q 56 75 53 73 M 60 71 Q 64 75 67 73"
+            d="M 54 70 Q 60 75 66 70"
             stroke={colors.bodyShadow}
-            strokeWidth="1.2"
+            strokeWidth="1.4"
             fill="none"
             strokeLinecap="round"
           />
+          <circle cx="60" cy="71" r="1" fill="#f43f5e" />
         </g>
       </g>
     </svg>

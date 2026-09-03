@@ -22,28 +22,28 @@ const config: SiteConfig = {
     name: 'Dẹo Dẹo',
     headline: 'Chúc mừng sinh nhật, Dẹo Dẹo!',
     outroWish:
-      'Thổi nến, ước thật to, rồi cùng đón mừng món quà này nhé',
+      'Thổi nến, ước thật to, rồi bóc quà sinh nhật từ đứa bạn này nhé! 🎁',
   },
   wishes: [
     {
       text:
-        'Chúc mừng sinh nhật Dẹo Dẹo! Thêm một tuổi — thế giới thêm một phiên bản dễ thương hơn của em.',
+        'Chúc mừng sinh nhật Dẹo Dẹo! Chúc bạn tui thêm một tuổi mới luôn vui vẻ, rạng rỡ, tràn đầy năng lượng tích cực và ngày càng thành công nhé! 🎂🎉',
     },
     {
       text:
-        'Ước gì từng điều em thầm nói hôm nay đều thành hiện thực. Còn nếu chưa thành — anh sẽ cùng em làm cho nó thành.',
+        'Chúc bạn tuổi mới tiền đầy túi, công việc hanh thông, mọi dự định đều thuận buồm xuôi gió. Lúc nào cần đồng bọn đi ăn đi quẩy cứ ới là có mặt ngay! 🛵💨',
     },
     {
       text:
-        'Cảm ơn em đã luôn kiên định, luôn ấm áp, luôn là phiên bản tốt nhất của chính mình. Hôm nay là ngày của em — tận hưởng nhé.',
+        'Mong tuổi mới mang đến cho Dẹo Dẹo thật nhiều chuyến đi thú vị, những trải nghiệm tuyệt vời và ăn bao nhiêu món ngon cũng không sợ béo! 🍕🧋',
     },
     {
       text:
-        'Một tuổi mới đầy sức khỏe, đầy khoảnh khắc đáng nhớ, và đầy những bữa cơm ngon bên người thương.',
+        'Cảm ơn vì đã luôn là một người bạn chí cốt cực kỳ tuyệt vời, luôn mang tiếng cười và sự ấm áp đến cho bạn bè xung quanh. Tình bạn của tụi mình mãi bền chặt nha! 🤝🌟',
     },
     {
       text:
-        'Em xứng đáng được hạnh phúc — không phải vì ai đó nói vậy, mà vì em đã nỗ lực cả năm qua. Giữ nguyên như thế nhé.',
+        'Thêm tuổi mới bớt "dẹo" lại một xíu nha bạn hiền, cơ mà nếu không dẹo thì đâu còn là Dẹo Dẹo nữa! Cứ tự tin tỏa sáng theo cách riêng của mình nha! 😜💖',
     },
   ],
   music: {

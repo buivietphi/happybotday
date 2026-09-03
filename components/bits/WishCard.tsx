@@ -29,7 +29,7 @@ const CARD_THEMES = [
     innerBorder: 'oklch(86% 0.14 85)',
     accent: '#e11d48',
     glow: 'oklch(90% 0.12 350 / 0.35)',
-    title: 'Cún Con Chúc Mừng Sinh Nhật',
+    title: 'Bé Kiến Chúc Mừng Sinh Nhật',
     badge: '🌸 Thiệp 01',
   },
   // Card 2: Lavender Champagne & Rose
@@ -39,7 +39,7 @@ const CARD_THEMES = [
     innerBorder: 'oklch(86% 0.14 85)',
     accent: '#9333ea',
     glow: 'oklch(90% 0.12 295 / 0.35)',
-    title: 'Cún Con Trao Món Quà Yêu Thương',
+    title: 'Bé Kiến Trao Món Quà Tri Kỷ',
     badge: '🎁 Thiệp 02',
   },
   // Card 3: Peach Coral & Honey
@@ -49,7 +49,7 @@ const CARD_THEMES = [
     innerBorder: 'oklch(86% 0.14 85)',
     accent: '#ea580c',
     glow: 'oklch(90% 0.14 55 / 0.35)',
-    title: 'Cún Con Thả Bóng Bay Ước Nguyện',
+    title: 'Bé Kiến Thả Bóng Bay Ước Nguyện',
     badge: '🎈 Thiệp 03',
   },
   // Card 4: Mint Pistachio & Strawberry
@@ -59,7 +59,7 @@ const CARD_THEMES = [
     innerBorder: 'oklch(86% 0.14 85)',
     accent: '#0d9488',
     glow: 'oklch(90% 0.12 155 / 0.35)',
-    title: 'Cún Con Thưởng Thức Bánh Kem Ngọt',
+    title: 'Bé Kiến Thưởng Thức Bánh Kem Ngọt',
     badge: '🍰 Thiệp 04',
   },
   // Card 5: Celestial Gold & Royal Velvet
@@ -69,7 +69,7 @@ const CARD_THEMES = [
     innerBorder: 'oklch(88% 0.18 85)',
     accent: '#ca8a04',
     glow: 'oklch(92% 0.18 85 / 0.40)',
-    title: 'Cún Con Ngôi Sao Tỏa Sáng',
+    title: 'Bé Kiến Tỏa Sáng Rực Rỡ',
     badge: '⭐ Thiệp 05',
   },
 ];
