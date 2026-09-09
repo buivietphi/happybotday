@@ -231,7 +231,6 @@ export default function Celebration({ name, outroWish, prizes = [], onReplay }: 
           prize={won}
           outroWish={outroWish}
           reduced={reduced}
-          onReplayWheel={replayWheel}
           onReplay={onReplay}
           onFirework={triggerFireworkBurst}
           showFireworkAnt={showFireworkAnt}
@@ -544,7 +543,6 @@ function RevealStage({
   prize,
   outroWish,
   reduced,
-  onReplayWheel,
   onReplay,
   onFirework,
   showFireworkAnt,
@@ -553,12 +551,47 @@ function RevealStage({
   prize: WheelPrize;
   outroWish: string;
   reduced: boolean;
-  onReplayWheel: () => void;
   onReplay: () => void;
   onFirework: () => void;
   showFireworkAnt: boolean;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const replayBtnRef = useRef<HTMLButtonElement>(null);
+  const scareRef = useRef<HTMLDivElement>(null);
+
+  // 1 lần thôi: lock "Quay Lại Vòng" sau lần bấm đầu, scare ant pops over it.
+  const [isReplayLocked, setIsReplayLocked] = useState(false);
+  const [showReplayScare, setShowReplayScare] = useState(false);
+
+  const triggerReplayScare = () => {
+    if (isReplayLocked) return;
+    setIsReplayLocked(true);
+    setShowReplayScare(true);
+    try {
+      const audio = new Audio('/sounds/ant_chirp.wav');
+      audio.volume = 0.7;
+      audio.play().catch(() => {});
+    } catch {}
+    if (replayBtnRef.current) {
+      gsap.fromTo(
+        replayBtnRef.current,
+        { x: -8 },
+        { x: 0, duration: 0.5, ease: 'elastic.out(1.2, 0.2)' },
+      );
+    }
+    window.setTimeout(() => {
+      if (scareRef.current) {
+        gsap.to(scareRef.current, {
+          scale: 0.8,
+          opacity: 0,
+          y: 15,
+          duration: 0.35,
+          ease: 'power2.in',
+          onComplete: () => setShowReplayScare(false),
+        });
+      }
+    }, 4200);
+  };
 
   useGSAP(
     () => {
@@ -687,13 +720,98 @@ function RevealStage({
           justifyContent: 'center',
         }}
       >
-        <button
-          type="button"
-          className="hallmark-secondary-btn"
-          onClick={onReplayWheel}
-        >
-          🎲 Quay Lại Vòng
-        </button>
+        <div style={{ position: 'relative', display: 'inline-flex' }}>
+          {showReplayScare && (
+            <div
+              ref={scareRef}
+              style={{
+                position: 'absolute',
+                bottom: 'calc(100% + 10px)',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                zIndex: 35,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                pointerEvents: 'none',
+                filter: 'drop-shadow(0 12px 28px rgba(0,0,0,0.65))',
+              }}
+            >
+              <div
+                style={{
+                  background: 'linear-gradient(135deg, #fef08a 0%, #fde047 100%)',
+                  color: '#1c1917',
+                  padding: '7px 16px',
+                  borderRadius: 16,
+                  border: '2px solid #ca8a04',
+                  boxShadow: '0 8px 20px rgba(0,0,0,0.3)',
+                  fontFamily: 'var(--font-display, "Cormorant Garamond", serif)',
+                  fontWeight: 800,
+                  fontSize: '13px',
+                  letterSpacing: '0.02em',
+                  textAlign: 'center',
+                  whiteSpace: 'nowrap',
+                  position: 'relative',
+                }}
+              >
+                <span style={{ fontSize: '15px' }}>Hí hí hí! 🐜</span> 1 Lần Thôi Nha!
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: -7,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: 0,
+                    height: 0,
+                    borderLeft: '7px solid transparent',
+                    borderRight: '7px solid transparent',
+                    borderTop: '7px solid #ca8a04',
+                  }}
+                />
+              </div>
+
+              {/* Tiny Ant Crossing Paws / No-No Gesture */}
+              <svg viewBox="0 0 130 90" width="120" height="84" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginTop: 2 }}>
+                <ellipse cx="65" cy="68" rx="32" ry="20" fill="#f97316" stroke="#c2410c" strokeWidth="2" />
+                <ellipse cx="65" cy="70" rx="18" ry="12" fill="#ffedd5" />
+                <path d="M 52 30 Q 38 14 44 6" stroke="#ea580c" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+                <circle cx="44" cy="6" r="3.5" fill="#facc15" stroke="#ea580c" strokeWidth="1" />
+                <path d="M 78 30 Q 92 14 86 6" stroke="#ea580c" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+                <circle cx="86" cy="6" r="3.5" fill="#facc15" stroke="#ea580c" strokeWidth="1" />
+                <ellipse cx="65" cy="44" rx="26" ry="22" fill="#f97316" stroke="#c2410c" strokeWidth="2" />
+                {/* X-eyes (shocked/scolding) */}
+                <path d="M 52 42 L 60 50 M 60 42 L 52 50" stroke="#1c1917" strokeWidth="2.5" strokeLinecap="round" />
+                <path d="M 70 42 L 78 50 M 78 42 L 70 50" stroke="#1c1917" strokeWidth="2.5" strokeLinecap="round" />
+                {/* Pouty mouth */}
+                <path d="M 60 58 Q 65 56 70 58" stroke="#1c1917" strokeWidth="2" fill="none" strokeLinecap="round" />
+                <ellipse cx="50" cy="50" rx="4" ry="2.5" fill="#f43f5e" opacity="0.5" />
+                <ellipse cx="80" cy="50" rx="4" ry="2.5" fill="#f43f5e" opacity="0.5" />
+                {/* Crossed front paws (X) */}
+                <g stroke="#9a3412" strokeWidth="6" strokeLinecap="round" fill="none">
+                  <line x1="52" y1="56" x2="72" y2="74" />
+                  <line x1="72" y1="56" x2="52" y2="74" />
+                </g>
+              </svg>
+            </div>
+          )}
+          <button
+            ref={replayBtnRef}
+            type="button"
+            className="hallmark-secondary-btn"
+            onClick={isReplayLocked ? undefined : triggerReplayScare}
+            disabled={isReplayLocked}
+            style={{
+              cursor: isReplayLocked ? 'not-allowed' : 'pointer',
+              opacity: isReplayLocked ? 0.72 : 1,
+              filter: isReplayLocked ? 'grayscale(0.35)' : 'none',
+              borderColor: isReplayLocked ? '#f43f5e' : undefined,
+              transition: 'all 0.3s ease',
+            }}
+            aria-label={isReplayLocked ? 'Đã khóa: chỉ được quay lại vòng 1 lần' : 'Quay lại vòng quay'}
+          >
+            <span>{isReplayLocked ? '🔒 1 Lần Thôi Nha! 🐜' : '🎲 Quay Lại Vòng'}</span>
+          </button>
+        </div>
         <div style={{ position: 'relative', display: 'inline-flex' }}>
           <button
             type="button"

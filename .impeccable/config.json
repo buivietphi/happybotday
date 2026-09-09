@@ -8,6 +8,15 @@
         "value": "cubic-bezier(0.34, 1.56, 0.64, 1)",
         "createdAt": "2026-09-09T03:23:46.417Z",
         "reason": "hallmark house-style easing reused across primary buttons and FireworkSunglassesAnt prompt-pop animation; pre-existing class definition, not new code"
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "/Users/phibui/happybotday/components/Celebration/Celebration.tsx"
+        ],
+        "createdAt": "2026-09-09T04:07:55.521Z",
+        "reason": "CSS triangle pointer on speech-bubble tooltip (borderLeft/Right transparent + borderTop solid); sanctioned tooltip pattern, not a side-tab card accent"
       }
     ]
   }
