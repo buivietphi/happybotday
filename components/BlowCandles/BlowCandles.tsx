@@ -1228,7 +1228,7 @@ export default function BlowCandles({ onComplete }: Props) {
         )}
         {phase === 'entering' && (
           <div className="phase-caption" key="enter" style={captionStyle}>
-            Có ai đó đang tới thắp nến cho Dẹo Dẹo nè
+            Có ai đó đang tới thắp nến cho Mỹ Hương nè
           </div>
         )}
         {isReady && (
@@ -1250,7 +1250,7 @@ export default function BlowCandles({ onComplete }: Props) {
               letterSpacing: '0.02em',
             }}
           >
-            Dẹo Dẹo ước một điều thật đẹp nhé ✨
+            Mỹ Hương ước một điều thật đẹp nhé ✨
           </div>
         )}
         {isBlowing && (
@@ -1271,7 +1271,7 @@ export default function BlowCandles({ onComplete }: Props) {
               letterSpacing: '0.02em',
             }}
           >
-            Chúc mừng sinh nhật Dẹo Dẹo! 🎉🎂
+            Chúc mừng sinh nhật Mỹ Hương! 🎉🎂
           </div>
         )}
       </div>
@@ -1773,7 +1773,7 @@ export default function BlowCandles({ onComplete }: Props) {
             >
               <div className="gold-shimmer-sweep" />
               <span style={{ fontSize: '1.2em' }}>💌</span>
-              <span>Mở Thư Chúc Dẹo Dẹo</span>
+              <span>Mở Thư Chúc Mỹ Hương</span>
               <span style={{ fontSize: '1.1em' }}>✨</span>
             </button>
           </div>

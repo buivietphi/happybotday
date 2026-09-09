@@ -441,7 +441,7 @@ export default function WishCard({
                 fontWeight: 700,
               }}
             >
-              Chúc Dẹo Dẹo
+              Chúc Mỹ Hương
             </span>
             <span
               style={{
@@ -452,7 +452,7 @@ export default function WishCard({
                 color: theme.accent,
               }}
             >
-              — Phi 🌟 —
+              — Anh Phi 🌟 —
             </span>
           </div>
 

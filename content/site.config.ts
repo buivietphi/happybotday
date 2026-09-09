@@ -2,48 +2,40 @@ import type { SiteConfig } from '@/lib/types';
 import { validateSiteConfig } from '@/lib/validate-config';
 
 /**
- * Birthday greeting for KIỀU LEE.
+ * Birthday greeting for Mỹ Hương — from her anh Phi.
  *
- * Mood: celebratory, festive — NOT romantic. The page is a birthday party:
- * cake with candles, balloons, confetti, six warm wishes, and a confetti finale.
- *
- * Anti-romance rule from design research:
- *   "If a stranger screenshots the page and thinks wedding/anniversary,
- *    it's a romantic leak."
- * So no rose palette, no heart motif, no "Mặt trái son trái nho" type
- * metaphors — only poly-chromatic party energy.
- *
- * Music: /music/birthday.mp3 — public-domain "Happy Birthday to You"
- * melody (US public domain since 2015; Good Morning to You Productions v.
- * Warner/Chappell). Recorded performance is CC BY-SA 3.0 (Wikimedia Commons).
+ * Relationship: anh Phi (gửi) ↔ em Mỹ Hương, bạn bè thân thiết — không phải
+ * người yêu. Tone: vui tươi, chân thành, hơi hài hước — như cách hai người
+ * bạn thân hay trêu nhau. Anti-romance rule: không ảnh hồng, không trái tim,
+ * không ví von kiểu "trái chín", chỉ có tiệc sinh nhật + vòng quay may mắn.
  */
 const config: SiteConfig = {
   recipient: {
-    name: 'Dẹo Dẹo',
-    headline: 'Chúc mừng sinh nhật, Dẹo Dẹo!',
+    name: 'Mỹ Hương',
+    headline: 'Chúc mừng sinh nhật, Mỹ Hương!',
     outroWish:
-      'Chúc chị tuổi mới công việc thăng tiến, sức khỏe dồi dào, cuộc sống viên mãn và luôn tươi cười rạng rỡ mỗi ngày! Từ Phi 🐜🎂',
+      'Chúc em Mỹ Hương tuổi mới công việc hanh thông, sức khỏe dồi dào, mọi dự định đều thuận lợi và lúc nào cũng tươi cười rạng rỡ! Cảm ơn em vì đã là một người bạn tuyệt vời của anh! Từ Anh Phi 🐜🎂',
   },
   wishes: [
     {
       text:
-        'Chúc mừng sinh nhật chị Dẹo Dẹo! Chúc chị thêm một tuổi mới tràn đầy sức khỏe, mọi dự án đều hanh thông, sự nghiệp ngày càng thăng tiến rực rỡ nhé! 🎂🎉',
+        'Chúc em Mỹ Hương sinh nhật vui vẻ nha! Tuổi mới chúc em sức khỏe dồi dào, công việc hanh thông, mọi dự án đều xuôi chèo mát mái và ngày càng tỏa sáng theo cách riêng của mình! 🎂🎉',
     },
     {
       text:
-        'Chúc chị tuổi mới tiền đầy túi, KPI đạt vượt chỉ tiêu, sếp thưởng tấp nập! Làm việc cùng chị là một điều may mắn của em đó nha! 🚀💪',
+        'Mỹ Hương ơi — tuổi mới chúc em tiền vào như nước, công việc thăng tiến, deadline nào cũng xong trước deadline! Làm bạn với em là cái duyên của anh đó nha, nhớ giữ gìn sức khỏe nhiều vào! 🚀💪',
     },
     {
       text:
-        'Mong tuổi mới mang đến cho chị thật nhiều niềm vui, những chuyến đi thú vị và những bữa ăn trưa team ngon lành không kém. Chị xứng đáng được hưởng điều tốt nhất! 🍕☕',
+        'Mong tuổi mới mang đến cho em thật nhiều niềm vui, những chuyến đi thú vị, mấy bữa lẩu nướng với hội bạn và đủ thứ trà sữa em thích. Em xứng đáng được hưởng những điều tốt đẹp nhất! 🍕☕',
     },
     {
       text:
-        'Cảm ơn chị đã luôn hỗ trợ và chia sẻ nhiều kinh nghiệm quý giá. Làm việc có chị em cảm thấy yên tâm và học hỏi được nhiều lắm. Sinh nhật chị vui vẻ nhé! 🌟🤝',
+        'Mỹ Hương ơi, tuổi mới chúc em deadline xong sớm, cơm trưa team luôn đông vui, và mình còn được đi ăn uống cùng hội bạn thật nhiều lần nữa nha! Cứ giữ cái sự vui tính và nhiệt tình đó nha, đừng đổi! 🍱🎯',
     },
     {
       text:
-        'Chị Dẹo Dẹo ơi — tuổi mới chúc chị vẫn giữ nguyên cái sự "dẹo" đáng yêu đó nha! Cứ tự tin là chính mình, tỏa sáng theo cách riêng của chị là đủ rồi! 😄✨',
+        'Mỹ Hương ơi — tuổi mới cứ giữ nguyên cái sự đáng yêu, tinh nghịch và năng lượng tích cực đó nha! Tự tin là chính mình, tỏa sáng theo cách riêng của em là đủ rồi, đừng nghe ai nói khác nữa! 😄✨',
     },
   ],
   music: {
@@ -54,19 +46,19 @@ const config: SiteConfig = {
   },
   wheelPrizes: [
     { label: '1 Ly Trà Sữa Full Topping', emoji: '🧋' },
-    { label: '1 Ly Cà Phê Thơm Lừng', emoji: '☕' },
-    { label: '1 Thỏi Son Môi Xinh Xắn', emoji: '💄' },
-    { label: '1 Chiếc Đầm Xinh Tự Chọn', emoji: '👗' },
-    { label: '1 Chiếc Áo Mới Tự Chọn', emoji: '👚' },
-    { label: 'Vật phẩm Shopee tự chọn dưới 200k', emoji: '🛍️' },
-    { label: 'Vật phẩm Shopee tự chọn dưới 500k', emoji: '🎁' },
-    { label: 'Quà 200k Tiền Mặt', emoji: '💵' },
-    { label: 'Ăn Tối Cùng Nhau', emoji: '🍽️' },
-    { label: 'Được Đi Du Lịch Sài Gòn', emoji: '✈️' },
-    { label: 'Vé Xem Phim Couple & Bắp Nước', emoji: '🎬' },
-    { label: '1 Buổi Gội Đầu Dưỡng Sinh Thư Giãn', emoji: '💆‍♀️' },
-    { label: '1 Bó Hoa Tươi Thơm Ngát', emoji: '💐' },
-    { label: 'Làm Bộ Móng Mới Dưới 300k', emoji: '💅' },
+    { label: '1 Ly Cà Phê Sữa Đá', emoji: '☕' },
+    { label: 'Đi Nhậu Cùng Anh Phi 🍻', emoji: '🍺' },
+    { label: '1 Bữa Lẩu Nướng Hội Bạn', emoji: '🍲' },
+    { label: '1 Bữa BBQ + Bia Tự Chọn', emoji: '🍖' },
+    { label: 'Ăn Vặt Vỉa Hè Cùng Nhau', emoji: '🌭' },
+    { label: '1 Suất Bún Đậu Mắm Tôm', emoji: '🍜' },
+    { label: 'Cơm Trưa Team 1 Tuần', emoji: '🍱' },
+    { label: 'Trà Sữa Size L × 4 Buổi', emoji: '🧋' },
+    { label: '1 Buổi Karaoke Cùng Hội Bạn', emoji: '🎤' },
+    { label: 'Đi Ăn Đêm Cùng Nhau', emoji: '🌙' },
+    { label: 'Cà Phê Cuối Tuần × 4', emoji: '☕' },
+    { label: 'Được Chọn Quán Ăn Tự Do', emoji: '🍴' },
+    { label: 'Bắp Rang + Nước Xem Phim Hội Bạn', emoji: '🍿' },
   ],
   theme: {
     primary: '#e34d8c',    // hot magenta

@@ -17,15 +17,12 @@ type Props = {
   className?: string;
 };
 
-// Pool of programming-language snippets — JS, TS, Java, Python, generic markup.
-// Each is short enough to read at a glance and visually distinct.
-const SNIPPETS = [
-  '</>', '{}', '()', '[]', '=>', '==', '!=', '++', '--', '...', ';;',
-  'const', 'let', 'var', 'function', 'return', 'await', 'async', 'import',
-  'export', 'from', 'class', 'extends', 'new', 'this', 'null', 'true',
-  'public', 'private', 'static', 'void', 'int', 'String', 'System.out',
-  'println', 'def', 'self', 'lambda', 'yield', 'None', 'True', 'False',
-  '<div/>', '<JSX/>', 'NaN', 'undefined', 'typeof', 'instanceof',
+// Marketing-style celebration tokens: big-impact emojis + short exclamations.
+// Drives the same rise-and-fade animation — only the visible glyphs change.
+const TOKENS = [
+  '🎉', '🎂', '🎈', '🎁', '✨', '🎊', '🥳', '🎆', '💝', '🎀',
+  '🌟', '💖', '💕', '💗', '💐', '🦋', '🌸', '🎶', '🎵', '💫',
+  'YAY', 'WOW', 'HÉ', 'HÍ', 'Ố', 'ỜI', 'WOOO', 'LOVE', 'HUGS', 'CHEERS',
 ];
 
 type PropsWithVariant = {
@@ -80,8 +77,8 @@ export default function FloatingCode({
 
   // Deterministic-ish per-index assignment so tokens don't reshuffle on re-render.
   const tokens = Array.from({ length: count }, (_, i) => {
-    const snippet = SNIPPETS[(i * 7 + 3) % SNIPPETS.length];
-    const colorVariant = i % 3;
+    const snippet = TOKENS[(i * 7 + 3) % TOKENS.length];
+    const colorVariant = i % 4;
     return {
       key: i,
       snippet,
@@ -91,8 +88,10 @@ export default function FloatingCode({
           ? 'var(--color-accent)'
           : colorVariant === 1
             ? 'var(--color-accent-deep)'
-            : 'var(--color-accent-soft)',
-      size: 12 + ((i * 5) % 6), // 12–17px
+            : colorVariant === 2
+              ? 'var(--color-accent-soft)'
+              : 'oklch(82% 0.18 85)', // gold
+      size: 14 + ((i * 5) % 7), // 14–20px (bigger for marketing impact)
     };
   });
 
@@ -122,17 +121,13 @@ export default function FloatingCode({
             transform: 'translate(-50%, 0)',
             opacity: 0,
             fontFamily:
-              'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
+              'var(--font-body), -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple Color Emoji", "Segoe UI Emoji", sans-serif',
             fontSize: `${t.size}px`,
-            fontWeight: 600,
+            fontWeight: 700,
             color: t.tone,
-            letterSpacing: '-0.01em',
+            letterSpacing: '0',
             whiteSpace: 'nowrap',
-            padding: '2px 6px',
-            borderRadius: 4,
-            background: 'oklch(98% 0.01 350 / 0.55)',
-            backdropFilter: 'blur(2px)',
-            boxShadow: '0 2px 6px oklch(22% 0.06 295 / 0.18)',
+            textShadow: '0 1px 2px rgba(255,255,255,0.85), 0 1px 6px oklch(22% 0.06 295 / 0.18)',
             userSelect: 'none',
           }}
         >

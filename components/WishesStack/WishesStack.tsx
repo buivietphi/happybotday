@@ -222,7 +222,7 @@ export default function WishesStack({ wishes, onComplete }: Props) {
             textShadow: '0 2px 10px rgba(255,255,255,0.8)',
           }}
         >
-          Gửi Tặng Dẹo Dẹo
+          Gửi Tặng Mỹ Hương
         </h2>
       </div>
 
