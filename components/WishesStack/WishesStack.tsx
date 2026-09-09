@@ -5,7 +5,7 @@ import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { useReducedMotionSafe } from '@/lib/useReducedMotion';
 import WishCard from '@/components/bits/WishCard';
-import FloatingHearts from '@/components/bits/FloatingHearts';
+import FloatingCode from '@/components/bits/FloatingCode';
 
 type Wish = { text: string };
 
@@ -173,8 +173,8 @@ export default function WishesStack({ wishes, onComplete }: Props) {
         }
       `}</style>
 
-      {/* Floating subtle ambient hearts */}
-      <FloatingHearts count={6} playing duration={4.2} />
+      {/* Floating subtle ambient code tokens */}
+      <FloatingCode count={6} playing duration={4.2} />
 
       {/* === TOP EYEBROW HEADER === */}
       <div

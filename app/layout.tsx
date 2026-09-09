@@ -18,7 +18,7 @@ const cormorantGaramond = Cormorant_Garamond({
 });
 
 // Great Vibes — flowing copperplate script. Used for the birthday banner
-// ("Happy Birthday KIỀU LEE") so it reads like a handwritten card, not a
+// ("Happy Birthday Dẹo Dẹo") so it reads like a handwritten card, not a
 // typographic serif.
 const greatVibes = Great_Vibes({
   subsets: ['latin', 'vietnamese'],
@@ -28,9 +28,9 @@ const greatVibes = Great_Vibes({
 });
 
 export const metadata: Metadata = {
-  title: 'Chúc mừng sinh nhật, KIỀU LEE!',
+  title: 'Chúc mừng sinh nhật, Dẹo Dẹo!',
   description:
-    'Một trang nhỏ để chúc mừng sinh nhật KIỀU LEE — thổi nến, đọc lời chúc, và ăn mừng.',
+    'Một trang nhỏ để chúc mừng sinh nhật Dẹo Dẹo — thổi nến, đọc lời chúc, và ăn mừng.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

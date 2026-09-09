@@ -9,7 +9,7 @@ import SmokeWisp from '@/components/bits/SmokeWisp';
 import ConfettiBurst from '@/components/bits/ConfettiBurst';
 import Matchstick from '@/components/bits/Matchstick';
 import IgniteBurst from '@/components/bits/IgniteBurst';
-import FloatingHearts from '@/components/bits/FloatingHearts';
+import FloatingCode from '@/components/bits/FloatingCode';
 import QueenAnt from '@/components/bits/QueenAnt';
 import config from '@/content/site.config';
 
@@ -1583,7 +1583,7 @@ export default function BlowCandles({ onComplete }: Props) {
 
         {/* Floating hearts during blowing + celebrate */}
         {(isBlowing || isCelebrate) && (
-          <FloatingHearts count={10} playing duration={3.6} />
+          <FloatingCode count={10} playing duration={3.6} />
         )}
 
         {/* Confetti burst anchor on celebrate */}
